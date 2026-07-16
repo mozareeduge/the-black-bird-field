@@ -3,7 +3,11 @@ Browser tests using Playwright/Chromium.
 
 Run: python -m pytest tests/browser/ -v
 Requires: pip install playwright pytest-playwright
-Uses pre-installed Chromium at /opt/pw-browsers/chromium
+
+In the Claude Code remote execution environment, Chromium is pre-installed at
+/opt/pw-browsers/chromium and we use it directly. On CI (GitHub Actions) the
+workflow runs `playwright install chromium --with-deps` which puts the browser
+in Playwright's default cache; we let Playwright discover it automatically.
 """
 
 import os
@@ -12,7 +16,14 @@ import http.server
 import pytest
 from pathlib import Path
 
-os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH', '/opt/pw-browsers')
+# Pre-built binary path used in the Claude Code remote execution environment.
+_LOCAL_CHROMIUM = '/opt/pw-browsers/chromium'
+_USE_LOCAL_CHROMIUM = Path(_LOCAL_CHROMIUM).exists()
+
+if _USE_LOCAL_CHROMIUM:
+    # Point Playwright at the pre-installed browsers directory so it does not
+    # attempt to download anything in the session container.
+    os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH', '/opt/pw-browsers')
 
 ROOT = Path(__file__).resolve().parents[2]
 DIST = ROOT / 'dist'
@@ -79,7 +90,8 @@ def subpath_url(static_server):
 def browser_context(static_server):
     from playwright.sync_api import sync_playwright
     pw = sync_playwright().start()
-    browser = pw.chromium.launch(executable_path='/opt/pw-browsers/chromium')
+    launch_kwargs = {'executable_path': _LOCAL_CHROMIUM} if _USE_LOCAL_CHROMIUM else {}
+    browser = pw.chromium.launch(**launch_kwargs)
     context = browser.new_context()
     yield context
     context.close()
