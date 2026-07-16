@@ -1,0 +1,25 @@
+:root{
+  --ground:#c7bfb2;
+  --ground-deep:#b9b0a2;
+  --paper:#ddd6ca;
+  --paper-deep:#d0c8bb;
+  --ink:#0d0e0d;
+  --dark:#090a09;
+  --bone:#eee8de;
+  --muted:#665f56;
+  --muted-dark:#a89f92;
+  --rule:rgba(13,14,13,.56);
+  --rule-soft:rgba(13,14,13,.22);
+  --rule-dark:rgba(238,232,222,.24);
+  --signal:#a86d2b;
+  --cold:#8f999d;
+  --oxide:#85594f;
+  --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --sans:"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+  --header-h:64px;
+  --page-pad:clamp(24px,4.1vw,72px);
+  --max:1640px;
+  --text-measure:68ch;
+  --ease:cubic-bezier(.2,.75,.25,1);
+}

@@ -1,0 +1,262 @@
+"""
+Browser tests using Playwright/Chromium.
+
+Run: python -m pytest tests/browser/ -v
+Requires: pip install playwright pytest-playwright
+Uses pre-installed Chromium at /opt/pw-browsers/chromium
+"""
+
+import os
+import time
+import threading
+import http.server
+import pytest
+from pathlib import Path
+
+os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH', '/opt/pw-browsers')
+
+ROOT = Path(__file__).resolve().parents[2]
+DIST = ROOT / 'dist'
+
+# ---------------------------------------------------------------------------
+# Fixtures
+# ---------------------------------------------------------------------------
+
+@pytest.fixture(scope='session')
+def static_server():
+    """Serve dist/ on a randomly assigned free port for the test session."""
+    import socketserver
+    import socket as _socket
+
+    class _Handler(http.server.SimpleHTTPRequestHandler):
+        extensions_map = {
+            '': 'application/octet-stream',
+            '.html': 'text/html',
+            '.css': 'text/css',
+            '.js': 'application/javascript',
+            '.png': 'image/png',
+            '.pdf': 'application/pdf',
+        }
+
+        def log_message(self, *args):
+            pass  # suppress per-request output in tests
+
+    os.chdir(str(DIST))
+    with _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM) as s:
+        s.bind(('', 0))
+        port = s.getsockname()[1]
+
+    httpd = socketserver.TCPServer(('', port), _Handler)
+    thread = threading.Thread(target=httpd.serve_forever)
+    thread.daemon = True
+    thread.start()
+    yield f'http://localhost:{port}'
+    httpd.shutdown()
+
+
+@pytest.fixture(scope='session')
+def browser_context(static_server):
+    from playwright.sync_api import sync_playwright
+    pw = sync_playwright().start()
+    browser = pw.chromium.launch(executable_path='/opt/pw-browsers/chromium')
+    context = browser.new_context()
+    yield context
+    context.close()
+    browser.close()
+    pw.stop()
+
+
+@pytest.fixture
+def page(browser_context):
+    p = browser_context.new_page()
+    yield p
+    p.close()
+
+
+# ---------------------------------------------------------------------------
+# Home page
+# ---------------------------------------------------------------------------
+
+class TestHomePage:
+    def test_title(self, page, static_server):
+        page.goto(static_server + '/')
+        assert page.title() == 'The Black Bird Field — Works by Mozare'
+
+    def test_h1(self, page, static_server):
+        page.goto(static_server + '/')
+        assert page.locator('h1').first.inner_text() == 'The Black Bird Field'
+
+    def test_four_works_listed(self, page, static_server):
+        page.goto(static_server + '/')
+        body = page.locator('body').inner_text()
+        for work in ['The Black Bird', 'Winter Road', 'Grave-Machine', 'TAROKE RIMIXER']:
+            assert work in body
+
+    def test_sticky_header_visible(self, page, static_server):
+        page.goto(static_server + '/')
+        assert page.locator('header.site-header').is_visible()
+
+    def test_skip_link_accessible(self, page, static_server):
+        page.goto(static_server + '/')
+        skip = page.locator('a.skip-link')
+        assert skip.count() == 1
+
+    def test_grave_link_target(self, page, static_server):
+        page.goto(static_server + '/')
+        links = page.locator('a[href="works/grave-machine/"]')
+        assert links.count() >= 1
+
+
+class TestNavigation:
+    def test_works_page_reachable(self, page, static_server):
+        page.goto(static_server + '/')
+        page.locator('a[href="works.html"]').first.click()
+        page.wait_for_load_state('load')
+        assert 'Works' in page.title()
+
+    def test_black_bird_page_reachable(self, page, static_server):
+        page.goto(static_server + '/black-bird.html')
+        assert page.locator('h1').first.inner_text() == 'The Black Bird'
+
+    def test_grave_machine_page_reachable(self, page, static_server):
+        page.goto(static_server + '/grave-machine.html')
+        assert 'Grave-Machine' in page.title()
+
+    def test_grave_runtime_loads(self, page, static_server):
+        page.goto(static_server + '/works/grave-machine/')
+        # Bilingual title contains both scripts
+        assert 'Grave-Machine' in page.title()
+        # Persian script character in title
+        assert 'گور' in page.title()
+
+    def test_works_page_has_four_entries(self, page, static_server):
+        page.goto(static_server + '/works.html')
+        work_nos = page.locator('.work-no')
+        assert work_nos.count() >= 4
+
+
+class TestMobileMenu:
+    def test_menu_toggle_visible_at_mobile(self, page, static_server):
+        page.set_viewport_size({'width': 375, 'height': 812})
+        page.goto(static_server + '/')
+        toggle = page.locator('button[data-menu-open]')
+        assert toggle.is_visible()
+
+    def test_menu_opens(self, page, static_server):
+        page.set_viewport_size({'width': 375, 'height': 812})
+        page.goto(static_server + '/')
+        page.locator('button[data-menu-open]').click()
+        page.wait_for_selector('dialog[data-menu-dialog][open]', timeout=3000)
+        assert page.locator('dialog[data-menu-dialog]').is_visible()
+
+    def test_menu_closes(self, page, static_server):
+        page.set_viewport_size({'width': 375, 'height': 812})
+        page.goto(static_server + '/')
+        page.locator('button[data-menu-open]').click()
+        page.wait_for_selector('dialog[data-menu-dialog][open]', timeout=3000)
+        page.locator('button[data-menu-close]').click()
+        # After close(), the dialog is hidden but still in DOM; check aria-expanded
+        toggle = page.locator('button[data-menu-open]')
+        page.wait_for_function(
+            "() => document.querySelector('[data-menu-open]').getAttribute('aria-expanded') === 'false'",
+            timeout=3000,
+        )
+        assert toggle.get_attribute('aria-expanded') == 'false'
+
+    def test_desktop_nav_hidden_at_mobile(self, page, static_server):
+        page.set_viewport_size({'width': 375, 'height': 812})
+        page.goto(static_server + '/')
+        desktop_nav = page.locator('nav.desktop-nav')
+        assert not desktop_nav.is_visible()
+
+
+class TestCVDownload:
+    def test_cv_download_link_present_on_home(self, page, static_server):
+        page.set_viewport_size({'width': 1280, 'height': 800})
+        page.goto(static_server + '/')
+        cv_links = page.locator('[data-cv-download]')
+        assert cv_links.count() >= 1
+
+    def test_cv_not_present_on_contact(self, page, static_server):
+        page.set_viewport_size({'width': 1280, 'height': 800})
+        page.goto(static_server + '/contact.html')
+        # CV is intentionally omitted from the contact page header/footer
+        # (the contact page IS the destination for reaching the artist)
+        cv_in_header = page.locator('header [data-cv-download]')
+        assert cv_in_header.count() == 0
+
+    def test_cv_download_does_not_navigate(self, page, static_server):
+        page.set_viewport_size({'width': 1280, 'height': 800})
+        page.goto(static_server + '/')
+        original_url = page.url
+        # Listen for downloads
+        downloads = []
+        page.on('download', lambda d: downloads.append(d))
+        cv_link = page.locator('[data-cv-download]').first
+        cv_link.click()
+        page.wait_for_timeout(1500)
+        assert page.url == original_url, 'CV click should not navigate'
+        assert len(downloads) == 1, f'Expected 1 download, got {len(downloads)}'
+
+
+class TestAccessibility:
+    def test_focus_visible_skip_link(self, page, static_server):
+        page.goto(static_server + '/')
+        # Tab to skip link
+        page.keyboard.press('Tab')
+        skip = page.locator('a.skip-link')
+        assert skip.is_visible()
+
+    def test_all_images_have_alt(self, page, static_server):
+        page.goto(static_server + '/')
+        imgs = page.locator('img')
+        for i in range(imgs.count()):
+            alt = imgs.nth(i).get_attribute('alt')
+            assert alt is not None, f'img #{i} missing alt attribute'
+
+    def test_aria_current_on_nav(self, page, static_server):
+        page.goto(static_server + '/works.html')
+        current = page.locator('[aria-current="page"]')
+        assert current.count() >= 1
+
+
+class TestStateAtlas:
+    def test_atlas_tabs_present_on_black_bird(self, page, static_server):
+        page.goto(static_server + '/black-bird.html')
+        tabs = page.locator('[role="tab"]')
+        assert tabs.count() >= 3
+
+    def test_atlas_tab_switch(self, page, static_server):
+        page.goto(static_server + '/black-bird.html')
+        tabs = page.locator('[role="tab"]')
+        initial_src = page.locator('[data-state-image]').first.get_attribute('src')
+        if tabs.count() > 1:
+            tabs.nth(1).click()
+            new_src = page.locator('[data-state-image]').first.get_attribute('src')
+            assert new_src != initial_src, 'Atlas image did not change on tab click'
+
+
+class TestLinksAndRoutes:
+    def test_work_pages_all_load(self, page, static_server):
+        pages = [
+            '/black-bird.html', '/winter-road.html', '/grave-machine.html',
+            '/taroke-remixer.html',
+        ]
+        for path in pages:
+            page.goto(static_server + path)
+            assert page.locator('h1').first.is_visible(), f'{path}: h1 not visible'
+
+    def test_linkedin_link_present(self, page, static_server):
+        page.goto(static_server + '/')
+        li = page.locator('a[href*="linkedin.com"]')
+        assert li.count() >= 1
+
+    def test_black_bird_external_link_present(self, page, static_server):
+        page.goto(static_server + '/black-bird.html')
+        link = page.locator('a[href="https://mozareeduge.github.io/the-black-bird/"]')
+        assert link.count() >= 1
+
+    def test_taroke_external_link_present(self, page, static_server):
+        page.goto(static_server + '/taroke-remixer.html')
+        link = page.locator('a[href="https://mozareeduge.github.io/taroke-remixer/"]')
+        assert link.count() >= 1
