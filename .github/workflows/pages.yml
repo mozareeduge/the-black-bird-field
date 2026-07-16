@@ -1,0 +1,58 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# One deployment at a time; a new push cancels a queued run but not an
+# in-progress one, keeping the Pages environment in a clean state.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pytest playwright
+
+      - name: Install Playwright Chromium
+        run: playwright install chromium --with-deps
+
+      - name: Build site
+        run: python src/build.py --check
+
+      - name: Static tests
+        run: python -m pytest tests/static/ -v
+
+      - name: Browser tests (root and subpath)
+        run: python -m pytest tests/browser/ -v
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+
+  deploy:
+    needs: build
+    # Publish only when a commit lands on main — never on PR builds.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

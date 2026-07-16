@@ -1,15 +1,31 @@
 # Deployment
 
-## Preview deployment (current)
+## GitHub Pages deployment
 
-The portfolio is deployed to GitHub Pages from the `dist/` build output. GitHub Pages is configured to serve the `dist/` branch or directory once the PR is merged.
+The portfolio deploys to `https://mozareeduge.github.io/the-black-bird-field/` via `.github/workflows/pages.yml`.
 
-**Preview URL:** `https://mozareeduge.github.io/the-black-bird-field/`
-
-To enable GitHub Pages for this repository:
+**To enable Pages after the PR is merged:**
 1. Go to Settings → Pages in the `mozareeduge/the-black-bird-field` repository.
-2. Set Source to "GitHub Actions" (recommended) or set Branch to `main`, folder to `/dist`.
-3. The CI workflow uploads `dist/` as an artifact; a separate deploy step can publish it.
+2. Set Source to **GitHub Actions**.
+3. The next push to `main` triggers the Pages workflow and publishes `dist/`.
+
+The site uses document-relative asset paths throughout, so it works correctly under the `/the-black-bird-field/` project subpath without any base-path configuration.
+
+## Workflows
+
+### `.github/workflows/pages.yml` (deployment)
+
+Runs on pushes and pull requests targeting `main`:
+
+1. Builds the site: `python src/build.py --check`
+2. Runs static tests: `python -m pytest tests/static/ -v`
+3. Runs browser tests at both `/` and `/the-black-bird-field/`: `python -m pytest tests/browser/ -v`
+4. Uploads `dist/` via `actions/upload-pages-artifact`
+5. **Deploys to GitHub Pages** only when `github.event_name == 'push'` and `github.ref == 'refs/heads/main'` — pull request builds build and test but never publish to the production Pages site.
+
+### `.github/workflows/ci.yml` (all-branch CI)
+
+Runs on every push and pull request to any branch. Builds, tests, and uploads `dist/` as a downloadable artifact for inspection. Does not deploy to Pages.
 
 ## Build locally
 
@@ -19,13 +35,9 @@ python src/build.py --check  # outputs to dist/ and verifies checksums
 python -m http.server 8080 --directory dist
 ```
 
-## GitHub Actions CI
-
-`.github/workflows/ci.yml` runs on every push and PR:
-1. Builds the site with `python src/build.py --check`
-2. Runs static tests: `python -m pytest tests/static/ -v`
-3. Runs browser tests: `python -m pytest tests/browser/ -v`
-4. Uploads `dist/` as a build artifact
+Visit `http://localhost:8080/` to see the site at root, or
+`http://localhost:8080/the-black-bird-field/` to test under the project subpath
+(the browser test server handles both).
 
 ## Domain
 

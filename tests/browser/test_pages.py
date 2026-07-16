@@ -7,7 +7,6 @@ Uses pre-installed Chromium at /opt/pw-browsers/chromium
 """
 
 import os
-import time
 import threading
 import http.server
 import pytest
@@ -18,13 +17,21 @@ os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH', '/opt/pw-browsers')
 ROOT = Path(__file__).resolve().parents[2]
 DIST = ROOT / 'dist'
 
+# GitHub Pages project subpath — the live deployment base.
+SUBPATH_PREFIX = '/the-black-bird-field'
+
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
 
 @pytest.fixture(scope='session')
 def static_server():
-    """Serve dist/ on a randomly assigned free port for the test session."""
+    """Serve dist/ on a randomly assigned free port.
+
+    Handles requests at both / (root) and /the-black-bird-field/ (the live
+    GitHub Pages project subpath), so tests can exercise both origins against
+    the same build without a second server process.
+    """
     import socketserver
     import socket as _socket
 
@@ -37,6 +44,14 @@ def static_server():
             '.png': 'image/png',
             '.pdf': 'application/pdf',
         }
+
+        def translate_path(self, path):
+            # Serve dist/ at both / and /the-black-bird-field/.
+            # Strip the project subpath prefix before delegating so relative
+            # asset references resolve identically in both URL namespaces.
+            if path == SUBPATH_PREFIX or path.startswith(SUBPATH_PREFIX + '/'):
+                path = path[len(SUBPATH_PREFIX):] or '/'
+            return super().translate_path(path)
 
         def log_message(self, *args):
             pass  # suppress per-request output in tests
@@ -52,6 +67,12 @@ def static_server():
     thread.start()
     yield f'http://localhost:{port}'
     httpd.shutdown()
+
+
+@pytest.fixture(scope='session')
+def subpath_url(static_server):
+    """The subpath base URL that mirrors the live GitHub Pages deployment."""
+    return static_server + SUBPATH_PREFIX
 
 
 @pytest.fixture(scope='session')
@@ -260,3 +281,96 @@ class TestLinksAndRoutes:
         page.goto(static_server + '/taroke-remixer.html')
         link = page.locator('a[href="https://mozareeduge.github.io/taroke-remixer/"]')
         assert link.count() >= 1
+
+
+# ---------------------------------------------------------------------------
+# Subpath deployment verification
+# Mirrors the live GitHub Pages URL: /the-black-bird-field/
+# ---------------------------------------------------------------------------
+
+class TestSubpathDeployment:
+    """Verify the full site operates correctly under /the-black-bird-field/.
+
+    All asset references in the generated HTML are document-relative, so they
+    resolve correctly whether the page is served at / or at a project subpath.
+    These tests confirm that invariant holds in a live browser against the
+    same build artifact that CI and GitHub Pages use.
+    """
+
+    def test_home_title_at_subpath(self, page, subpath_url):
+        page.goto(subpath_url + '/')
+        assert page.title() == 'The Black Bird Field — Works by Mozare'
+
+    def test_header_visible_at_subpath(self, page, subpath_url):
+        """CSS and JS assets loaded correctly; header is styled and visible."""
+        page.goto(subpath_url + '/')
+        assert page.locator('header.site-header').is_visible()
+
+    def test_four_works_at_subpath(self, page, subpath_url):
+        page.goto(subpath_url + '/')
+        body = page.locator('body').inner_text()
+        for work in ['The Black Bird', 'Winter Road', 'Grave-Machine', 'TAROKE RIMIXER']:
+            assert work in body
+
+    def test_all_portfolio_pages_load_at_subpath(self, page, subpath_url):
+        paths = [
+            '/works.html', '/black-bird.html', '/winter-road.html',
+            '/grave-machine.html', '/taroke-remixer.html',
+            '/practice.html', '/about.html', '/contact.html',
+        ]
+        for path in paths:
+            page.goto(subpath_url + path)
+            assert page.locator('h1').first.is_visible(), f'{path}: h1 not visible at subpath'
+
+    def test_grave_runtime_loads_at_subpath(self, page, subpath_url):
+        page.goto(subpath_url + '/works/grave-machine/')
+        assert 'Grave-Machine' in page.title()
+        assert 'گور' in page.title()
+
+    def test_nav_links_resolve_at_subpath(self, page, subpath_url):
+        """Relative nav links follow the subpath correctly."""
+        page.goto(subpath_url + '/')
+        page.locator('a[href="works.html"]').first.click()
+        page.wait_for_load_state('load')
+        assert 'Works' in page.title()
+        # Navigate back via the wordmark (href="index.html")
+        page.locator('a[href="index.html"]').first.click()
+        page.wait_for_load_state('load')
+        assert page.title() == 'The Black Bird Field — Works by Mozare'
+
+    def test_grave_link_resolves_at_subpath(self, page, subpath_url):
+        """Relative grave link from home routes to the runtime at subpath."""
+        page.goto(subpath_url + '/')
+        links = page.locator('a[href="works/grave-machine/"]')
+        assert links.count() >= 1
+
+    def test_cv_download_at_subpath(self, page, subpath_url):
+        """CV download works; page does not navigate."""
+        page.set_viewport_size({'width': 1280, 'height': 800})
+        page.goto(subpath_url + '/')
+        original_url = page.url
+        downloads = []
+        page.on('download', lambda d: downloads.append(d))
+        page.locator('[data-cv-download]').first.click()
+        page.wait_for_timeout(1500)
+        assert page.url == original_url, 'CV click should not navigate at subpath'
+        assert len(downloads) == 1, f'Expected 1 download, got {len(downloads)}'
+
+    def test_no_failed_asset_requests_at_subpath(self, page, subpath_url):
+        """No 4xx/5xx asset requests when loading home under the subpath."""
+        failed = []
+        page.on('response', lambda r: failed.append((r.url, r.status)) if r.status >= 400 else None)
+        page.goto(subpath_url + '/')
+        page.wait_for_load_state('networkidle')
+        assert not failed, f'Failed asset requests under subpath: {failed}'
+
+    def test_skip_link_at_subpath(self, page, subpath_url):
+        page.goto(subpath_url + '/')
+        assert page.locator('a.skip-link').count() == 1
+
+    def test_mobile_menu_at_subpath(self, page, subpath_url):
+        page.set_viewport_size({'width': 375, 'height': 812})
+        page.goto(subpath_url + '/')
+        page.locator('button[data-menu-open]').click()
+        page.wait_for_selector('dialog[data-menu-dialog][open]', timeout=3000)
+        assert page.locator('dialog[data-menu-dialog]').is_visible()
