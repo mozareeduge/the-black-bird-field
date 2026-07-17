@@ -2,14 +2,13 @@
 
 ## GitHub Pages deployment
 
-The portfolio deploys to `https://mozareeduge.github.io/the-black-bird-field/` via `.github/workflows/pages.yml`.
+The portfolio deploys to `https://theblackbirdfield.com/` (custom domain) via
+`.github/workflows/pages.yml`. The CNAME file in this repository points to
+`theblackbirdfield.com`; GitHub Pages and Cloudflare handle HTTPS automatically.
 
-**To enable Pages after the PR is merged:**
-1. Go to Settings → Pages in the `mozareeduge/the-black-bird-field` repository.
-2. Set Source to **GitHub Actions**.
-3. The next push to `main` triggers the Pages workflow and publishes `dist/`.
-
-The site uses document-relative asset paths throughout, so it works correctly under the `/the-black-bird-field/` project subpath without any base-path configuration.
+The site uses document-relative asset paths throughout, so it also works
+correctly under the `/the-black-bird-field/` GitHub Pages project subpath — the
+browser tests verify both origins against the same build artifact.
 
 ## Workflows
 
@@ -41,15 +40,35 @@ Visit `http://localhost:8080/` to see the site at root, or
 
 ## Domain
 
-See [DOMAIN_MIGRATION_DECISION.md](DOMAIN_MIGRATION_DECISION.md) for the pending domain migration.
+See [DOMAIN_MIGRATION_DECISION.md](DOMAIN_MIGRATION_DECISION.md) for the full
+migration record. The migration is complete: `theblackbirdfield.com` now serves
+the portfolio and `poem.theblackbirdfield.com` serves The Black Bird poem.
 
-**Do not** add a CNAME file to this repository, remove the `CNAME` from `mozareeduge/the-black-bird`, or edit Cloudflare DNS until the domain decision is explicitly approved.
+## Routes
+
+Canonical pages are generated as directory indexes:
+
+| Route | Output |
+|-------|--------|
+| `/` | `index.html` |
+| `/works/` | `works/index.html` |
+| `/works/the-black-bird/` | `works/the-black-bird/index.html` |
+| `/works/winter-road/` | `works/winter-road/index.html` |
+| `/works/grave-machine/` | `works/grave-machine/index.html` |
+| `/works/taroke-remixer/` | `works/taroke-remixer/index.html` |
+| `/works/grave-machine/run/` | `works/grave-machine/run/index.html` (Grave runtime, noindex) |
+| `/practice/` | `practice/index.html` |
+| `/about/` | `about/index.html` |
+| `/contact/` | `contact/index.html` |
+
+Eight legacy redirect stubs at the old flat paths (`/about.html` etc.) redirect
+to the canonical directory routes with `meta-refresh` and `location.replace()`.
 
 ## Adding a new work
 
-1. Add the work URL to `WORK_URLS` in `src/site_config.py`.
-2. Add a page entry to `PAGES` in `src/site_config.py`.
-3. Create `src/pages/<work-slug>.html` for the project page content.
+1. Add the work to `ROUTES` in `src/site_config.py`.
+2. Add its path to `ROUTE_PATHS` and, if it needs a legacy stub, to `LEGACY_REDIRECTS`.
+3. Create `src/pages/<work-slug>.html` for the project page content (use `{{ASSETS}}`, `{{ROUTE:*}}`, `{{CV}}` tokens for internal references).
 4. Add representative images to `public/assets/<work-slug>/`.
-5. If the work is hosted under the portfolio (like Grave-Machine), add its runtime to `public/works/<work-slug>/`.
-6. Run `python src/build.py` and `python -m pytest`.
+5. If the work is hosted under the portfolio (like Grave-Machine), add its runtime to `public/works/<work-slug>/` and set `GRAVE_RUNTIME_OUTPUT` in `site_config.py`.
+6. Run `python src/build.py --check` and `python -m pytest`.

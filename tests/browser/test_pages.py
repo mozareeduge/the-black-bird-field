@@ -21,8 +21,6 @@ _LOCAL_CHROMIUM = '/opt/pw-browsers/chromium'
 _USE_LOCAL_CHROMIUM = Path(_LOCAL_CHROMIUM).exists()
 
 if _USE_LOCAL_CHROMIUM:
-    # Point Playwright at the pre-installed browsers directory so it does not
-    # attempt to download anything in the session container.
     os.environ.setdefault('PLAYWRIGHT_BROWSERS_PATH', '/opt/pw-browsers')
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -58,14 +56,12 @@ def static_server():
 
         def translate_path(self, path):
             # Serve dist/ at both / and /the-black-bird-field/.
-            # Strip the project subpath prefix before delegating so relative
-            # asset references resolve identically in both URL namespaces.
             if path == SUBPATH_PREFIX or path.startswith(SUBPATH_PREFIX + '/'):
                 path = path[len(SUBPATH_PREFIX):] or '/'
             return super().translate_path(path)
 
         def log_message(self, *args):
-            pass  # suppress per-request output in tests
+            pass
 
     os.chdir(str(DIST))
     with _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM) as s:
@@ -134,39 +130,57 @@ class TestHomePage:
         skip = page.locator('a.skip-link')
         assert skip.count() == 1
 
-    def test_grave_link_target(self, page, static_server):
+    def test_grave_launch_link_target(self, page, static_server):
+        # Grave-Machine launch link from home goes to the runtime, not the project page.
+        page.goto(static_server + '/')
+        links = page.locator('a[href="works/grave-machine/run/"]')
+        assert links.count() >= 1
+
+    def test_grave_project_page_link_present(self, page, static_server):
         page.goto(static_server + '/')
         links = page.locator('a[href="works/grave-machine/"]')
         assert links.count() >= 1
 
 
+# ---------------------------------------------------------------------------
+# Navigation
+# ---------------------------------------------------------------------------
+
 class TestNavigation:
     def test_works_page_reachable(self, page, static_server):
         page.goto(static_server + '/')
-        page.locator('a[href="works.html"]').first.click()
+        page.locator('a[href="works/"]').first.click()
         page.wait_for_load_state('load')
         assert 'Works' in page.title()
 
     def test_black_bird_page_reachable(self, page, static_server):
-        page.goto(static_server + '/black-bird.html')
+        page.goto(static_server + '/works/the-black-bird/')
         assert page.locator('h1').first.inner_text() == 'The Black Bird'
 
     def test_grave_machine_page_reachable(self, page, static_server):
-        page.goto(static_server + '/grave-machine.html')
+        page.goto(static_server + '/works/grave-machine/')
         assert 'Grave-Machine' in page.title()
 
     def test_grave_runtime_loads(self, page, static_server):
-        page.goto(static_server + '/works/grave-machine/')
-        # Bilingual title contains both scripts
+        page.goto(static_server + '/works/grave-machine/run/')
         assert 'Grave-Machine' in page.title()
-        # Persian script character in title
         assert 'گور' in page.title()
 
     def test_works_page_has_four_entries(self, page, static_server):
-        page.goto(static_server + '/works.html')
+        page.goto(static_server + '/works/')
         work_nos = page.locator('.work-no')
         assert work_nos.count() >= 4
 
+    def test_wordmark_returns_home(self, page, static_server):
+        page.goto(static_server + '/works/')
+        page.locator('a.wordmark').first.click()
+        page.wait_for_load_state('load')
+        assert page.title() == 'The Black Bird Field — Works by Mozare'
+
+
+# ---------------------------------------------------------------------------
+# Mobile menu
+# ---------------------------------------------------------------------------
 
 class TestMobileMenu:
     def test_menu_toggle_visible_at_mobile(self, page, static_server):
@@ -188,7 +202,6 @@ class TestMobileMenu:
         page.locator('button[data-menu-open]').click()
         page.wait_for_selector('dialog[data-menu-dialog][open]', timeout=3000)
         page.locator('button[data-menu-close]').click()
-        # After close(), the dialog is hidden but still in DOM; check aria-expanded
         toggle = page.locator('button[data-menu-open]')
         page.wait_for_function(
             "() => document.querySelector('[data-menu-open]').getAttribute('aria-expanded') === 'false'",
@@ -203,6 +216,10 @@ class TestMobileMenu:
         assert not desktop_nav.is_visible()
 
 
+# ---------------------------------------------------------------------------
+# CV download
+# ---------------------------------------------------------------------------
+
 class TestCVDownload:
     def test_cv_download_link_present_on_home(self, page, static_server):
         page.set_viewport_size({'width': 1280, 'height': 800})
@@ -212,9 +229,7 @@ class TestCVDownload:
 
     def test_cv_not_present_on_contact(self, page, static_server):
         page.set_viewport_size({'width': 1280, 'height': 800})
-        page.goto(static_server + '/contact.html')
-        # CV is intentionally omitted from the contact page header/footer
-        # (the contact page IS the destination for reaching the artist)
+        page.goto(static_server + '/contact/')
         cv_in_header = page.locator('header [data-cv-download]')
         assert cv_in_header.count() == 0
 
@@ -222,7 +237,6 @@ class TestCVDownload:
         page.set_viewport_size({'width': 1280, 'height': 800})
         page.goto(static_server + '/')
         original_url = page.url
-        # Listen for downloads
         downloads = []
         page.on('download', lambda d: downloads.append(d))
         cv_link = page.locator('[data-cv-download]').first
@@ -232,10 +246,13 @@ class TestCVDownload:
         assert len(downloads) == 1, f'Expected 1 download, got {len(downloads)}'
 
 
+# ---------------------------------------------------------------------------
+# Accessibility
+# ---------------------------------------------------------------------------
+
 class TestAccessibility:
     def test_focus_visible_skip_link(self, page, static_server):
         page.goto(static_server + '/')
-        # Tab to skip link
         page.keyboard.press('Tab')
         skip = page.locator('a.skip-link')
         assert skip.is_visible()
@@ -248,19 +265,23 @@ class TestAccessibility:
             assert alt is not None, f'img #{i} missing alt attribute'
 
     def test_aria_current_on_nav(self, page, static_server):
-        page.goto(static_server + '/works.html')
+        page.goto(static_server + '/works/')
         current = page.locator('[aria-current="page"]')
         assert current.count() >= 1
 
 
+# ---------------------------------------------------------------------------
+# State atlas
+# ---------------------------------------------------------------------------
+
 class TestStateAtlas:
     def test_atlas_tabs_present_on_black_bird(self, page, static_server):
-        page.goto(static_server + '/black-bird.html')
+        page.goto(static_server + '/works/the-black-bird/')
         tabs = page.locator('[role="tab"]')
         assert tabs.count() >= 3
 
     def test_atlas_tab_switch(self, page, static_server):
-        page.goto(static_server + '/black-bird.html')
+        page.goto(static_server + '/works/the-black-bird/')
         tabs = page.locator('[role="tab"]')
         initial_src = page.locator('[data-state-image]').first.get_attribute('src')
         if tabs.count() > 1:
@@ -269,11 +290,15 @@ class TestStateAtlas:
             assert new_src != initial_src, 'Atlas image did not change on tab click'
 
 
+# ---------------------------------------------------------------------------
+# Links and routes
+# ---------------------------------------------------------------------------
+
 class TestLinksAndRoutes:
     def test_work_pages_all_load(self, page, static_server):
         pages = [
-            '/black-bird.html', '/winter-road.html', '/grave-machine.html',
-            '/taroke-remixer.html',
+            '/works/the-black-bird/', '/works/winter-road/',
+            '/works/grave-machine/', '/works/taroke-remixer/',
         ]
         for path in pages:
             page.goto(static_server + path)
@@ -284,15 +309,29 @@ class TestLinksAndRoutes:
         li = page.locator('a[href*="linkedin.com"]')
         assert li.count() >= 1
 
-    def test_black_bird_external_link_present(self, page, static_server):
-        page.goto(static_server + '/black-bird.html')
-        link = page.locator('a[href="https://mozareeduge.github.io/the-black-bird/"]')
+    def test_black_bird_poem_subdomain_link_present(self, page, static_server):
+        # The Black Bird launch link must point to the custom poem subdomain.
+        page.goto(static_server + '/works/the-black-bird/')
+        link = page.locator('a[href="https://poem.theblackbirdfield.com/"]')
         assert link.count() >= 1
 
     def test_taroke_external_link_present(self, page, static_server):
-        page.goto(static_server + '/taroke-remixer.html')
+        page.goto(static_server + '/works/taroke-remixer/')
         link = page.locator('a[href="https://mozareeduge.github.io/taroke-remixer/"]')
         assert link.count() >= 1
+
+    def test_legacy_stubs_redirect_within_site(self, page, static_server):
+        # Each legacy stub should redirect (via JS) before Playwright's load event.
+        stubs = {
+            '/works.html': '/works/',
+            '/about.html': '/about/',
+            '/practice.html': '/practice/',
+        }
+        for stub, expected_suffix in stubs.items():
+            page.goto(static_server + stub, wait_until='networkidle')
+            assert page.url.endswith(expected_suffix), (
+                f'{stub} did not redirect to {expected_suffix}; final URL: {page.url}'
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -314,7 +353,6 @@ class TestSubpathDeployment:
         assert page.title() == 'The Black Bird Field — Works by Mozare'
 
     def test_header_visible_at_subpath(self, page, subpath_url):
-        """CSS and JS assets loaded correctly; header is styled and visible."""
         page.goto(subpath_url + '/')
         assert page.locator('header.site-header').is_visible()
 
@@ -326,38 +364,35 @@ class TestSubpathDeployment:
 
     def test_all_portfolio_pages_load_at_subpath(self, page, subpath_url):
         paths = [
-            '/works.html', '/black-bird.html', '/winter-road.html',
-            '/grave-machine.html', '/taroke-remixer.html',
-            '/practice.html', '/about.html', '/contact.html',
+            '/works/', '/works/the-black-bird/', '/works/winter-road/',
+            '/works/grave-machine/', '/works/taroke-remixer/',
+            '/practice/', '/about/', '/contact/',
         ]
         for path in paths:
             page.goto(subpath_url + path)
             assert page.locator('h1').first.is_visible(), f'{path}: h1 not visible at subpath'
 
     def test_grave_runtime_loads_at_subpath(self, page, subpath_url):
-        page.goto(subpath_url + '/works/grave-machine/')
+        page.goto(subpath_url + '/works/grave-machine/run/')
         assert 'Grave-Machine' in page.title()
         assert 'گور' in page.title()
 
     def test_nav_links_resolve_at_subpath(self, page, subpath_url):
-        """Relative nav links follow the subpath correctly."""
         page.goto(subpath_url + '/')
-        page.locator('a[href="works.html"]').first.click()
+        page.locator('a[href="works/"]').first.click()
         page.wait_for_load_state('load')
         assert 'Works' in page.title()
-        # Navigate back via the wordmark (href="index.html")
-        page.locator('a[href="index.html"]').first.click()
+        # Navigate back via the wordmark
+        page.locator('a.wordmark').first.click()
         page.wait_for_load_state('load')
         assert page.title() == 'The Black Bird Field — Works by Mozare'
 
-    def test_grave_link_resolves_at_subpath(self, page, subpath_url):
-        """Relative grave link from home routes to the runtime at subpath."""
+    def test_grave_launch_link_resolves_at_subpath(self, page, subpath_url):
         page.goto(subpath_url + '/')
-        links = page.locator('a[href="works/grave-machine/"]')
+        links = page.locator('a[href="works/grave-machine/run/"]')
         assert links.count() >= 1
 
     def test_cv_download_at_subpath(self, page, subpath_url):
-        """CV download works; page does not navigate."""
         page.set_viewport_size({'width': 1280, 'height': 800})
         page.goto(subpath_url + '/')
         original_url = page.url
@@ -369,7 +404,6 @@ class TestSubpathDeployment:
         assert len(downloads) == 1, f'Expected 1 download, got {len(downloads)}'
 
     def test_no_failed_asset_requests_at_subpath(self, page, subpath_url):
-        """No 4xx/5xx asset requests when loading home under the subpath."""
         failed = []
         page.on('response', lambda r: failed.append((r.url, r.status)) if r.status >= 400 else None)
         page.goto(subpath_url + '/')
