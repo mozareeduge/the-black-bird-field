@@ -33,10 +33,21 @@ scripts/      capture and validation utilities
 docs/         domain migration decision and deployment notes
 ```
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for full decisions.
-
 ## Domain
 
-`www.theblackbirdfield.com` is currently owned by `mozareeduge/the-black-bird`.
-See [docs/DOMAIN_MIGRATION_DECISION.md](docs/DOMAIN_MIGRATION_DECISION.md) for
-the migration comparison and recommendation awaiting approval.
+| URL | Purpose |
+|-----|---------|
+| `https://theblackbirdfield.com/` | Portfolio (this repository) |
+| `https://www.theblackbirdfield.com/` | Redirects to apex |
+| `https://poem.theblackbirdfield.com/` | The Black Bird poem (`mozareeduge/the-black-bird`) |
+
+The portfolio occupies the apex domain. The Black Bird poem lives on the
+`poem` subdomain with its own GitHub Pages custom domain. See
+[docs/DOMAIN_MIGRATION_DECISION.md](docs/DOMAIN_MIGRATION_DECISION.md) for
+the full record.
+
+## Routes
+
+The build produces directory-style canonical routes (`/works/the-black-bird/`,
+`/practice/`, etc.) and eight legacy redirect stubs at the old flat paths
+(`/black-bird.html` → `/works/the-black-bird/`, etc.).

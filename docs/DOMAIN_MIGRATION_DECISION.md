@@ -1,17 +1,24 @@
 # Domain Migration Decision
 
-**Status: awaiting explicit approval before any irreversible action.**
+**Status: complete — Option A implemented and live as of 2026-07-17.**
 
-## Current state
+## Final state
 
-| Resource | Value | Evidence |
-|---|---|---|
-| Custom domain | `www.theblackbirdfield.com` | |
-| Current owner | `mozareeduge/the-black-bird` | `CNAME` file in that repo (confirmed at package compilation) |
-| DNS manager | Cloudflare | Account-level confirmation required |
-| Portfolio preview | `mozareeduge.github.io/the-black-bird-field` | This repository, pre-approval |
+| URL | Repository | Purpose |
+|-----|-----------|---------|
+| `https://theblackbirdfield.com/` | `mozareeduge/the-black-bird-field` | Portfolio |
+| `https://www.theblackbirdfield.com/` | — | Redirects to apex via Cloudflare |
+| `https://poem.theblackbirdfield.com/` | `mozareeduge/the-black-bird` | The Black Bird poem |
 
-The poem's repository currently owns the custom domain. The portfolio is intended to occupy that domain, and the poem must move to a stable new address.
+DNS is managed via Cloudflare. HTTPS certificates are provisioned by GitHub
+Pages. Both deployments serve from the `main` branch of their respective
+repositories via GitHub Actions.
+
+---
+
+## Decision record
+
+Option A (subdomain for The Black Bird) was chosen and implemented.
 
 ---
 
