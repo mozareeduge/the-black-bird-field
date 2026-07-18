@@ -11,7 +11,7 @@ EMAIL = 'mozare1997@gmail.com'
 WORK_REPO_URLS = {
     'black-bird':     'https://github.com/mozareeduge/the-black-bird',
     'winter-road':    'https://github.com/mozareeduge/winter-road',
-    'grave-machine':  'https://github.com/mozareeduge/the-black-bird-field',
+    'grave-machine':  'https://github.com/mozareeduge/grave-machine',
     'taroke-remixer': 'https://github.com/mozareeduge/taroke-remixer',
 }
 
