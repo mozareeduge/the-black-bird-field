@@ -33,6 +33,17 @@ scripts/      capture and validation utilities
 docs/         domain migration decision and deployment notes
 ```
 
+## Repository map
+
+| Work or layer | Repository | Status |
+|---|---|---|
+| Portfolio | `mozareeduge/the-black-bird-field` | Canonical host and documentation layer |
+| The Black Bird | `mozareeduge/the-black-bird` | Canonical public source archive |
+| The Black Bird development lab | `mozareeduge/black-bird-lab` | Development and experiment history |
+| Winter Road | `mozareeduge/winter-road` | Canonical public source archive |
+| Grave-Machine | `mozareeduge/grave-machine` | Canonical public source archive; live runtime remains in the portfolio |
+| TAROKE RIMIXER | `mozareeduge/taroke-remixer` | Active construction; excluded from this alignment pass |
+
 ## Domain
 
 | URL | Purpose |
