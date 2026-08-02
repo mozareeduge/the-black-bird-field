@@ -1,0 +1,26 @@
+{
+  "action_id": "A-OPEN-PR",
+  "recorded_at": "2026-08-02T18:16:25Z",
+  "status": "PASS",
+  "authorization_sha256": "9aeb8644d9f6bb72998df0cdbc919a500726ff104a541a43fa70d4269497ad9a",
+  "substitution_note": "gh CLI is not installed in this execution environment. detect/apply/readback were performed with git (push) and the GitHub MCP server (create_pull_request, pull_request_read) in place of scripts/release_actions/open_pr_action.py's gh-based argv, per explicit USER authorization covering this substitution.",
+  "detect": {
+    "method": "mcp__github__list_pull_requests",
+    "args": {"owner": "mozareeduge", "repo": "the-black-bird-field", "state": "open", "head": "mozareeduge:claude/black-bird-field-contract-oz6xpv"},
+    "result": [],
+    "interpretation": "ABSENT — no open PR existed for this branch prior to apply"
+  },
+  "action": {
+    "steps": [
+      {"method": "git push -u origin claude/black-bird-field-contract-oz6xpv", "result": "new branch pushed, tracking set up"},
+      {"method": "mcp__github__create_pull_request", "args": {"owner": "mozareeduge", "repo": "the-black-bird-field", "title": "Finalize The Black Bird Field five-work portfolio", "head": "claude/black-bird-field-contract-oz6xpv", "base": "main", "draft": true, "body": "artifacts/release/PR_BODY.md (test-plan checklist item for C-VISUAL-REVIEW updated to checked, referencing artifacts/release/DESIGN_ACCEPTANCE.json, since the visual verdict was recorded before this PR was opened)"}, "result": {"id": "4189380597", "url": "https://github.com/mozareeduge/the-black-bird-field/pull/4", "number": 4}}
+    ]
+  },
+  "readback": {
+    "method": "mcp__github__pull_request_read get",
+    "result": {"number": 4, "state": "open", "draft": true, "head_ref": "claude/black-bird-field-contract-oz6xpv", "base_ref": "main", "head_sha": "1aee9a324dc89f22367bdd4d1f434c799d8c0d5e"},
+    "ok": true,
+    "assertion": "state==OPEN and headRefName==feature_branch and baseRefName==base_branch"
+  },
+  "idempotency_key": "bbf-open-pr-snap-bbf-001"
+}
