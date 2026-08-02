@@ -5,3 +5,11 @@ __pycache__/
 *.swp
 node_modules/
 .env
+
+# Intake/workload material must never land in the repository.
+.claude/
+project-relay/
+PROJECT_RELAY.md
+claude-execution-contract/
+*-execution-contract/
+*.contract.zip
