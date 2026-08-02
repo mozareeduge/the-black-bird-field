@@ -9,19 +9,43 @@ rather than a general Markdown runtime.
 
 from __future__ import annotations
 
+import json
 import re
 from html import escape as _escape
+from pathlib import Path
 
 _EMPHASIS_RE = re.compile(r'\*([^*]+)\*')
+
+_MANIFEST_PATH = Path(__file__).resolve().parents[1] / 'docs' / 'ASSET_MANIFEST.json'
+_DIMENSIONS_BY_PATH: dict[str, tuple[int, int]] = {}
+if _MANIFEST_PATH.is_file():
+    for _entry in json.loads(_MANIFEST_PATH.read_text(encoding='utf-8')).get('assets', []):
+        _dims = _entry['output_dimensions']
+        _site_path = _entry['path'].removeprefix('public/')
+        _DIMENSIONS_BY_PATH[_site_path] = (_dims['width'], _dims['height'])
 
 
 def escape(text: str) -> str:
     return _escape(str(text), quote=True)
 
 
+_ARABIC_SCRIPT_RUN_RE = re.compile(r'[؀-ۿ][؀-ۿ\s]*[؀-ۿ]|[؀-ۿ]')
+
+
+def wrap_script_runs(escaped_text: str) -> str:
+    """Wrap contiguous Arabic-script (Persian) runs in explicit lang/dir
+    (D-TYPOGRAPHY: 'Persian content receives explicit language and
+    direction'). Input must already be HTML-escaped."""
+    return _ARABIC_SCRIPT_RUN_RE.sub(
+        lambda m: f'<span lang="fa" dir="rtl" class="script-fa">{m.group(0)}</span>', escaped_text
+    )
+
+
 def emphasize(text: str) -> str:
-    """Escape text, then resolve *word* markers into <em>word</em>."""
+    """Escape text, resolve *word* markers into <em>word</em>, and wrap any
+    Persian script runs with explicit lang/dir."""
     escaped = escape(text)
+    escaped = wrap_script_runs(escaped)
     return _EMPHASIS_RE.sub(lambda m: f'<em>{m.group(1)}</em>', escaped)
 
 
@@ -66,17 +90,20 @@ def render_ledger(rows, css_class: str = 'ledger') -> str:
 
 
 def render_picture(image_path: str, alt: str, prefix: str, css_class: str = '', loading: str = 'lazy', fetchpriority: str = None) -> str:
-    """Render a single-source responsive-ready <img>.
+    """Render a single-source <img> with intrinsic dimensions.
 
-    T-ASSETS supplies the final optimized WebP variants and <picture>
-    sources; this renders a working <img> against whatever asset exists
-    today so the build stays valid while that work lands.
+    Width/height come from docs/ASSET_MANIFEST.json so the browser can
+    reserve layout space before the image loads (R-PERFORMANCE, CLS).
+    A future responsive-image pass may add <picture> sources / srcset;
+    this already renders a fully working, dimensioned <img>.
     """
     src = resolve_href(image_path, prefix)
     cls = f' class="{escape(css_class)}"' if css_class else ''
     prio = f' fetchpriority="{fetchpriority}"' if fetchpriority else ''
     decoding = ' decoding="async"'
-    return f'<img{cls} src="{escape(src)}" alt="{escape(alt)}" loading="{loading}"{decoding}{prio}>'
+    dims = _DIMENSIONS_BY_PATH.get(image_path)
+    size_attrs = f' width="{dims[0]}" height="{dims[1]}"' if dims else ''
+    return f'<img{cls} src="{escape(src)}"{size_attrs} alt="{escape(alt)}" loading="{loading}"{decoding}{prio}>'
 
 
 def render_selected_views(views, images, prefix: str) -> str:
@@ -141,12 +168,24 @@ def render_project(work_key: str, work: dict, prefix: str, is_alias: bool = Fals
 
 def render_home_hero(hero: dict, works, work_order, prefix: str) -> str:
     index_rows = ''.join(
-        f'<li><a href="{escape(resolve_href(works[k]["canonical_route"], prefix))}">'
+        f'<li><a href="{escape(resolve_href(works[k]["canonical_route"], prefix))}" data-preview-index="{i}">'
         f'<span class="work-no">{i:02d}</span>'
         f'<span class="work-title">{escape(works[k]["title"])}</span>'
         f'<span class="work-operative">{escape(works[k]["operative"])}</span></a></li>'
         for i, k in enumerate(work_order, 1)
     )
+
+    def preview_image(i, k):
+        img = render_picture(
+            works[k]['assets']['hero_preview'],
+            works[k]['home_feature']['image_alt'], prefix,
+            css_class='hero-preview-image' + ('' if i == 1 else ' is-inactive'),
+            loading='eager' if i == 1 else 'lazy',
+            fetchpriority='high' if i == 1 else None,
+        )
+        caption = escape(works[k]['home_feature']['frame_caption'])
+        return img[:-1] + f' data-preview-index="{i}" data-caption="{caption}">'
+
     return f'''
 <section class="hero-field">
   <div class="hero-copy">
@@ -156,16 +195,8 @@ def render_home_hero(hero: dict, works, work_order, prefix: str) -> str:
     {render_actions(hero["actions"], prefix)}
   </div>
   <div class="hero-preview" data-home-preview>
-    {"".join(
-        render_picture(
-            works[k]['assets']['hero_preview'],
-            works[k]['home_feature']['image_alt'], prefix,
-            css_class='hero-preview-image' + ('' if i == 1 else ' is-inactive'),
-            loading='eager' if i == 1 else 'lazy',
-            fetchpriority='high' if i == 1 else None,
-        ) for i, k in enumerate(work_order, 1)
-    )}
-    <p class="hero-preview-caption">{escape(works[work_order[0]]['home_feature']['frame_caption'])}</p>
+    {"".join(preview_image(i, k) for i, k in enumerate(work_order, 1))}
+    <p class="hero-preview-caption" data-preview-caption>{escape(works[work_order[0]]['home_feature']['frame_caption'])}</p>
   </div>
   <nav class="hero-work-index" aria-label="Works">
     <ol>{index_rows}</ol>
