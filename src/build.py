@@ -13,7 +13,6 @@ from each page's output depth, so the same build works under both:
   /the-black-bird-field/                 (GitHub Pages project subpath)
 """
 
-import re
 import sys
 import json
 import shutil
@@ -21,27 +20,26 @@ import hashlib
 import argparse
 from pathlib import Path
 from html import escape
-from base64 import b64encode
 
-# Allow running from repo root or from src/
 _src = Path(__file__).resolve().parent
 if str(_src) not in sys.path:
     sys.path.insert(0, str(_src))
 
-from site_config import (
-    ROUTES, ROUTE_PATHS, GRAVE_RUNTIME_OUTPUT, LEGACY_REDIRECTS,
-    CV_FILENAME, SITE_TITLE, SITE_ORIGIN, ARTISTIC_NAME,
-)
+from content import WORK_ORDER, WORKS, SITE_COPY, CV_FILENAME, SITE_TITLE, SITE_ORIGIN, FORMAL_NAME
+from site_config import ROUTES, ROUTE_PATHS, GRAVE_RUNTIME_OUTPUT, LEGACY_REDIRECTS, CNAME_DOMAIN
 from components import header, footer
+import renderers as R
 
 ROOT = _src.parent
 PUBLIC = ROOT / 'public'
 DIST = ROOT / 'dist'
-PAGES_DIR = _src / 'pages'
 CHECKSUMS_FILE = ROOT / 'tests' / 'fixtures' / 'checksums.json'
 
-# Token pattern — unknown tokens in fragments fail the build.
-_TOKEN_RE = re.compile(r'\{\{[^}]+\}\}')
+CSP = (
+    "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; "
+    "style-src 'self'; font-src 'self'; img-src 'self' data:; media-src 'self'; "
+    "connect-src 'none'; frame-src 'none'; worker-src 'none'; form-action 'self'"
+)
 
 # ---------------------------------------------------------------------------
 # Path helpers
@@ -53,33 +51,15 @@ def root_prefix(output_path):
     return '../' * depth
 
 
-def apply_tokens(html, prefix, label='<fragment>'):
-    """Replace {{TOKEN}} placeholders in fragment HTML.
+def _assert_exists(path, label):
+    if not path.exists():
+        sys.exit(f'ERROR: required {label} not found: {path}')
 
-    Defined tokens are replaced with prefix-relative URLs.
-    Any unrecognised token fails the build immediately.
-    """
-    tokens = {
-        '{{PREFIX}}':              prefix,
-        '{{ASSETS}}':              f'{prefix}assets/',
-        '{{CV}}':                  f'{prefix}{CV_FILENAME}',
-        '{{ROUTE:home}}':          prefix or 'index.html',
-        '{{ROUTE:works}}':         f'{prefix}{ROUTE_PATHS["works"]}',
-        '{{ROUTE:black-bird}}':    f'{prefix}{ROUTE_PATHS["black-bird"]}',
-        '{{ROUTE:winter-road}}':   f'{prefix}{ROUTE_PATHS["winter-road"]}',
-        '{{ROUTE:grave-machine}}': f'{prefix}{ROUTE_PATHS["grave-machine"]}',
-        '{{ROUTE:taroke-remixer}}':f'{prefix}{ROUTE_PATHS["taroke-remixer"]}',
-        '{{ROUTE:grave-machine-run}}': f'{prefix}{ROUTE_PATHS["grave-machine-run"]}',
-        '{{ROUTE:practice}}':      f'{prefix}{ROUTE_PATHS["practice"]}',
-        '{{ROUTE:about}}':         f'{prefix}{ROUTE_PATHS["about"]}',
-        '{{ROUTE:contact}}':       f'{prefix}{ROUTE_PATHS["contact"]}',
-    }
-    unknown = set(_TOKEN_RE.findall(html)) - set(tokens.keys())
-    if unknown:
-        sys.exit(f'ERROR: Unknown tokens in {label}: {sorted(unknown)}')
-    for token, value in tokens.items():
-        html = html.replace(token, value)
-    return html
+
+def _sha256(path):
+    h = hashlib.sha256()
+    h.update(path.read_bytes())
+    return h.hexdigest()
 
 
 # ---------------------------------------------------------------------------
@@ -93,8 +73,13 @@ def og_image_url(meta):
     return f'{SITE_ORIGIN}/{img}'
 
 
-def meta_tags(meta):
-    canonical = SITE_ORIGIN + meta['route']
+def meta_tags(key, meta):
+    """Canonical/OG/Twitter metadata. Aliases canonicalize to their work's
+    /works/ route and carry noindex,follow (D-ALIAS-RENDERING)."""
+    canonical_key = meta.get('canonical_key', key)
+    canonical_route = ROUTES[canonical_key]['route']
+    canonical = SITE_ORIGIN + canonical_route
+    robots = '\n  <meta name="robots" content="noindex,follow">' if meta.get('noindex') else ''
     img_url = og_image_url(meta)
     img_tags = ''
     if img_url:
@@ -103,7 +88,7 @@ def meta_tags(meta):
             f'\n  <meta name="twitter:image" content="{escape(img_url)}">'
         )
     return (
-        f'  <link rel="canonical" href="{escape(canonical)}">\n'
+        f'  <link rel="canonical" href="{escape(canonical)}">{robots}\n'
         f'  <meta property="og:title" content="{escape(meta["title"])}">\n'
         f'  <meta property="og:description" content="{escape(meta["description"])}">\n'
         f'  <meta property="og:url" content="{escape(canonical)}">\n'
@@ -116,79 +101,59 @@ def meta_tags(meta):
     )
 
 
-# ---------------------------------------------------------------------------
-# CV downloader JS (embeds PDF as base64)
-# ---------------------------------------------------------------------------
-
-def build_cv_downloader():
-    pdf_path = PUBLIC / 'documents' / CV_FILENAME
-    _assert_exists(pdf_path, 'CV PDF')
-    encoded = b64encode(pdf_path.read_bytes()).decode('ascii')
-    script = f'''(() => {{
-  'use strict';
-  const filename = '{CV_FILENAME}';
-  const base64 = '{encoded}';
-  const toBlob = () => {{
-    const raw = atob(base64);
-    const bytes = new Uint8Array(raw.length);
-    for (let i = 0; i < raw.length; i += 1) bytes[i] = raw.charCodeAt(i);
-    return new Blob([bytes], {{ type: 'application/pdf' }});
-  }};
-  document.addEventListener('click', (event) => {{
-    const link = event.target.closest('[data-cv-download]');
-    if (!link) return;
-    event.preventDefault();
-    const url = URL.createObjectURL(toBlob());
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = filename;
-    anchor.hidden = true;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
-  }});
-}})();'''
-    out = DIST / 'assets' / 'js' / 'cv-download.js'
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(script, encoding='utf-8')
+def structured_data(key, meta):
+    """JSON-LD CreativeWork block for canonical project pages only."""
+    work_key = meta.get('work_key')
+    if meta.get('renderer') != 'project' or meta.get('noindex') or not work_key:
+        return ''
+    work = WORKS[work_key]
+    data = {
+        '@context': 'https://schema.org',
+        '@type': 'CreativeWork',
+        'name': work['title'],
+        'creator': {'@type': 'Person', 'name': FORMAL_NAME, 'alternateName': 'Mozare'},
+        'dateCreated': str(work['year']),
+        'inLanguage': 'en',
+        'url': SITE_ORIGIN + work['canonical_route'],
+        'sameAs': [work['live_url'], work['repo_url']] if work['live_url'].startswith('http') else [work['repo_url']],
+    }
+    return f'\n  <script type="application/ld+json">{json.dumps(data)}</script>'
 
 
 # ---------------------------------------------------------------------------
-# Page generation
+# Page body dispatch
 # ---------------------------------------------------------------------------
 
-def _assert_exists(path, label):
-    if not path.exists():
-        sys.exit(f'ERROR: required {label} not found: {path}')
-
-
-def _sha256(path):
-    h = hashlib.sha256()
-    h.update(path.read_bytes())
-    return h.hexdigest()
+def render_body(meta, prefix):
+    renderer = meta['renderer']
+    if renderer == 'home':
+        return R.render_home(SITE_COPY, WORKS, WORK_ORDER, prefix)
+    if renderer == 'works':
+        return R.render_works_index(SITE_COPY, WORKS, WORK_ORDER, prefix)
+    if renderer == 'project':
+        work_key = meta['work_key']
+        return R.render_project(work_key, WORKS[work_key], prefix, is_alias=bool(meta.get('canonical_key')))
+    if renderer == 'practice':
+        return R.render_practice(SITE_COPY)
+    if renderer == 'about':
+        return R.render_about(SITE_COPY, prefix)
+    if renderer == 'contact':
+        return R.render_contact(SITE_COPY)
+    sys.exit(f'ERROR: unknown renderer {renderer!r}')
 
 
 def build_page(key, meta):
     output = meta['output']
     prefix = root_prefix(output)
 
-    fragment_path = PAGES_DIR / meta['fragment']
-    _assert_exists(fragment_path, f'page fragment {meta["fragment"]}')
-    body_raw = fragment_path.read_text(encoding='utf-8')
-    body = apply_tokens(body_raw, prefix, label=meta['fragment'])
+    body = render_body(meta, prefix)
 
     css_files = ('tokens.css', 'base.css', 'components.css', 'pages.css', 'responsive.css')
     css = ''.join(
         f'<link rel="stylesheet" href="{prefix}assets/css/{f}">'
         for f in css_files
     )
-    scripts = (
-        f'<script defer src="{prefix}assets/js/site.js"></script>'
-        f'<script defer src="{prefix}assets/js/cv-download.js"></script>'
-    )
-    if meta.get('atlas'):
-        scripts += f'<script defer src="{prefix}assets/js/atlas.js"></script>'
+    scripts = f'<script defer src="{prefix}assets/js/site.js"></script>'
 
     html = f'''<!doctype html>
 <html lang="en">
@@ -197,10 +162,12 @@ def build_page(key, meta):
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="{escape(meta['description'])}">
   <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="{CSP}">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>{escape(meta['title'])}</title>
-{meta_tags(meta)}
+{meta_tags(key, meta)}
   {css}
-  {scripts}
+  {scripts}{structured_data(key, meta)}
 </head>
 <body class="{meta['class']}">
 {header(meta['current'], prefix)}
@@ -222,7 +189,6 @@ def build_legacy_redirects():
     for old_name, route_key in LEGACY_REDIRECTS:
         meta = ROUTES[route_key]
         canonical = SITE_ORIGIN + meta['route']
-        # From a root-level file, route paths are already correct as-is.
         rel_target = ROUTE_PATHS[route_key]
         html = f'''<!doctype html>
 <html lang="en">
@@ -278,24 +244,12 @@ def build_robots():
 # ---------------------------------------------------------------------------
 
 def copy_public_assets():
-    # CSS and JS (cv-download.js is generated separately)
-    for subdir in ('css', 'js'):
-        src = PUBLIC / 'assets' / subdir
-        _assert_exists(src, f'public/assets/{subdir}')
-        dst = DIST / 'assets' / subdir
-        dst.mkdir(parents=True, exist_ok=True)
-        for f in src.iterdir():
-            if f.name != 'cv-download.js':
-                shutil.copy2(f, dst / f.name)
-
-    # Work media directories
-    for work in ('black-bird', 'winter-road', 'grave-machine', 'taroke-remixer'):
-        src = PUBLIC / 'assets' / work
-        if src.exists():
-            dst = DIST / 'assets' / work
-            if dst.exists():
-                shutil.rmtree(dst)
-            shutil.copytree(src, dst)
+    assets_src = PUBLIC / 'assets'
+    _assert_exists(assets_src, 'public/assets')
+    assets_dst = DIST / 'assets'
+    if assets_dst.exists():
+        shutil.rmtree(assets_dst)
+    shutil.copytree(assets_src, assets_dst)
 
     # Grave-Machine runtime at canonical run/ path (byte-identical)
     grave_src = PUBLIC / 'works' / 'grave-machine' / 'index.html'
@@ -304,10 +258,16 @@ def copy_public_assets():
     grave_dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(grave_src, grave_dst)
 
-    # CV document (fallback href for non-JS browsers)
+    # CV document — ordinary same-origin download, no base64 embedding.
     cv_src = PUBLIC / 'documents' / CV_FILENAME
     _assert_exists(cv_src, 'CV PDF')
     shutil.copy2(cv_src, DIST / CV_FILENAME)
+
+    # CNAME — required so the custom domain persists across Actions-based
+    # Pages deployments.
+    cname_src = ROOT / 'CNAME'
+    if cname_src.exists():
+        shutil.copy2(cname_src, DIST / 'CNAME')
 
 
 # ---------------------------------------------------------------------------
@@ -347,10 +307,7 @@ def main():
     print('Copying public assets...')
     copy_public_assets()
 
-    print('Generating cv-download.js...')
-    build_cv_downloader()
-
-    print('Building canonical pages...')
+    print('Building canonical and alias pages...')
     for key, meta in ROUTES.items():
         build_page(key, meta)
         print(f'  {meta["output"]}')
