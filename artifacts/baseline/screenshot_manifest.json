@@ -1,0 +1,110 @@
+[
+  {
+    "page": "home",
+    "path": "/",
+    "viewport": "desktop",
+    "file": "screenshots/home_desktop.png"
+  },
+  {
+    "page": "works",
+    "path": "/works/",
+    "viewport": "desktop",
+    "file": "screenshots/works_desktop.png"
+  },
+  {
+    "page": "black-bird",
+    "path": "/works/the-black-bird/",
+    "viewport": "desktop",
+    "file": "screenshots/black-bird_desktop.png"
+  },
+  {
+    "page": "winter-road",
+    "path": "/works/winter-road/",
+    "viewport": "desktop",
+    "file": "screenshots/winter-road_desktop.png"
+  },
+  {
+    "page": "grave-machine",
+    "path": "/works/grave-machine/",
+    "viewport": "desktop",
+    "file": "screenshots/grave-machine_desktop.png"
+  },
+  {
+    "page": "taroke-remixer",
+    "path": "/works/taroke-remixer/",
+    "viewport": "desktop",
+    "file": "screenshots/taroke-remixer_desktop.png"
+  },
+  {
+    "page": "practice",
+    "path": "/practice/",
+    "viewport": "desktop",
+    "file": "screenshots/practice_desktop.png"
+  },
+  {
+    "page": "about",
+    "path": "/about/",
+    "viewport": "desktop",
+    "file": "screenshots/about_desktop.png"
+  },
+  {
+    "page": "contact",
+    "path": "/contact/",
+    "viewport": "desktop",
+    "file": "screenshots/contact_desktop.png"
+  },
+  {
+    "page": "home",
+    "path": "/",
+    "viewport": "mobile",
+    "file": "screenshots/home_mobile.png"
+  },
+  {
+    "page": "works",
+    "path": "/works/",
+    "viewport": "mobile",
+    "file": "screenshots/works_mobile.png"
+  },
+  {
+    "page": "black-bird",
+    "path": "/works/the-black-bird/",
+    "viewport": "mobile",
+    "file": "screenshots/black-bird_mobile.png"
+  },
+  {
+    "page": "winter-road",
+    "path": "/works/winter-road/",
+    "viewport": "mobile",
+    "file": "screenshots/winter-road_mobile.png"
+  },
+  {
+    "page": "grave-machine",
+    "path": "/works/grave-machine/",
+    "viewport": "mobile",
+    "file": "screenshots/grave-machine_mobile.png"
+  },
+  {
+    "page": "taroke-remixer",
+    "path": "/works/taroke-remixer/",
+    "viewport": "mobile",
+    "file": "screenshots/taroke-remixer_mobile.png"
+  },
+  {
+    "page": "practice",
+    "path": "/practice/",
+    "viewport": "mobile",
+    "file": "screenshots/practice_mobile.png"
+  },
+  {
+    "page": "about",
+    "path": "/about/",
+    "viewport": "mobile",
+    "file": "screenshots/about_mobile.png"
+  },
+  {
+    "page": "contact",
+    "path": "/contact/",
+    "viewport": "mobile",
+    "file": "screenshots/contact_mobile.png"
+  }
+]
