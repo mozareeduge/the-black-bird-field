@@ -100,3 +100,33 @@ def test_every_work_link_uses_canonical_current_url():
     assert 'https://poem.theblackbirdfield.com/' in html
     html = (DIST / 'works' / 'unhappy-scenario' / 'index.html').read_text(encoding='utf-8')
     assert 'https://unhappy.theblackbirdfield.com/' in html
+
+
+def test_unhappy_locked_message_fixture_matches_release_source():
+    """The eight system messages are locked inside the artwork itself; the
+    portfolio keeps only a byte-identical validation fixture, never a
+    rendered copy (R-COPY-EXACT)."""
+    fixture = ROOT / 'tests' / 'fixtures' / 'unhappy_procedure_text.txt'
+    text = fixture.read_text(encoding='utf-8')
+    for line in (
+        'Upload failed', 'Sending the message failed', 'Connection attempt failed',
+        'Reconnecting…', 'Failed', 'Do you want to report the problem?',
+        'Reporting the problem…', 'Reporting failed',
+    ):
+        assert line in text, line
+    assert 'Try again' in text
+    import hashlib
+    assert hashlib.sha256(fixture.read_bytes()).hexdigest() == (
+        'd3ec2fead5ef9a3dff6ab96576d07df506c270153c74e8eddc3a42564ea0cb70'
+    )
+
+
+def test_try_again_separated_from_locked_messages_in_fixture():
+    """'Try again' is an interface action outside the eight-message poem
+    core; the fixture must keep it in a clearly separate section rather
+    than mixed into the locked message list (Section 11.2)."""
+    fixture = ROOT / 'tests' / 'fixtures' / 'unhappy_procedure_text.txt'
+    text = fixture.read_text(encoding='utf-8')
+    messages_section, _, action_section = text.partition('Interface action outside the poem:')
+    assert 'Try again' not in messages_section
+    assert 'Try again' in action_section
