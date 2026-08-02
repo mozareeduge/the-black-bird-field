@@ -53,7 +53,7 @@
     "C-BROWSER": "PASS", "C-ACCESSIBILITY": "PASS", "C-ASSETS": "PASS",
     "C-SECURITY": "PASS", "C-PERFORMANCE": "PASS", "C-NOJS": "PASS",
     "C-WORKFLOW": "PASS", "C-GRAVE": "PASS",
-    "C-VISUAL-REVIEW": "AWAITING_REVIEW (human, owner MOZARE, not automatable)",
+    "C-VISUAL-REVIEW": "ACCEPTED (human, owner MOZARE, recorded in artifacts/release/DESIGN_ACCEPTANCE.json)",
     "C-LIVE-READBACK": "NOT_YET_APPLICABLE (no push/merge/deploy authorized yet)",
     "raw_records": "artifacts/release/checks/*.json (copied verbatim from each check's own runner output)"
   },

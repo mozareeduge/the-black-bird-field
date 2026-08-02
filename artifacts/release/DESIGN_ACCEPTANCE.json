@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "SNAP-BBF-001",
+  "status": "ACCEPTED",
+  "accepted_by": "USER",
+  "accepted_at": "2026-08-02T00:00:00Z",
+  "check_id": "C-VISUAL-REVIEW",
+  "judgment_dimension": "curatorial coherence, visual rhythm, image selection quality and conceptual restraint",
+  "candidate_identity": {
+    "algorithm": "sha256-path-content-v3",
+    "sha256": "6eea933a15d87e5629ec64cbc64785891fe821111b773bd54b43b4012a3e7e2a",
+    "files": 105,
+    "bytes": 4997031,
+    "note": "Computed with the sealed contract's own operations/CANDIDATE_IDENTITY.json material_paths/exclude_patterns via tools/runtime_common.py:candidate_fingerprint()."
+  },
+  "reviewed_evidence": [
+    "artifacts/release/screenshots/home-wide-01.png",
+    "artifacts/release/screenshots/home-compact-01.png",
+    "artifacts/release/screenshots/home-mobile-01.png",
+    "artifacts/release/video/mobile-menu-01.webm",
+    "artifacts/release/screenshots/project-black-bird-wide.png",
+    "artifacts/release/screenshots/project-black-bird-mobile.png",
+    "artifacts/release/screenshots/project-winter-road-wide.png",
+    "artifacts/release/screenshots/project-winter-road-mobile.png",
+    "artifacts/release/screenshots/project-unhappy-scenario-wide.png",
+    "artifacts/release/screenshots/project-unhappy-scenario-mobile.png",
+    "artifacts/release/screenshots/project-grave-machine-wide.png",
+    "artifacts/release/screenshots/project-grave-machine-mobile.png",
+    "artifacts/release/screenshots/project-taroke-remixer-wide.png",
+    "artifacts/release/screenshots/project-taroke-remixer-mobile.png",
+    "artifacts/release/reports/alias-black-bird.json",
+    "artifacts/release/reports/alias-winter-road.json",
+    "artifacts/release/reports/alias-unhappy-scenario.json",
+    "artifacts/release/reports/alias-grave-machine.json",
+    "artifacts/release/reports/alias-taroke-remixer.json"
+  ],
+  "note": "Verdict given in-session against the candidate-bound contact sheets presented for this exact fingerprint; recorded verbatim, not inferred."
+}
