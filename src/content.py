@@ -90,6 +90,18 @@ WORKS = {
             'description': 'The Black Bird is a hypergraph research poem by Mozare that gathers sources, names, relations, poem-nodes, and reader routes into a born-digital literary field.',
             'og_image_alt': 'The Black Bird graph beside a Mapping Note Object in the Reader.',
         },
+        'assets': {
+            'hero_preview': 'assets/black-bird/portfolio/hero.png',
+            'hero': 'assets/black-bird/portfolio/hero.png',
+            'home_feature': 'assets/black-bird/portfolio/home-feature.png',
+            'works_thumb': 'assets/black-bird/portfolio/works-thumb.png',
+            'views': [
+                'assets/black-bird/portfolio/view-01.png',
+                'assets/black-bird/portfolio/view-02.png',
+                'assets/black-bird/portfolio/view-03-mobile.png',
+                'assets/black-bird/portfolio/view-04-mobile.png',
+            ],
+        },
         'home_feature': {
             'form_line': 'Hypergraph research poem · 2026',
             'title': 'The Black Bird',
@@ -160,6 +172,18 @@ WORKS = {
             'title': 'Winter Road - A Digital Haiga Space',
             'description': 'Winter Road is a digital haiga space by Mozare: nine English haiku developed through permutation and dispersed across a near-black field.',
             'og_image_alt': 'Two Winter Road haiku visible at different strengths in the near-black field.',
+        },
+        'assets': {
+            'hero_preview': 'assets/winter-road/portfolio/hero.png',
+            'hero': 'assets/winter-road/portfolio/hero.png',
+            'home_feature': 'assets/winter-road/portfolio/home-feature.png',
+            'works_thumb': 'assets/winter-road/portfolio/works-thumb.png',
+            'views': [
+                'assets/winter-road/portfolio/view-01.png',
+                'assets/winter-road/portfolio/view-02.png',
+                'assets/winter-road/portfolio/view-03.png',
+                'assets/winter-road/portfolio/view-04-mobile.png',
+            ],
         },
         'home_feature': {
             'form_line': 'Digital haiga space · 2026',
@@ -232,6 +256,18 @@ WORKS = {
             'title': 'UNHAPPY Scenario - An Internet Blackout Poem',
             'description': 'UNHAPPY Scenario is a browser-native found-interface poem by Mozare, composed in relation to repeated internet blackouts in Iran.',
             'og_image_alt': 'The UNHAPPY Scenario messenger apparatus beside its accumulated poem field.',
+        },
+        'assets': {
+            'hero_preview': 'assets/unhappy-scenario/portfolio/hero.png',
+            'hero': 'assets/unhappy-scenario/portfolio/hero.png',
+            'home_feature': 'assets/unhappy-scenario/portfolio/home-feature.png',
+            'works_thumb': 'assets/unhappy-scenario/portfolio/works-thumb.png',
+            'views': [
+                'assets/unhappy-scenario/portfolio/view-01.png',
+                'assets/unhappy-scenario/portfolio/view-02.png',
+                'assets/unhappy-scenario/portfolio/view-03.png',
+                'assets/unhappy-scenario/portfolio/view-04-mobile.png',
+            ],
         },
         'home_feature': {
             'form_line': 'Internet blackout poem · 2026',
@@ -311,6 +347,18 @@ WORKS = {
             'description': 'Grave-Machine is a bilingual generative electronic poem by Mozare, grounded in the play Grave and composed within the remix lineage of Taroko Gorge.',
             'og_image_alt': 'Grave-Machine generated lines beside a runtime trace.',
         },
+        'assets': {
+            'hero_preview': 'assets/grave-machine/portfolio/hero.png',
+            'hero': 'assets/grave-machine/portfolio/hero.png',
+            'home_feature': 'assets/grave-machine/portfolio/home-feature.png',
+            'works_thumb': 'assets/grave-machine/portfolio/works-thumb.png',
+            'views': [
+                'assets/grave-machine/portfolio/view-01.png',
+                'assets/grave-machine/portfolio/view-02.png',
+                'assets/grave-machine/portfolio/view-03.png',
+                'assets/grave-machine/portfolio/view-04.png',
+            ],
+        },
         'home_feature': {
             'form_line': 'Generative electronic poem · 2026',
             'title': 'Grave-Machine',
@@ -382,6 +430,18 @@ WORKS = {
             'title': 'TAROKE RIMIXER - A Work for Generative Literature',
             'description': 'TAROKE RIMIXER is a browser-native creative work by Mozare for composing constrained generative literature through authored materials, rules, runtime, and revision.',
             'og_image_alt': 'TAROKE RIMIXER showing authored materials and a readable line-making route.',
+        },
+        'assets': {
+            'hero_preview': 'assets/taroke-remixer/portfolio/hero.png',
+            'hero': 'assets/taroke-remixer/portfolio/hero.png',
+            'home_feature': 'assets/taroke-remixer/portfolio/home-feature.png',
+            'works_thumb': 'assets/taroke-remixer/portfolio/works-thumb.png',
+            'views': [
+                'assets/taroke-remixer/portfolio/view-01.png',
+                'assets/taroke-remixer/portfolio/view-02.png',
+                'assets/taroke-remixer/portfolio/view-03.png',
+                'assets/taroke-remixer/portfolio/view-04-mobile.png',
+            ],
         },
         'home_feature': {
             'form_line': 'Work for generative literature · 2026',

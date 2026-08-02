@@ -46,7 +46,7 @@ ROUTES = {
         'current': 'home',
         'class': 'home-page',
         'renderer': 'home',
-        'og_image': f'assets/{WORK_ORDER[0]}/_placeholder.png',
+        'og_image': WORKS[WORK_ORDER[0]]['assets']['hero'],
     },
     'works': {
         'route': '/works/',
@@ -98,7 +98,7 @@ for _key in WORK_ORDER:
         'class': f'project-page project-page--{_key}',
         'renderer': 'project',
         'work_key': _key,
-        'og_image': _work.get('assets', {}).get('hero', f'assets/{_key}/_placeholder.png'),
+        'og_image': _work['assets']['hero'],
     }
     ROUTES[f'{_key}-alias'] = {
         'route': _work['alias_route'],
@@ -112,7 +112,7 @@ for _key in WORK_ORDER:
         'canonical_key': _key,
         'noindex': True,
         'sitemap': False,
-        'og_image': _work.get('assets', {}).get('hero', f'assets/{_key}/_placeholder.png'),
+        'og_image': _work['assets']['hero'],
     }
 
 # Grave runtime: not a portfolio page, not sitemap-indexed.

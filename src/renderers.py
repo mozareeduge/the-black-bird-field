@@ -101,9 +101,9 @@ def render_selected_views(views, images, prefix: str) -> str:
 def render_project(work_key: str, work: dict, prefix: str, is_alias: bool = False) -> str:
     project = work['project']
     subtitle_html = f'<p class="project-subtitle">{escape(project["subtitle"])}</p>' if project.get('subtitle') else ''
-    hero_image = work.get('assets', {}).get('hero', f'assets/{work_key}/_placeholder.png')
+    hero_image = work['assets']['hero']
     context_paragraphs = ''.join(f'<p>{emphasize(p)}</p>' for p in project['context_paragraphs'])
-    view_images = work.get('assets', {}).get('views') or [hero_image] * len(project['selected_views'])
+    view_images = work['assets']['views']
     locked = project.get('locked_textual_authority')
     locked_html = f'<p class="locked-note">{emphasize(locked)}</p>' if locked else ''
 
@@ -158,7 +158,7 @@ def render_home_hero(hero: dict, works, work_order, prefix: str) -> str:
   <div class="hero-preview" data-home-preview>
     {"".join(
         render_picture(
-            works[k].get('assets', {}).get('hero_preview', f'assets/{k}/_placeholder.png'),
+            works[k]['assets']['hero_preview'],
             works[k]['home_feature']['image_alt'], prefix,
             css_class='hero-preview-image' + ('' if i == 1 else ' is-inactive'),
             loading='eager' if i == 1 else 'lazy',
@@ -181,7 +181,7 @@ def render_home_features(works, work_order, prefix: str) -> str:
         w = works[k]
         f = w['home_feature']
         subtitle_html = f'<p class="feature-subtitle">{escape(f["subtitle"])}</p>' if f.get('subtitle') else ''
-        img = w.get('assets', {}).get('home_feature', f'assets/{k}/_placeholder.png')
+        img = w['assets']['home_feature']
         features.append(f'''
 <article class="home-feature home-feature--{i:02d}">
   <figure class="feature-media">
@@ -239,7 +239,7 @@ def render_works_index(site_copy: dict, works, work_order, prefix: str) -> str:
     for i, k in enumerate(work_order, 1):
         w = works[k]
         idx = w['works_index']
-        img = w.get('assets', {}).get('works_thumb', f'assets/{k}/_placeholder.png')
+        img = w['assets']['works_thumb']
         rows.append(f'''
 <article class="works-row">
   <span class="work-no">{i:02d}</span>
