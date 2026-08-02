@@ -1,7 +1,7 @@
 {
   "action_id": "A-CONFIGURE-UNHAPPY-DOMAIN",
   "recorded_at": "2026-08-02T21:00:06Z",
-  "status": "PARTIAL_PENDING_LIVE_READBACK",
+  "status": "DNS_LIVE_HTTPS_ENFORCEMENT_PENDING",
   "substitution_note": "gh CLI and CLOUDFLARE_API_TOKEN are not available in this execution environment. Cloudflare DNS steps were performed with the Cloudflare MCP tool (mcp__Cloudflare_API__execute) in place of scripts/release_actions/unhappy_domain_action.py's gh/urllib-based argv. GitHub Pages custom-domain configuration (PUT /repos/{repo}/pages) has no available tool (no gh CLI, no MCP tool covering repository Pages settings) and was performed directly by USER outside this session, per their message.",
   "release_identity_check": {
     "method": "git rev-parse origin/main:index.html (local clone of mozareeduge/UNHAPPY-scenario)",
@@ -36,9 +36,14 @@
         {"method": "WebFetch https://unhappy.theblackbirdfield.com/", "result": "blocked by this session's outbound network policy (403 Forbidden)"}
       ],
       "ok": null,
-      "interpretation": "NOT VERIFIABLE FROM THIS SESSION — this execution environment's network policy blocks outbound requests to this domain family (consistent with earlier blocks on theblackbirdfield.com subdomains and mozareeduge.github.io during T-ASSETS). This is an environment restriction, not evidence the live site is broken or working. Requires verification from outside this sandbox (your browser, or a later session/tool with unrestricted egress) before this action can be marked PASS."
+      "interpretation": "NOT VERIFIABLE FROM THIS SESSION — this execution environment's network policy blocks outbound requests to this domain family (consistent with earlier blocks on theblackbirdfield.com subdomains and mozareeduge.github.io during T-ASSETS). This is an environment restriction, not evidence the live site is broken or working."
+    },
+    "user_confirmation": {
+      "reported_at": "2026-08-02T21:10:00Z",
+      "statement": "User confirmed (outside this session, in their own browser) that the subdomain is visible/serving correctly, and that GitHub's Pages 'DNS check' for the custom domain is successful. HTTPS enforcement is not yet enabled — GitHub Pages is still provisioning the certificate — and the user will enable 'Enforce HTTPS' once it becomes available.",
+      "accepted_as": "authoritative external confirmation in place of this session's blocked direct verification; this session cannot independently re-verify HTTP(S) reachability for this domain"
     }
   },
   "idempotency_key": "bbf-unhappy-domain-snap-bbf-001",
-  "outstanding": "Live HTTPS readback (C-LIVE-READBACK-equivalent for this action) unconfirmed from within this session. DNS is applied and correct on the Cloudflare side; GitHub Pages side was configured by USER outside this session and not independently verified by any available tool here."
+  "outstanding": "HTTPS enforcement (pages.https_enforced) not yet toggled on GitHub's side — expected once GitHub finishes issuing the certificate for the custom domain (typically minutes after a successful DNS check); USER will enable it. DNS check, domain reachability, and Pages association are otherwise confirmed. This action cannot be marked strict-schema PASS (per unhappy_domain_action.py's own success criteria, which require https_enforced==true) until that toggle completes."
 }
