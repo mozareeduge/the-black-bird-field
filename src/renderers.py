@@ -108,7 +108,7 @@ def render_project(work_key: str, work: dict, prefix: str, is_alias: bool = Fals
     locked_html = f'<p class="locked-note">{emphasize(locked)}</p>' if locked else ''
 
     return f'''
-<article class="project-hero">
+<article class="project-hero inverse">
   <div class="project-hero-copy">
     <p class="form-line">{escape(project["form_line"])}</p>
     <h1>{escape(work["title"])}</h1>
@@ -131,7 +131,7 @@ def render_project(work_key: str, work: dict, prefix: str, is_alias: bool = Fals
   <h2 id="views-heading">A relation, held long enough to read</h2>
   {render_selected_views(project["selected_views"], view_images, prefix)}
 </section>
-<section class="work-details" aria-labelledby="details-heading">
+<section class="work-details inverse" aria-labelledby="details-heading">
   <h2 id="details-heading">Work details</h2>
   {render_ledger(project["details"])}
   {locked_html}
@@ -196,7 +196,7 @@ def render_home_features(works, work_order, prefix: str) -> str:
     {render_actions(f["actions"], prefix, item_class="action action--secondary")}
   </div>
 </article>''')
-    return f'<div class="home-feature-sequence">{"".join(features)}</div>'
+    return f'<div class="home-feature-sequence inverse">{"".join(features)}</div>'
 
 
 def render_home(site_copy: dict, works, work_order, prefix: str) -> str:
@@ -217,7 +217,7 @@ def render_home(site_copy: dict, works, work_order, prefix: str) -> str:
   <p>{escape(lead["body"])}</p>
 </section>
 {render_home_features(works, work_order, prefix)}
-<section class="practice-teaser">
+<section class="practice-teaser inverse">
   <p class="section-label">{escape(teaser["section_label"])}</p>
   <h2>{escape(teaser["h2"])}</h2>
   <p>{escape(teaser["body"])}</p>
