@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "SNAP-BBF-001",
+  "contract_id": "BLACK-BIRD-FIELD-FIVE-WORK-FINALIZATION",
+  "contract_version": "1.0.1",
+  "repository": "mozareeduge/the-black-bird-field",
+  "repository_start": {
+    "branch": "main",
+    "commit": "49b656eba480903835315767057eec4bb6fa7f6e"
+  },
+  "feature_branch": "claude/black-bird-field-contract-oz6xpv",
+  "candidate_identity": {
+    "algorithm": "sha256-path-content-v3",
+    "sha256": "6eea933a15d87e5629ec64cbc64785891fe821111b773bd54b43b4012a3e7e2a",
+    "files": 105,
+    "bytes": 4997031,
+    "note": "Computed with the sealed contract's own operations/CANDIDATE_IDENTITY.json material_paths/exclude_patterns via tools/runtime_common.py:candidate_fingerprint()."
+  },
+  "changed_paths_summary": {
+    "removed": [
+      "src/pages/*.html (nine per-work fragments)",
+      "public/assets/js/atlas.js",
+      "public/assets/{black-bird,winter-road,taroke-remixer,grave-machine}/<old flat numbered screenshots>",
+      "public/assets/winter-road/WALKTHROUGH_MANIFEST.md and walkthrough/",
+      "scripts/validate_assets.py",
+      ".github/workflows/ci.yml"
+    ],
+    "added": [
+      "src/content.py, src/renderers.py",
+      "docs/authority/CANONICAL_COPY.md, docs/authority/PROJECT_ACTION_CONFIG.json",
+      "docs/ASSET_MANIFEST.json, docs/CAPTURE_REPORT.md",
+      "docs/DOMAIN_AND_REDIRECTS.md, docs/ADDING_A_WORK.md, docs/RELEASE_CHECKLIST.md, docs/ROLLBACK.md",
+      "public/assets/{black-bird,winter-road,unhappy-scenario,grave-machine,taroke-remixer}/portfolio/*.png (35 files)",
+      "public/assets/fonts/*.woff2 (8 files) + SOURCES.md",
+      "scripts/validate_authority_environment.py, scripts/validate_asset_manifest.py, scripts/validate_test_authority.py, scripts/validate_workflows.py, scripts/verify_live_release.py",
+      "scripts/release_actions/*.py (5 files, installed not executed)",
+      "tests/static/test_copy_contract.py, test_routes.py, test_assets.py, test_security.py (test_build.py rewritten)",
+      "tests/browser/test_accessibility.py, test_performance_budget.py, test_no_javascript.py, test_responsive_matrix.py, conftest.py (test_pages.py rewritten)",
+      "tests/fixtures/unhappy_procedure_text.txt",
+      "requirements-test.txt",
+      "artifacts/baseline/**, artifacts/release/**"
+    ],
+    "rewritten": [
+      "src/build.py, src/site_config.py, src/components.py",
+      "public/assets/css/*.css (all 5 files)",
+      "public/assets/js/site.js",
+      "CLAUDE.md (new), README.md, docs/DEPLOYMENT.md, docs/DOMAIN_MIGRATION_DECISION.md",
+      ".github/workflows/pages.yml, pyproject.toml, .gitignore"
+    ]
+  },
+  "checks": {
+    "C-BUILD": "PASS", "C-COPY": "PASS", "C-ROUTES": "PASS", "C-STATIC": "PASS",
+    "C-BROWSER": "PASS", "C-ACCESSIBILITY": "PASS", "C-ASSETS": "PASS",
+    "C-SECURITY": "PASS", "C-PERFORMANCE": "PASS", "C-NOJS": "PASS",
+    "C-WORKFLOW": "PASS", "C-GRAVE": "PASS",
+    "C-VISUAL-REVIEW": "AWAITING_REVIEW (human, owner MOZARE, not automatable)",
+    "C-LIVE-READBACK": "NOT_YET_APPLICABLE (no push/merge/deploy authorized yet)",
+    "raw_records": "artifacts/release/checks/*.json (copied verbatim from each check's own runner output)"
+  },
+  "test_suite": {
+    "tests/static + tests/browser": "250 passed, 0 failed, 0 skipped, 0 xfail"
+  },
+  "budgets": {
+    "html_max_kb": "16 (budget 120)",
+    "css_total_kb": "35 (budget 85)",
+    "js_total_kb": "2.3 (budget 12)",
+    "fonts_total_kb": "163 (budget 300)",
+    "lcp_hero_images": "all six (home + 5 project pages) within 350 KB desktop budget",
+    "other_portfolio_images": "all within 300 KB desktop / 160 KB mobile budget after Pillow lossless re-encode"
+  },
+  "checksums": {
+    "grave_machine_bilingual_v1_1": "0e1cfd0097cf261f169c0e52a88d39f1541f04f07d179b1f009ff2cc311eb385",
+    "match": true
+  },
+  "evidence_index": {
+    "EV-HOME-WIDE": "artifacts/release/screenshots/home-wide-01.png",
+    "EV-HOME-COMPACT": "artifacts/release/screenshots/home-compact-01.png",
+    "EV-HOME-MOBILE": "artifacts/release/screenshots/home-mobile-01.png",
+    "EV-MENU": "artifacts/release/video/mobile-menu-01.webm",
+    "EV-PROJECTS": "artifacts/release/screenshots/project-{black-bird,winter-road,unhappy-scenario,grave-machine,taroke-remixer}-{wide,mobile}.png (10 files)",
+    "EV-ALIASES": "artifacts/release/reports/alias-*.json (5 files)",
+    "EV-NOJS": "artifacts/release/reports/nojs-report.json",
+    "EV-RELEASE-REPORT": "artifacts/release/RELEASE_EVIDENCE.json"
+  },
+  "deviations": [
+    {
+      "id": "DEV-01",
+      "description": "Portfolio images ship as optimized PNG, not the WebP + responsive srcset variants Section 7.2 describes.",
+      "reason": "No image-optimization/conversion pipeline was built in the time available for this candidate; PNGs are within every performance budget after lossless re-encoding (Pillow optimize=True).",
+      "impact": "Slightly larger transfer than an optimal WebP pipeline would give; no functional or accessibility impact.",
+      "recorded_in": "docs/CAPTURE_REPORT.md"
+    },
+    {
+      "id": "DEV-02",
+      "description": "scripts/capture_grave.py was not generalized or archived per the authority migration matrix's suggestion; it still hardcodes /opt/pw-browsers/chromium.",
+      "reason": "It was not re-run for this candidate (the existing English captures under public/assets/grave-machine/bilingual/ were reused as portfolio-asset sources); out of scope for the tasks actually touching Grave-Machine evidence.",
+      "impact": "None on the shipped site; only affects a future maintainer re-capturing Grave-Machine states outside this specific environment.",
+      "recorded_in": "this file"
+    }
+  ],
+  "rollback": {
+    "record": "docs/ROLLBACK.md",
+    "summary": "Static build from one commit; rollback is redeploying a prior main commit. No DNS or artwork-repository changes are entangled with a portfolio rollback."
+  }
+}
