@@ -37,24 +37,22 @@
     });
   }
 
-  // Home hero preview — wide-screen hover/keyboard-focus enhancement only
-  // (Section 4.2.1). The first frame and caption are already correct in
-  // HTML; this only switches the active frame. No aria-live: decorative
-  // image switching must not be announced.
-  const previewRoot = document.querySelector('[data-home-preview]');
+  const previewRoot = document.querySelector('[data-preview-root]');
   if (previewRoot) {
-    const images = [...previewRoot.querySelectorAll('[data-preview-index]')];
-    const caption = previewRoot.querySelector('[data-preview-caption]');
-    const links = [...document.querySelectorAll('.hero-work-index [data-preview-index]')];
-    const activate = (index) => {
-      images.forEach((img) => img.classList.toggle('is-inactive', img.dataset.previewIndex !== index));
-      const active = images.find((img) => img.dataset.previewIndex === index);
-      if (active && caption) caption.textContent = active.dataset.caption || '';
+    const links = [...previewRoot.querySelectorAll('[data-preview-link]')];
+    const frames = [...previewRoot.querySelectorAll('[data-preview-frame]')];
+    const number = previewRoot.querySelector('[data-preview-number]');
+    const label = previewRoot.querySelector('[data-preview-label]');
+    const activate = (key, link) => {
+      frames.forEach((frame) => frame.classList.toggle('is-active', frame.dataset.previewFrame === key));
+      links.forEach((item) => item.classList.toggle('is-active', item === link));
+      if (number) number.textContent = link.dataset.number || '';
+      if (label) label.textContent = link.dataset.label || '';
     };
     links.forEach((link) => {
-      const index = link.dataset.previewIndex;
-      link.addEventListener('mouseenter', () => activate(index));
-      link.addEventListener('focus', () => activate(index));
+      const key = link.dataset.previewLink;
+      link.addEventListener('mouseenter', () => activate(key, link));
+      link.addEventListener('focus', () => activate(key, link));
     });
   }
 })();
