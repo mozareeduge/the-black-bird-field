@@ -3,34 +3,28 @@
 ## GitHub Pages deployment
 
 The portfolio deploys to `https://theblackbirdfield.com/` (custom domain) via
-`.github/workflows/pages.yml`. A root `CNAME` file is copied into `dist/` by
-the build so the custom domain persists across Actions-based Pages
-deployments; GitHub Pages and Cloudflare handle HTTPS automatically.
+`.github/workflows/pages.yml`. The CNAME file in this repository points to
+`theblackbirdfield.com`; GitHub Pages and Cloudflare handle HTTPS automatically.
 
 The site uses document-relative asset paths throughout, so it also works
-correctly under the `/the-black-bird-field/` GitHub Pages project subpath —
-the browser tests verify both origins against the same build artifact.
-
-UNHAPPY Scenario is a separate, autonomous repository
-(`mozareeduge/UNHAPPY-scenario`) released unchanged at its own custom
-subdomain, `https://unhappy.theblackbirdfield.com/`, via GitHub Pages on
-that repository. This portfolio only links to it; it does not build, host,
-or modify that runtime.
+correctly under the `/the-black-bird-field/` GitHub Pages project subpath — the
+browser tests verify both origins against the same build artifact.
 
 ## Workflows
 
-### `.github/workflows/pages.yml` (quality + deploy)
+### `.github/workflows/pages.yml` (deployment)
 
-Runs the quality job (build, static tests, browser tests) on pull requests
-and pushes to `main`, and deploys to GitHub Pages only after a
-quality-passing push to `main`. Pull request builds build and test but never
-publish to the production Pages site.
+Runs on pushes and pull requests targeting `main`:
 
-### `.github/workflows/ci.yml` (pull request / branch quality)
+1. Builds the site: `python src/build.py --check`
+2. Runs static tests: `python -m pytest tests/static/ -v`
+3. Runs browser tests at both `/` and `/the-black-bird-field/`: `python -m pytest tests/browser/ -v`
+4. Uploads `dist/` via `actions/upload-pages-artifact`
+5. **Deploys to GitHub Pages** only when `github.event_name == 'push'` and `github.ref == 'refs/heads/main'` — pull request builds build and test but never publish to the production Pages site.
 
-Runs the same quality job on pull requests and non-`main` pushes for
-inspection, without deploying. See `docs/authority/` for the exact job
-definition shared between the two workflows.
+### `.github/workflows/ci.yml` (all-branch CI)
+
+Runs on every push and pull request to any branch. Builds, tests, and uploads `dist/` as a downloadable artifact for inspection. Does not deploy to Pages.
 
 ## Build locally
 
@@ -46,40 +40,35 @@ Visit `http://localhost:8080/` to see the site at root, or
 
 ## Domain
 
-See [DOMAIN_MIGRATION_DECISION.md](DOMAIN_MIGRATION_DECISION.md) (historical
-record) for the original portfolio/poem domain split. Current live domains:
-
-| URL | Repository |
-|-----|-----------|
-| `https://theblackbirdfield.com/` | `mozareeduge/the-black-bird-field` (this repository) |
-| `https://poem.theblackbirdfield.com/` | `mozareeduge/the-black-bird` |
-| `https://unhappy.theblackbirdfield.com/` | `mozareeduge/UNHAPPY-scenario` |
+See [DOMAIN_MIGRATION_DECISION.md](DOMAIN_MIGRATION_DECISION.md) for the full
+migration record. The migration is complete: `theblackbirdfield.com` now serves
+the portfolio and `poem.theblackbirdfield.com` serves The Black Bird poem.
 
 ## Routes
 
-Canonical pages are generated as directory indexes from the content/route
-registry under `docs/authority/`: home, the works index, one project page
-per work, practice, about, and contact — ten canonical pages in total. Each
-project also has a full root alias (for example `/the-black-bird/` renders
-the same project page as `/works/the-black-bird/`, with alias-appropriate
-canonical/`noindex` metadata). Historical flat-path stubs
-(`/about.html` etc.) redirect to the canonical directory routes with
-`meta-refresh` and `location.replace()`. The Grave-Machine runtime keeps its
-own unchanged route and is excluded from the sitemap.
+Canonical pages are generated as directory indexes:
 
-The exact generated table is produced by `src/build.py` from the registry;
-run `python src/build.py --check` to see every output path.
+| Route | Output |
+|-------|--------|
+| `/` | `index.html` |
+| `/works/` | `works/index.html` |
+| `/works/the-black-bird/` | `works/the-black-bird/index.html` |
+| `/works/winter-road/` | `works/winter-road/index.html` |
+| `/works/grave-machine/` | `works/grave-machine/index.html` |
+| `/works/taroke-remixer/` | `works/taroke-remixer/index.html` |
+| `/works/grave-machine/run/` | `works/grave-machine/run/index.html` (Grave runtime, noindex) |
+| `/practice/` | `practice/index.html` |
+| `/about/` | `about/index.html` |
+| `/contact/` | `contact/index.html` |
+
+Eight legacy redirect stubs at the old flat paths (`/about.html` etc.) redirect
+to the canonical directory routes with `meta-refresh` and `location.replace()`.
 
 ## Adding a new work
 
-1. Add the work's content record (copy, metadata, image roles, actions) to
-   the content authority under `docs/authority/`.
-2. Add representative images to `public/assets/<work-slug>/` and register
-   them in the asset manifest.
-3. If the work is hosted under the portfolio (like Grave-Machine), add its
-   runtime to `public/works/<work-slug>/` and register the runtime route.
-4. Run `python src/build.py --check` and `python -m pytest`.
-
-This procedure adds a work through the shared content registry and generic
-project renderer — it does not create a new per-work template or a
-work-specific token branch in `src/build.py`.
+1. Add the work to `ROUTES` in `src/site_config.py`.
+2. Add its path to `ROUTE_PATHS` and, if it needs a legacy stub, to `LEGACY_REDIRECTS`.
+3. Create `src/pages/<work-slug>.html` for the project page content (use `{{ASSETS}}`, `{{ROUTE:*}}`, `{{CV}}` tokens for internal references).
+4. Add representative images to `public/assets/<work-slug>/`.
+5. If the work is hosted under the portfolio (like Grave-Machine), add its runtime to `public/works/<work-slug>/` and set `GRAVE_RUNTIME_OUTPUT` in `site_config.py`.
+6. Run `python src/build.py --check` and `python -m pytest`.

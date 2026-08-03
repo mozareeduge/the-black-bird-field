@@ -2,20 +2,18 @@ name: Pages
 
 on:
   push:
-    branches: ["**"]
+    branches: [main]
   pull_request:
     branches: [main]
 
-# A newer push cancels obsolete work for the same ref (Section 12.1).
+# One deployment at a time; a new push cancels a queued run but not an
+# in-progress one, keeping the Pages environment in a clean state.
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  quality:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,43 +22,29 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install pinned test dependencies
-        run: pip install -r requirements-test.txt
+      - name: Install dependencies
+        run: pip install pytest playwright
 
       - name: Install Playwright Chromium
         run: playwright install chromium --with-deps
 
-      - name: Build site (with checksum verification)
+      - name: Build site
         run: python src/build.py --check
 
       - name: Static tests
         run: python -m pytest tests/static/ -v
 
-      - name: Browser tests (root and subpath, all required viewports)
+      - name: Browser tests (root and subpath)
         run: python -m pytest tests/browser/ -v
 
-      - name: Upload QA evidence on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: qa-evidence
-          path: |
-            dist/
-            artifacts/
-          retention-days: 7
-
-      - name: Upload dist artifact
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
           path: dist/
-          retention-days: 7
 
   deploy:
-    needs: quality
-    # Publish only from a quality-passing push to main — never from a PR
-    # build, and never from a push to any other branch.
+    needs: build
+    # Publish only when a commit lands on main — never on PR builds.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -70,26 +54,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install pinned test dependencies
-        run: pip install -r requirements-test.txt
-
-      - name: Build site (with checksum verification)
-        run: python src/build.py --check
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist/
-
       - id: deployment
-        name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
