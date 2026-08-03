@@ -1,0 +1,13 @@
+{
+  "snapshot_id": "SNAP-BBF-001",
+  "action_id": "A-OPEN-PR",
+  "authorized_by": "USER",
+  "authorized_fields": ["repository", "feature_branch", "base_branch", "pr_title"],
+  "authorized_values": {
+    "repository": "mozareeduge/the-black-bird-field",
+    "feature_branch": "claude/black-bird-field-contract-oz6xpv",
+    "base_branch": "main",
+    "pr_title": "Finalize The Black Bird Field five-work portfolio"
+  },
+  "verbatim_authorization_text": "AUTHORIZED — A-OPEN-PR\nI authorize you to:\n\n* push `claude/black-bird-field-contract-oz6xpv` to `mozareeduge/the-black-bird-field`;\n* open a draft pull request against `main`;\n* use the title “Finalize The Black Bird Field five-work portfolio”;\n* use `artifacts/release/PR_BODY.md` as the PR body;\n* substitute `git push` plus the available GitHub MCP tools for the unavailable `gh` CLI;\n* record the substitution and complete detect → apply → read-back → re-finalize.\n\nThis authorization is limited to A-OPEN-PR. It does not yet authorize Cloudflare or GitHub Pages domain changes, merging, production deployment, or branch deletion."
+}

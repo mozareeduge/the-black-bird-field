@@ -1,5 +1,12 @@
 # Domain Migration Decision
 
+> **Historical record — not an active instruction.** This document captures
+> a decision that was already implemented and is preserved for provenance.
+> Section 8 below records what was approved at the time; it is not a
+> present-tense approval request, and its statement about Cloudflare access
+> describes that point in time only. Current domain state and authority live
+> in [DEPLOYMENT.md](DEPLOYMENT.md) and `CLAUDE.md`.
+
 **Status: complete — Option A implemented and live as of 2026-07-17.**
 
 ## Final state
@@ -93,17 +100,27 @@ At any point before propagation settles, reverting the `CNAME` files in both rep
 
 ---
 
-## What needs approval before Claude proceeds
+## 8. What was approved at the time (historical)
 
-1. **Which option?** (Recommendation: Option A)
-2. **Subdomain name for The Black Bird?** (Suggestion: `poem.theblackbirdfield.com`)
-3. **Cloudflare credentials/access:** Claude does not have access to the Cloudflare dashboard. A human must add the DNS CNAME record and, optionally, the redirect rule.
-4. **GitHub Pages settings:** Claude can update the `CNAME` files and push, but enabling/disabling GitHub Pages custom domains requires GitHub repository settings access.
+This section records the approval this decision required before it was
+implemented; it is not a live request.
 
-Once approved, the implementation is: update two `CNAME` files, update one line in `site_config.py`, rebuild, and push.
+1. **Which option?** Option A was approved and implemented.
+2. **Subdomain name for The Black Bird?** `poem.theblackbirdfield.com` was approved.
+3. **Cloudflare credentials/access:** at the time this decision was written, the
+   session did not have Cloudflare dashboard access, so a human added the DNS
+   CNAME record. This does not describe current session capability — see the
+   active session's own authorization for that.
+4. **GitHub Pages settings:** custom-domain enablement required repository
+   settings access, which was completed as part of this migration.
+
+The implementation performed was: update two `CNAME` files, update one line
+in `site_config.py`, rebuild, and push.
 
 ---
 
-## Current portfolio deployment before approval
+## Outcome
 
-The portfolio preview is available at the GitHub Pages project URL for this repository (`mozareeduge.github.io/the-black-bird-field`) once the draft PR is merged and Pages is enabled. The poem remains accessible at `www.theblackbirdfield.com` (via `mozareeduge/the-black-bird`) until explicit approval to migrate.
+The migration described above is complete and live, per the Final state
+table at the top of this document. `docs/DEPLOYMENT.md` is the current
+domain and release authority.
