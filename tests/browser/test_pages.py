@@ -18,7 +18,9 @@ def launch_chromium(pw):
 def server():
     subprocess.run([sys.executable,'src/build.py','--check'],cwd=ROOT,check=True)
     handler=lambda *a,**k:http.server.SimpleHTTPRequestHandler(*a,directory=str(DIST),**k)
-    with socketserver.TCPServer(('127.0.0.1',0),handler) as httpd:
+    class ThreadingServer(socketserver.ThreadingMixIn,http.server.HTTPServer):
+        daemon_threads=True
+    with ThreadingServer(('127.0.0.1',0),handler) as httpd:
         t=threading.Thread(target=httpd.serve_forever,daemon=True); t.start(); yield f'http://127.0.0.1:{httpd.server_address[1]}'; httpd.shutdown()
 
 def test_responsive_matrix(server):
@@ -30,6 +32,8 @@ def test_responsive_matrix(server):
             page.goto(server+route,wait_until='networkidle')
             for width,height in VIEWPORTS:
                 page.set_viewport_size({'width':width,'height':height})
+                page.wait_for_timeout(150)
+                page.wait_for_load_state('networkidle')
                 m=page.evaluate('''() => ({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,h1:document.querySelectorAll('h1').length,bad:[...document.images].filter(i=>!i.complete||!i.naturalWidth).length})''')
                 assert m['sw']<=m['cw']+1,(route,width,m); assert m['h1']==1; assert m['bad']==0
         assert not errors,errors; b.close()
