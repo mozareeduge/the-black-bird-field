@@ -1,0 +1,122 @@
+/* Section 5.5 — breakpoint matrix: 0-419 narrow mobile, 420-760 mobile,
+   761-1100 tablet/compact desktop, 1101-1279 medium desktop, 1280+ wide. */
+
+@media (max-width: 1279px) {
+  .hero-preview { aspect-ratio: 4 / 3; }
+}
+
+@media (max-width: 1100px) {
+  .hero-field { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .hero-copy { grid-column: 1 / 9; }
+  .hero-work-index { grid-column: 1 / 4; grid-row: 3; }
+  .hero-preview { grid-column: 4 / 9; grid-row: 3; }
+  .hero-ledger { grid-column: 1 / 9; }
+
+  .home-feature, .home-feature--02, .home-feature--04 { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .home-feature .feature-media, .home-feature--02 .feature-media, .home-feature--04 .feature-media { grid-column: 1 / 6; order: 1; }
+  .home-feature .feature-copy, .home-feature--02 .feature-copy, .home-feature--04 .feature-copy { grid-column: 6 / 9; order: 2; }
+
+  .propositions { grid-template-columns: 1fr; }
+  .proposition { border-left: 0; border-top: 1px solid var(--rule-dark); padding: var(--space-5) var(--page-pad); }
+  .proposition:last-child { border-right: 0; border-bottom: 1px solid var(--rule-dark); }
+  .practice-teaser h2, .practice-teaser > p { margin-left: 0; }
+
+  .about-strip, .work-details { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .about-strip .section-label, .about-strip h2 { grid-column: 1 / 4; }
+  .about-strip > p, .about-strip .actions { grid-column: 4 / 9; }
+  .work-details h2 { grid-column: 1 / 3; }
+  .work-details .ledger, .work-details .locked-note { grid-column: 3 / 9; }
+
+  .works-row { grid-template-columns: 40px minmax(160px, 2.5fr) minmax(220px, 4fr); }
+  .works-thumb { grid-column: 2 / 4; margin-top: var(--space-3); }
+
+  .project-hero { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .project-hero-copy { grid-column: 1 / 5; }
+  .project-hero-media { grid-column: 5 / 9; }
+
+  .project-context { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .project-context .section-label { grid-column: 1 / 2; }
+  .project-context h2, .context-essay { grid-column: 2 / 8; }
+
+  .project-view--01, .project-view--04 { grid-column: 1 / 13; }
+  .project-view--02, .project-view--03 { grid-column: span 6; }
+  .selected-views-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+  .practice-module { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .module-number { grid-column: 1 / 3; }
+  .practice-module h2, .practice-module p { grid-column: 3 / 8; }
+
+  .about-biography { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .about-biography p { grid-column: 1 / 6; }
+  .identity-ledger { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .identity-ledger.ledger { grid-column: 6 / 9; }
+}
+
+@media (max-width: 760px) {
+  :root { --header-h: 56px; }
+  html { scroll-padding-top: calc(var(--header-h) + 14px); }
+  [id] { scroll-margin-top: calc(var(--header-h) + 14px); }
+
+  .site-header { padding-left: var(--page-pad); padding-right: var(--page-pad); }
+  .wordmark span { font-size: 15px; }
+
+  .hero-field { display: flex; flex-direction: column; gap: var(--space-6); padding-top: var(--space-6); min-height: auto; }
+  .hero-copy { order: 1; }
+  .hero-work-index { order: 2; width: 100%; }
+  .hero-preview { display: none; }
+  .hero-ledger { order: 4; font-size: 10px; }
+
+  /* Section 4.2.3 — coarse pointer / narrow: static five-image contact sheet
+     replaces the dynamic preview; work index carries the same links. */
+  .hero-work-index a { min-height: 60px; }
+
+  .home-feature, .home-feature--02, .home-feature--04 {
+    display: flex; flex-direction: column; padding: var(--space-7) var(--page-pad);
+  }
+  .home-feature .feature-media, .home-feature--02 .feature-media, .home-feature--04 .feature-media { order: 1; width: 100%; aspect-ratio: 4 / 3; }
+  .home-feature .feature-copy, .home-feature--02 .feature-copy, .home-feature--04 .feature-copy { order: 2; margin-top: var(--space-5); }
+  .feature-copy p, .feature-copy h3 { max-width: none; }
+
+  .about-strip { display: block; padding: var(--space-7) var(--page-pad); }
+  .about-strip .section-label, .about-strip h2, .about-strip > p, .about-strip .actions { grid-column: auto; }
+  .about-strip h2 { margin-top: var(--space-3); }
+  .about-strip > p { margin-top: var(--space-4); }
+
+  .works-mast, .practice-mast, .about-mast, .contact-mast { padding: var(--space-6) var(--page-pad) var(--space-5); }
+  .works-row { display: block; padding: var(--space-5) 0; }
+  .works-row > * { display: block; margin-bottom: var(--space-3); }
+  .works-thumb { aspect-ratio: 4 / 3; margin-top: var(--space-2); }
+
+  .project-hero { display: block; padding: var(--space-6) var(--page-pad) var(--space-7); }
+  .project-hero-media { margin-top: var(--space-6); aspect-ratio: 4 / 3; }
+  .project-hero-copy h1 { font-size: clamp(34px, 8vw, 46px); }
+
+  .project-context { display: block; padding: var(--space-7) var(--page-pad); }
+  .project-context h2 { margin-top: var(--space-3); }
+
+  .selected-views-grid { display: block; }
+  .project-view { margin-bottom: var(--space-6); }
+  .project-view:last-child { margin-bottom: 0; }
+
+  .work-details { display: block; padding: var(--space-7) var(--page-pad); }
+  .work-details .ledger, .work-details .locked-note { margin-top: var(--space-5); }
+
+  .practice-index { position: static !important; }
+  .practice-module { display: block; padding: var(--space-6) 0; }
+  .practice-module h2, .practice-module p { max-width: none; margin-top: var(--space-3); }
+
+  .about-biography { display: block; padding: var(--space-6) var(--page-pad) 0; }
+  .about-biography p { max-width: none; }
+  .identity-ledger { display: block; padding: 0 var(--page-pad); margin-top: var(--space-6); }
+  .identity-ledger.ledger { border-top: 1px solid var(--text-ink); }
+
+  .contact-row { grid-template-columns: 1fr 28px; gap: var(--space-2) var(--space-3); min-height: auto; padding: var(--space-5) 0; }
+  .contact-label { grid-column: 1; }
+  .contact-value { grid-column: 1; font-size: clamp(20px, 6vw, 26px); }
+  .contact-arrow { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+}
+
+@media (max-width: 419px) {
+  .menu-primary a { font-size: clamp(24px, 8vw, 32px); }
+  .site-footer nav { grid-template-columns: 1fr; }
+}

@@ -10,15 +10,65 @@ The site uses document-relative asset paths throughout, so it also works
 correctly under the `/the-black-bird-field/` GitHub Pages project subpath — the
 browser tests verify both origins against the same build artifact.
 
+## The `/next/` preview
+
+`https://theblackbirdfield.com/next/` serves a second, independent build —
+the five-work portfolio (adds UNHAPPY Scenario) — sitting alongside the live
+four-work site while it awaits approval. It is a self-contained site rooted
+at `next/`:
+
+```
+next/
+  src/      build.py, content.py, site_config.py, renderers.py, components.py
+  public/   assets, documents, the Grave-Machine runtime
+  tests/    its own static + browser suite
+```
+
+`scripts/build_combined_site.py` builds both trees (`src/build.py` →
+`dist/`, `next/src/build.py` → `next/dist/`) and copies the preview build
+into `dist/next/`. Every preview page gets an injected
+`<meta name="robots" content="noindex,nofollow">` and the production
+`robots.txt` gets a `Disallow: /next/` line, so the preview stays out of
+search indexes while it's provisional. `.github/workflows/pages.yml` and
+`ci.yml` run both test suites and then call this script to produce the
+final `dist/`.
+
+Build and preview it locally:
+
+```bash
+python scripts/build_combined_site.py --check
+python -m http.server 8080 --directory dist
+# http://localhost:8080/       -> live site, unchanged
+# http://localhost:8080/next/  -> five-work preview
+```
+
+### Promoting `/next/` to production
+
+Once the preview is approved:
+
+1. Archive the current four-work source (e.g. move `src/`, `public/`,
+   `tests/` to `archive/four-work/`) so the prior version stays in the repo.
+2. Move `next/src/`, `next/public/`, `next/tests/` up to `src/`, `public/`,
+   `tests/` at the repo root.
+3. Delete the now-empty `next/` directory, `scripts/build_combined_site.py`,
+   and the `/next/`-related workflow steps above.
+4. Restore `src/build.py` as the sole build step in `pages.yml`/`ci.yml`.
+
+This keeps the swap a plain move/delete rather than a rewrite, and the
+former version stays recoverable from repo history and the archive path.
+
 ## Workflows
 
 ### `.github/workflows/pages.yml` (deployment)
 
 Runs on pushes and pull requests targeting `main`:
 
-1. Builds the site: `python src/build.py --check`
-2. Runs static tests: `python -m pytest tests/static/ -v`
-3. Runs browser tests at both `/` and `/the-black-bird-field/`: `python -m pytest tests/browser/ -v`
+1. Builds the production site and runs its static + browser tests
+   (`src/build.py --check`, `tests/static/`, `tests/browser/`)
+2. Builds the `/next/` preview site and runs its own static + browser tests
+   the same way, from `next/`
+3. Merges both into one `dist/` via `python scripts/build_combined_site.py --check`
+   (see [The `/next/` preview](#the-next-preview) above)
 4. Uploads `dist/` via `actions/upload-pages-artifact`
 5. **Deploys to GitHub Pages** only when `github.event_name == 'push'` and `github.ref == 'refs/heads/main'` — pull request builds build and test but never publish to the production Pages site.
 
