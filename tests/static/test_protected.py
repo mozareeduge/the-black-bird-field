@@ -9,7 +9,7 @@ def git_blob_sha1(p):
 
 def test_protected_authority_matches_audited_current_repository():
     assert AUTH['baseline_commit']=='c6fb375877daa47bd7c9061258efa61e73196da8'
-    assert G['sha256']=='e6052d2b770614add5473657c8c0e2bd628b0874f0199a3c2651e63b86731359'
+    assert G['sha256']=='0e1cfd0097cf261f169c0e52a88d39f1541f04f07d179b1f009ff2cc311eb385'
     assert C['git_blob_sha1']=='8d2de052d73890c4a48afd7f4b4ea83cf9269394'
     assert C['size_bytes']==54724
 

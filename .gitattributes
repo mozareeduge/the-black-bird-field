@@ -1,0 +1,3 @@
+# Protected byte-identical artifacts must never be line-ending-normalized.
+public/works/** -text
+public/documents/** -text
