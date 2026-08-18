@@ -155,6 +155,14 @@ def build_page(key, meta):
     )
     scripts = f'<script defer src="{prefix}assets/js/site.js"></script>'
 
+    favicon = (
+        f'<link id="dynamic-favicon" rel="icon" href="{prefix}assets/favicon/favicon-32.png" sizes="32x32" type="image/png">'
+        f'<link rel="icon" href="{prefix}assets/favicon/favicon-16.png" sizes="16x16" type="image/png">'
+        f'<link rel="icon" href="{prefix}assets/favicon/favicon-48.png" sizes="48x48" type="image/png">'
+        f'<link rel="apple-touch-icon" href="{prefix}assets/favicon/favicon-180.png" sizes="180x180">'
+        f'<script src="{prefix}assets/favicon/favicon.js" defer></script>'
+    )
+
     html = f'''<!doctype html>
 <html lang="en">
 <head>
@@ -166,6 +174,7 @@ def build_page(key, meta):
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>{escape(meta['title'])}</title>
 {meta_tags(key, meta)}
+  {favicon}
   {css}
   {scripts}{structured_data(key, meta)}
 </head>
@@ -257,6 +266,15 @@ def copy_public_assets():
     grave_dst = DIST / GRAVE_RUNTIME_OUTPUT
     grave_dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(grave_src, grave_dst)
+
+    # Grave-Machine's own favicon/ folder, relative to the byte-identical
+    # runtime copy above (index.html links to it with a relative path).
+    grave_favicon_src = PUBLIC / 'works' / 'grave-machine' / 'favicon'
+    if grave_favicon_src.exists():
+        grave_favicon_dst = grave_dst.parent / 'favicon'
+        if grave_favicon_dst.exists():
+            shutil.rmtree(grave_favicon_dst)
+        shutil.copytree(grave_favicon_src, grave_favicon_dst)
 
     # CV document — ordinary same-origin download, no base64 embedding.
     cv_src = PUBLIC / 'documents' / CV_FILENAME

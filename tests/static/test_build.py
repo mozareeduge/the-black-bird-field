@@ -166,11 +166,23 @@ class TestPublicPrivateBoundary:
         matches = list(ROOT.rglob('*Diagnostic_and_QA*'))
         assert not matches, f'Diagnostic files found: {matches}'
 
-    def test_grave_public_dir_contains_only_index(self):
+    def test_grave_public_dir_contains_only_index_and_favicon(self):
         grave_public = PUBLIC / 'works' / 'grave-machine'
-        files = list(grave_public.iterdir())
-        assert [f.name for f in files] == ['index.html'], (
-            f'Unexpected files in public/works/grave-machine/: {files}'
+        names = {f.name for f in grave_public.iterdir()}
+        assert names == {'index.html', 'favicon'}, (
+            f'Unexpected files in public/works/grave-machine/: {sorted(names)}'
+        )
+
+    def test_grave_favicon_dir_has_no_stray_files(self):
+        grave_favicon = PUBLIC / 'works' / 'grave-machine' / 'favicon'
+        expected = {
+            'favicon-16.png', 'favicon-32.png', 'favicon-48.png', 'favicon-64.png',
+            'favicon-180.png', 'favicon-192.png', 'favicon-512.png',
+            'favicon-static.svg', 'favicon.ico', 'favicon.js',
+        }
+        names = {f.name for f in grave_favicon.iterdir()}
+        assert names == expected, (
+            f'Unexpected files in public/works/grave-machine/favicon/: {sorted(names)}'
         )
 
 

@@ -190,6 +190,14 @@ def build_page(key, meta):
     if meta.get('atlas'):
         scripts += f'<script defer src="{prefix}assets/js/atlas.js"></script>'
 
+    favicon = (
+        f'<link id="dynamic-favicon" rel="icon" href="{prefix}assets/favicon/favicon-32.png" sizes="32x32" type="image/png">'
+        f'<link rel="icon" href="{prefix}assets/favicon/favicon-16.png" sizes="16x16" type="image/png">'
+        f'<link rel="icon" href="{prefix}assets/favicon/favicon-48.png" sizes="48x48" type="image/png">'
+        f'<link rel="apple-touch-icon" href="{prefix}assets/favicon/favicon-180.png" sizes="180x180">'
+        f'<script src="{prefix}assets/favicon/favicon.js" defer></script>'
+    )
+
     html = f'''<!doctype html>
 <html lang="en">
 <head>
@@ -199,6 +207,7 @@ def build_page(key, meta):
   <meta name="color-scheme" content="light">
   <title>{escape(meta['title'])}</title>
 {meta_tags(meta)}
+  {favicon}
   {css}
   {scripts}
 </head>
@@ -278,8 +287,8 @@ def build_robots():
 # ---------------------------------------------------------------------------
 
 def copy_public_assets():
-    # CSS and JS (cv-download.js is generated separately)
-    for subdir in ('css', 'js'):
+    # CSS, JS, and favicon (cv-download.js is generated separately)
+    for subdir in ('css', 'js', 'favicon'):
         src = PUBLIC / 'assets' / subdir
         _assert_exists(src, f'public/assets/{subdir}')
         dst = DIST / 'assets' / subdir
@@ -303,6 +312,15 @@ def copy_public_assets():
     grave_dst = DIST / GRAVE_RUNTIME_OUTPUT
     grave_dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(grave_src, grave_dst)
+
+    # Grave-Machine's own favicon/ folder, relative to the byte-identical
+    # runtime copy above (index.html links to it with a relative path).
+    grave_favicon_src = PUBLIC / 'works' / 'grave-machine' / 'favicon'
+    if grave_favicon_src.exists():
+        grave_favicon_dst = grave_dst.parent / 'favicon'
+        if grave_favicon_dst.exists():
+            shutil.rmtree(grave_favicon_dst)
+        shutil.copytree(grave_favicon_src, grave_favicon_dst)
 
     # CV document (fallback href for non-JS browsers)
     cv_src = PUBLIC / 'documents' / CV_FILENAME
