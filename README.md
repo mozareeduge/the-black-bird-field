@@ -1,8 +1,8 @@
 # The Black Bird Field
 
-Portfolio site for four browser-native works by Mozare (Mohammad Zare).
+Portfolio site for five browser-native works by Mozare (Mohammad Zare).
 
-**Works:** The Black Bird · Winter Road · Grave-Machine · TAROKE RIMIXER
+**Works:** The Black Bird · Winter Road · UNHAPPY Scenario · Grave-Machine · TAROKE RIMIXER
 
 ## Local development
 
@@ -24,13 +24,14 @@ Playwright uses the pre-installed Chromium binary at `/opt/pw-browsers/chromium`
 ## Structure
 
 ```
-src/          source (build script, config, page fragments)
+content/      semantic site/work data (site.json, works/*.json)
+src/          build script, content loading/validation, renderers
 public/       immutable inputs (CSS, JS, images, documents, Grave runtime)
 dist/         generated output — not committed
-tests/        static + browser + fixtures
-scripts/      capture and validation utilities
+tests/        static + browser test suites
+scripts/      work-scaffolding and migration utilities
 .github/      CI workflows
-docs/         domain migration decision and deployment notes
+docs/         design system, architecture, deployment and domain notes
 ```
 
 ## Repository map
@@ -41,6 +42,7 @@ docs/         domain migration decision and deployment notes
 | The Black Bird | `mozareeduge/the-black-bird` | Canonical public source archive |
 | The Black Bird development lab | `mozareeduge/black-bird-lab` | Development and experiment history |
 | Winter Road | `mozareeduge/winter-road` | Canonical public source archive |
+| UNHAPPY Scenario | `mozareeduge/UNHAPPY-scenario` | Canonical public source archive |
 | Grave-Machine | `mozareeduge/grave-machine` | Canonical public source archive; live runtime remains in the portfolio |
 | TAROKE RIMIXER | `mozareeduge/taroke-remixer` | Active construction; excluded from this alignment pass |
 

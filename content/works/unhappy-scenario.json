@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "unhappy-scenario",
+  "asset_slug": "unhappy-scenario",
+  "order": 3,
+  "title": "UNHAPPY Scenario",
+  "title_parts": [
+    "UNHAPPY",
+    "Scenario"
+  ],
+  "mode": "Attempt",
+  "form": "An internet blackout poem",
+  "year": 2026,
+  "body_class": "unhappy-page",
+  "summary": "Software calls the route away from success an unhappy scenario. The phrase makes interruption sound manageable: a branch to be anticipated, named, and recovered from.",
+  "responsibility": "procedural language can retain the memory of blackout",
+  "meta_description": "UNHAPPY Scenario is an internet blackout poem by Mozare, made from the calm procedural language of system failure and repeated interruption.",
+  "live_url": "https://unhappy.theblackbirdfield.com/",
+  "repository_url": "https://github.com/mozareeduge/UNHAPPY-scenario",
+  "poster_caption": "English edition · v2.6.0",
+  "feature_caption": "English edition · v2.6.0",
+  "feature_image": "view-reconnecting",
+  "hero_lead": "Software calls the route away from success an unhappy scenario. The phrase makes interruption sound manageable: a branch to be anticipated, named, and recovered from.",
+  "prelude": {
+    "label": "BEFORE ENTERING",
+    "items": [
+      [
+        "01 / TIME",
+        "Allow one continuous interval",
+        "The work keeps its own durations."
+      ],
+      [
+        "02 / WINDOW",
+        "Give it the whole browser",
+        "The black surface is composed as one field."
+      ],
+      [
+        "03 / PRIVACY",
+        "Nothing leaves the browser",
+        "No file, message, report, analytics request, cookie, or persistent storage is used."
+      ]
+    ]
+  },
+  "views": {
+    "title": "Three notices",
+    "intro": "The images keep each view inside the surface that gives it pressure. They document the work without replacing its duration.",
+    "items": [
+      [
+        "01",
+        "Upload failed",
+        "A pale image remains close to arrival. The notice is calm enough to belong anywhere.",
+        "view-upload",
+        "UNHAPPY Scenario: Upload failed"
+      ],
+      [
+        "02",
+        "Reconnecting…",
+        "The ellipsis holds the promise open. Its duration becomes more legible than its assurance.",
+        "view-reconnecting",
+        "UNHAPPY Scenario: Reconnecting…"
+      ],
+      [
+        "03",
+        "Reporting failed",
+        "The language of accountability reaches a sentence that cannot reach its recipient.",
+        "view-reporting",
+        "UNHAPPY Scenario: Reporting failed"
+      ]
+    ]
+  },
+  "context": {
+    "title": "The calm language of interruption",
+    "paragraphs": [
+      "UNHAPPY Scenario stays with that calm language after recovery has ceased to be credible. Drawn from the small notices through which systems explain failure and promise return, the poem carries their familiar English into the memory of repeated internet blackouts in Iran.",
+      "What begins as technical inconvenience becomes a vocabulary for isolation, deferred contact, and an accountability that cannot be reached. The notices keep their procedural composure; under blackout, that composure becomes one of the work’s pressures."
+    ],
+    "coda": "The title keeps the managerial calm of the phrase and the conditions it cannot contain."
+  },
+  "identity": {
+    "edition": "English edition · v2.6.0 · commit 9f013ba",
+    "language": "English",
+    "encounter": "Standalone browser work; no network request or persistent storage"
+  },
+  "citation": {
+    "author": "Mohammad Zare.",
+    "title": "UNHAPPY Scenario: An Internet Blackout Poem",
+    "rest": "Version 2.6.0, 2026."
+  },
+  "motion": {
+    "enabled": true,
+    "home_preview": true,
+    "project_hero": true,
+    "desktop_file": "motion-loop-desktop.mp4",
+    "mobile_file": "motion-loop-mobile.mp4",
+    "fallback_role": "view-reconnecting",
+    "source_roles": [
+      "view-upload",
+      "view-reconnecting",
+      "view-reporting"
+    ],
+    "verb": "fail / reconnect / report / return",
+    "duration_seconds": 11,
+    "provenance": "authentic captured states from the released work; assembled without invented interface states"
+  }
+}

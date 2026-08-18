@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "baseline_commit": "c6fb375877daa47bd7c9061258efa61e73196da8",
+  "artifacts": {
+    "grave_machine_runtime": {
+      "source_path": "public/works/grave-machine/index.html",
+      "output_path": "works/grave-machine/run/index.html",
+      "sha256": "e6052d2b770614add5473657c8c0e2bd628b0874f0199a3c2651e63b86731359",
+      "required_for_production": true,
+      "policy": "byte-identical inherited artifact; portfolio work must never rewrite it",
+      "git_blob_sha1": "c609c2ef559c2fceb5ef35a207b14999609b7238",
+      "size_bytes": 371696
+    },
+    "academic_cv": {
+      "source_path": "public/documents/Mohammad_Zare_AcademicCV.pdf",
+      "output_path": "documents/Mohammad_Zare_AcademicCV.pdf",
+      "git_blob_sha1": "8d2de052d73890c4a48afd7f4b4ea83cf9269394",
+      "size_bytes": 54724,
+      "required_for_production": true,
+      "policy": "preserve exact current production document unless the user explicitly supplies/replaces the CV"
+    }
+  }
+}

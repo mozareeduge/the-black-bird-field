@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "the-black-bird",
+  "asset_slug": "black-bird",
+  "order": 1,
+  "title": "The Black Bird",
+  "title_parts": [
+    "The Black Bird"
+  ],
+  "mode": "Traverse",
+  "form": "A hypergraph research poem",
+  "year": 2026,
+  "summary": "A black bird appears beside a body, and other scenes gather around that contact. Each source, name, object, and relation receives an address without being closed into one explanation.",
+  "responsibility": "relation can become spatial",
+  "meta_description": "The Black Bird is a hypergraph research poem by Mozare. The reader moves between a field of linked materials and the text held in its Reader.",
+  "live_url": "https://poem.theblackbirdfield.com/",
+  "repository_url": "https://github.com/mozareeduge/the-black-bird",
+  "poster_caption": "Current public build · 5972b2b",
+  "feature_caption": "Current public build · 5972b2b",
+  "feature_image": "view-midpoint",
+  "hero_lead": "A black bird appears beside a body. The scene does not remain singular. It draws other materials toward it, each carrying its own form and degree of support.",
+  "prelude": {
+    "label": "READING CONDITIONS",
+    "items": [
+      [
+        "01 / FIELD",
+        "Begin with relation before explanation.",
+        ""
+      ],
+      [
+        "02 / READ",
+        "Give one object textual duration.",
+        ""
+      ],
+      [
+        "03 / ROUTE",
+        "Let movement remain partial.",
+        ""
+      ]
+    ]
+  },
+  "views": {
+    "title": "Three views",
+    "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
+    "items": [
+      [
+        "01",
+        "Threshold",
+        "Entry before the field becomes visible.",
+        "view-first_frame",
+        "The Black Bird: Threshold"
+      ],
+      [
+        "02",
+        "Mapping note",
+        "A local poetic surface remains linked to the wider relation field.",
+        "view-midpoint",
+        "The Black Bird: Mapping note"
+      ],
+      [
+        "03",
+        "Relation field",
+        "Objects, names, sources, and relation bodies remain simultaneously addressable.",
+        "view-last_change",
+        "The Black Bird: Relation field"
+      ]
+    ]
+  },
+  "context": {
+    "title": "A field that keeps its differences",
+    "paragraphs": [
+      "The Black Bird gives each material a distinct working body. Research notes carry source-bearing prose. Mapping notes condense charged relations into local textual surfaces. Recurring things receive stable addresses, while names and citations preserve routes of return.",
+      "These distinctions let research and poetry remain in contact without asking one to borrow the authority of the other. The field makes contact spatial; the Reader gives one object time; Route records a partial movement through the work."
+    ],
+    "coda": ""
+  },
+  "identity": {
+    "edition": "Current public build · commit 5972b2b",
+    "language": "English with source-language Name Objects",
+    "encounter": "Graph field and linked reading chambers"
+  },
+  "citation": {
+    "author": "Mohammad Zare.",
+    "title": "The Black Bird: A Hypergraph Research Poem",
+    "rest": "Born-digital web work, 2026."
+  },
+  "motion": {
+    "enabled": true,
+    "home_preview": true,
+    "project_hero": true,
+    "desktop_file": "motion-loop-desktop.mp4",
+    "mobile_file": "motion-loop-mobile.mp4",
+    "fallback_role": "view-midpoint",
+    "source_roles": [
+      "view-first_frame",
+      "view-midpoint",
+      "view-last_change"
+    ],
+    "verb": "focus travel / afterglow",
+    "duration_seconds": 10,
+    "provenance": "authentic captured states from the released work; assembled without invented interface states"
+  }
+}

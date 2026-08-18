@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "The Black Bird Field work manifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "slug",
+    "asset_slug",
+    "order",
+    "title",
+    "mode",
+    "form",
+    "year",
+    "summary",
+    "responsibility",
+    "meta_description",
+    "live_url",
+    "repository_url",
+    "poster_caption",
+    "feature_caption",
+    "feature_image",
+    "hero_lead",
+    "prelude",
+    "views",
+    "context",
+    "identity",
+    "citation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "asset_slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title_parts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "form": {
+      "type": "string",
+      "minLength": 1
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 2000,
+      "maximum": 2100
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "responsibility": {
+      "type": "string",
+      "minLength": 1
+    },
+    "meta_description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "live_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "repository_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://github\\.com/"
+    },
+    "poster_caption": {
+      "type": "string",
+      "minLength": 1
+    },
+    "feature_caption": {
+      "type": "string",
+      "minLength": 1
+    },
+    "feature_image": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hero_lead": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prelude": {
+      "type": "object",
+      "required": [
+        "label",
+        "items"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+    },
+    "views": {
+      "type": "object",
+      "required": [
+        "title",
+        "intro",
+        "items"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intro": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 5
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "required": [
+        "title",
+        "paragraphs"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "coda": {
+          "type": "string"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "edition",
+        "language",
+        "encounter"
+      ],
+      "properties": {
+        "edition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encounter": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "citation": {
+      "type": "object",
+      "required": [
+        "author",
+        "title",
+        "rest"
+      ],
+      "properties": {
+        "author": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rest": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "home_preview",
+        "project_hero",
+        "desktop_file",
+        "mobile_file",
+        "fallback_role",
+        "source_roles",
+        "verb",
+        "duration_seconds",
+        "provenance"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "home_preview": {
+          "type": "boolean"
+        },
+        "project_hero": {
+          "type": "boolean"
+        },
+        "desktop_file": {
+          "type": "string"
+        },
+        "mobile_file": {
+          "type": "string"
+        },
+        "fallback_role": {
+          "type": "string"
+        },
+        "source_roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2
+        },
+        "verb": {
+          "type": "string"
+        },
+        "duration_seconds": {
+          "type": "number"
+        },
+        "provenance": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

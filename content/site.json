@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0.0",
+  "site_title": "The Black Bird Field",
+  "site_origin": "https://theblackbirdfield.com",
+  "artistic_name": "Mozare",
+  "formal_name": "Mohammad Zare",
+  "year": 2026,
+  "github_profile": "https://github.com/mozareeduge",
+  "email": "mozare1997@gmail.com",
+  "linkedin": "https://www.linkedin.com/in/mohammad-zare-287997215/",
+  "shared": {
+    "deck": "Browser-native literary works by Mozare, shaped through research and generative writing.",
+    "section_intro": "The works share a field without sharing one interface. Each asks the browser to carry another form of attention.",
+    "footer_identity": "Browser-native literary works shaped through research and generative writing.",
+    "name_boundary": "Academic records, citations, and rights: Mohammad Zare.",
+    "menu_name_boundary": "Academic records, citations, and rights: Mohammad Zare.",
+    "about_strip": "Mozare is the artistic name under which Mohammad Zare presents his literary and digital work. Academic records, citations, and rights remain attached to his formal name."
+  },
+  "practice": {
+    "mast": "Across {count_word} works, sources, constraints, failures, and reader actions remain attached to the forms they help produce.",
+    "intro": [
+      "The work often begins when a material no longer fits its first container. A source grows too charged for a footnote; a short poem asks for darkness around it; a system notice keeps speaking after its promise of recovery has thinned; a dramatic scene begins to behave like a procedure.",
+      "No fixed sequence joins research, writing, interface, and code. Their relation is composed anew for each work."
+    ],
+    "modules": [
+      {
+        "id": "research",
+        "index": "01",
+        "title": "Research can return",
+        "home_title": "Research that can return",
+        "home_text": "A source can remain reachable after it enters a literary arrangement.",
+        "text": "Speculative research poetry keeps the origin and limits of a source visible while allowing the material to enter another arrangement. In The Black Bird, a source-bearing scene acquires an address and can be reached again.",
+        "image": "assets/black-bird/view-midpoint-desktop.webp",
+        "alt": "The Black Bird Reader beside its graph",
+        "caption": "A source-bearing object remains inside the field."
+      },
+      {
+        "id": "generation",
+        "index": "02",
+        "title": "Writing through constraints",
+        "home_title": "Writing through constraints",
+        "home_text": "Rules of recurrence give authorship a temporal and procedural form.",
+        "text": "Generative writing places authorship in the conditions of recurrence. Grave-Machine demonstrates the pressure of one construction; TAROKE REMIXER opens construction itself for composition and revision.",
+        "image": "assets/grave-machine/view-midpoint-desktop.webp",
+        "alt": "Grave-Machine generated lines beside a runtime trace",
+        "caption": "The poem accumulates beside the record of its formation."
+      },
+      {
+        "id": "interface",
+        "index": "03",
+        "title": "The interface carries consequence",
+        "home_title": "The interface carries consequence",
+        "home_text": "Visibility, duration, movement, and return participate in the writing.",
+        "text": "Movement leaves a route in The Black Bird. Nearness governs visibility in Winter Road. UNHAPPY Scenario lets procedural notices keep their calm after recovery loses credibility. Grave-Machine holds the poem beside its trace, while TAROKE REMIXER exposes the act of composition.",
+        "image": "assets/unhappy-scenario/view-reconnecting-desktop.webp",
+        "alt": "UNHAPPY Scenario reconnecting notice beside accumulated lines",
+        "caption": "A familiar system notice acquires another duration."
+      }
+    ],
+    "home_teaser": {
+      "title": "The form is discovered through the material",
+      "text": "Research, writing, interface, and code meet differently in each work. Their relation is composed anew rather than applied as a house style."
+    }
+  },
+  "about": {
+    "mast": "Mozare is the artistic name used for the works. Mohammad Zare remains the name used for academic records, citations, rights, and professional identification.",
+    "paragraphs": [
+      "Mohammad Zare is an Iranian poet, researcher, and product/interface practitioner. His work joins dramatic literature to browser-based forms and attends to moments when writing remains visibly attached to its sources, procedures, failures, or reader actions.",
+      "He studied Industrial Engineering at Sharif University of Technology and completed an MA in Dramatic Literature at the University of Art, Tehran. His practical and theoretical work has moved through playwriting, speculative research poetry, critical writing, translation, curatorial work, generative literature, and interface design.",
+      "The {count_word} works in this portfolio are where those trajectories currently meet. They are presented under the name Mozare; the formal name, Mohammad Zare, remains attached to citations, rights, the CV, and academic records."
+    ],
+    "facts": [
+      [
+        "Artistic name",
+        "Mozare"
+      ],
+      [
+        "Formal name",
+        "Mohammad Zare"
+      ],
+      [
+        "Education",
+        "MA Dramatic Literature\nBSc Industrial Engineering"
+      ],
+      [
+        "Current field",
+        "Born-digital literature\nResearch poetry\nGenerative writing"
+      ]
+    ]
+  },
+  "contact": {
+    "mast": "For questions about the works, research, publication, exhibition, or collaboration."
+  },
+  "metadata": {
+    "home": "The Black Bird Field presents {count_word} autonomous browser-native literary works by Mozare, shaped through research, generative writing, interface, and code.",
+    "works": "{Count_word} autonomous browser-native works by Mozare: {work_titles}.",
+    "practice": "Mozare develops browser-native literary forms through research, generative writing, and the design of reading conditions.",
+    "about": "About Mozare and Mohammad Zare, an Iranian poet and researcher working across dramatic literature and born-digital form.",
+    "contact": "Contact Mozare regarding the works, related research, publication, exhibition, and collaboration."
+  },
+  "documents": {
+    "cv": {
+      "path": "documents/Mohammad_Zare_AcademicCV.pdf",
+      "label": "Download CV"
+    }
+  }
+}
