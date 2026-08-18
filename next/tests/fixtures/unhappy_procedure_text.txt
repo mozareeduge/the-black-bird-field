@@ -1,0 +1,16 @@
+UNHAPPY Scenario — locked system-message core
+English edition · v2.6.0
+
+Upload failed
+Sending the message failed
+Connection attempt failed
+Reconnecting…
+Failed
+Do you want to report the problem?
+Reporting the problem…
+Reporting failed
+
+Interface action outside the poem:
+Try again
+
+The wording, order of the first passage, capitalization, question mark, and Unicode ellipses are release invariants.
