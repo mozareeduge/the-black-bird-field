@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "winter-road",
+  "asset_slug": "winter-road",
+  "order": 2,
+  "title": "Winter Road",
+  "title_parts": [
+    "Winter Road"
+  ],
+  "mode": "Search",
+  "form": "A digital haiga space",
+  "year": 2026,
+  "summary": "Nine haiku inhabit a dark field that withholds them from a single view. A poem becomes legible through proximity, can be held briefly, then recedes as attention moves elsewhere.",
+  "responsibility": "a poem can remain hidden until approached",
+  "meta_description": "Winter Road is a digital haiga space by Mozare in which nine English haiku are found through movement and held only for a time.",
+  "live_url": "https://mozareeduge.github.io/winter-road/",
+  "repository_url": "https://github.com/mozareeduge/winter-road",
+  "poster_caption": "Release v1.0.1",
+  "feature_caption": "Release v1.0.1",
+  "feature_image": "view-midpoint",
+  "hero_lead": "Nine English haiku inhabit a dark field. None is presented as the next item in a sequence. The reader searches by moving and finds that another poem can begin to surface elsewhere.",
+  "prelude": {
+    "label": "READING CONDITIONS",
+    "items": [
+      [
+        "01 / DISTANCE",
+        "Most of the field remains dark.",
+        ""
+      ],
+      [
+        "02 / PROXIMITY",
+        "Legibility arrives locally.",
+        ""
+      ],
+      [
+        "03 / DURATION",
+        "A kept poem remains temporary.",
+        ""
+      ]
+    ]
+  },
+  "views": {
+    "title": "Three views",
+    "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
+    "items": [
+      [
+        "01",
+        "Entry",
+        "The root phrase appears while the poems remain undisclosed.",
+        "view-first_frame",
+        "Winter Road: Entry"
+      ],
+      [
+        "02",
+        "Discovery",
+        "A poem becomes legible by degrees before it can be read in full.",
+        "view-midpoint",
+        "Winter Road: Discovery"
+      ],
+      [
+        "03",
+        "Kept relation",
+        "One poem remains while another begins to appear elsewhere.",
+        "view-last_change",
+        "Winter Road: Kept relation"
+      ]
+    ]
+  },
+  "context": {
+    "title": "A haiga space",
+    "paragraphs": [
+      "The nine poems began around two words: winter road. Repeated rewriting moved some words, removed others, and allowed several to return under new grammatical pressure. The result is a family of completed haiku without a single poem serving as the original.",
+      "In the browser, the poems coexist without becoming equally available. Darkness gives distance a role, makes discovery local, and lets the field recover after a poem fades."
+    ],
+    "coda": ""
+  },
+  "identity": {
+    "edition": "Release v1.0.1 · source head 316f640",
+    "language": "English",
+    "encounter": "Search by proximity; keep by click or tap"
+  },
+  "citation": {
+    "author": "Zare, Mohammad.",
+    "title": "Winter Road: A Haiga Space",
+    "rest": "Version 1.0.1, 2026."
+  },
+  "motion": {
+    "enabled": true,
+    "home_preview": true,
+    "project_hero": true,
+    "desktop_file": "motion-loop-desktop.mp4",
+    "mobile_file": "motion-loop-mobile.mp4",
+    "fallback_role": "view-midpoint",
+    "source_roles": [
+      "view-first_frame",
+      "view-midpoint",
+      "view-last_change"
+    ],
+    "verb": "approach / condense / recede",
+    "duration_seconds": 11,
+    "provenance": "authentic captured states from the released work; assembled without invented interface states"
+  }
+}

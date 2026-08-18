@@ -1,376 +1,117 @@
-"""
-Build script for The Black Bird Field portfolio.
-
-Usage:
-    python src/build.py              # builds to dist/
-    python src/build.py --check      # build + verify checksums
-
-Output: dist/ — complete deployable site. Broken source references fail the build.
-
-All internal links and asset references use document-relative paths derived
-from each page's output depth, so the same build works under both:
-  https://theblackbirdfield.com/         (custom domain)
-  /the-black-bird-field/                 (GitHub Pages project subpath)
-"""
-
-import re
-import sys
-import json
-import shutil
-import hashlib
-import argparse
+from __future__ import annotations
+import argparse, hashlib, shutil
 from pathlib import Path
 from html import escape
-from base64 import b64encode
+from content import load_site, load_works, load_protected_artifacts
+from renderers import document, render_home, render_works, render_project, render_practice, render_about, render_contact
 
-# Allow running from repo root or from src/
-_src = Path(__file__).resolve().parent
-if str(_src) not in sys.path:
-    sys.path.insert(0, str(_src))
+ROOT=Path(__file__).resolve().parents[1]
+PUBLIC=ROOT/'public'; DIST=ROOT/'dist'
+LEGACY={
+ 'works.html':'works/index.html','black-bird.html':'works/the-black-bird/index.html','winter-road.html':'works/winter-road/index.html',
+ 'unhappy-scenario.html':'works/unhappy-scenario/index.html','grave-machine.html':'works/grave-machine/index.html','taroke-remixer.html':'works/taroke-remixer/index.html',
+ 'practice.html':'practice/index.html','about.html':'about/index.html','contact.html':'contact/index.html',
+}
 
-from site_config import (
-    ROUTES, ROUTE_PATHS, GRAVE_RUNTIME_OUTPUT, LEGACY_REDIRECTS,
-    CV_FILENAME, SITE_TITLE, SITE_ORIGIN, ARTISTIC_NAME,
-)
-from components import header, footer
+def sha256(path:Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
-ROOT = _src.parent
-PUBLIC = ROOT / 'public'
-DIST = ROOT / 'dist'
-PAGES_DIR = _src / 'pages'
-CHECKSUMS_FILE = ROOT / 'tests' / 'fixtures' / 'checksums.json'
+def git_blob_sha1(path:Path) -> str:
+    data=path.read_bytes()
+    return hashlib.sha1(b'blob '+str(len(data)).encode('ascii')+b'\0'+data).hexdigest()
 
-# Token pattern — unknown tokens in fragments fail the build.
-_TOKEN_RE = re.compile(r'\{\{[^}]+\}\}')
+def write(rel,text):
+    p=DIST/rel; p.parent.mkdir(parents=True,exist_ok=True); p.write_text(text,encoding='utf-8')
 
-# ---------------------------------------------------------------------------
-# Path helpers
-# ---------------------------------------------------------------------------
+def legacy_stub(old,target,origin):
+    canonical=origin+'/'+target.replace('index.html','')
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,follow"><link rel="canonical" href="{escape(canonical)}"><meta http-equiv="refresh" content="0;url={escape(target)}"><title>Redirecting — The Black Bird Field</title></head><body><script>(function(){{var t={target!r};location.replace(t+(location.search||'')+(location.hash||''));}})();</script><p>This page has moved. <a href="{escape(target)}">Continue →</a></p></body></html>'''
 
-def root_prefix(output_path):
-    """Relative path prefix from this page's directory back to site root."""
-    depth = len(Path(output_path).parts) - 1
-    return '../' * depth
+def asset(role,work): return f"assets/{work['asset_slug']}/{role}-desktop.webp"
 
+def protected_paths(authority:dict):
+    a=authority['artifacts']
+    grave=a['grave_machine_runtime']; cv=a['academic_cv']
+    return (ROOT/grave['source_path'], grave, ROOT/cv['source_path'], cv)
 
-def apply_tokens(html, prefix, label='<fragment>'):
-    """Replace {{TOKEN}} placeholders in fragment HTML.
+def validate_sources(site,works,authority,strict_protected=True):
+    errors=[]
+    def walk(value, where):
+        if isinstance(value, dict):
+            for k,v in value.items(): walk(v, f'{where}.{k}')
+        elif isinstance(value, list):
+            for i,v in enumerate(value): walk(v, f'{where}[{i}]')
+        elif isinstance(value, str) and 'TODO' in value:
+            errors.append(f'unresolved TODO: {where}')
+    walk(site,'site')
+    for w in works:
+        walk(w, w['slug'])
+        roles=['poster',w['feature_image']]+[x[3] for x in w['views']['items']]
+        for role in set(roles):
+            for size in ('desktop','mobile'):
+                p=PUBLIC/'assets'/w['asset_slug']/f'{role}-{size}.webp'
+                if not p.is_file(): errors.append(f'missing asset: {p.relative_to(ROOT)}')
+        motion=w.get('motion') or {}
+        if motion.get('enabled'):
+            for key in ('desktop_file','mobile_file'):
+                mp=PUBLIC/'assets'/w['asset_slug']/motion[key]
+                if not mp.is_file(): errors.append(f'missing motion asset: {mp.relative_to(ROOT)}')
+                elif mp.stat().st_size>1_500_000: errors.append(f'motion asset exceeds 1.5 MB budget: {mp.relative_to(ROOT)}')
+    grave_path,grave,cv_path,cv=protected_paths(authority)
+    if strict_protected:
+        if not grave_path.is_file():
+            errors.append(f"missing protected Grave-Machine runtime: {grave['source_path']}")
+        else:
+            if grave_path.stat().st_size!=grave['size_bytes']: errors.append(f"protected Grave-Machine runtime size mismatch: {grave_path.stat().st_size}")
+            actual=sha256(grave_path)
+            if actual!=grave['sha256']: errors.append(f'protected Grave-Machine runtime checksum mismatch: {actual}')
+            blob=git_blob_sha1(grave_path)
+            if blob!=grave['git_blob_sha1']: errors.append(f'protected Grave-Machine git-blob checksum mismatch: {blob}')
+        if not cv_path.is_file():
+            errors.append(f"missing protected CV: {cv['source_path']}")
+        else:
+            if cv_path.stat().st_size!=cv['size_bytes']:
+                errors.append(f"protected CV size mismatch: {cv_path.stat().st_size}")
+            actual=git_blob_sha1(cv_path)
+            if actual!=cv['git_blob_sha1']:
+                errors.append(f'protected CV git-blob checksum mismatch: {actual}')
+    if errors: raise SystemExit('SOURCE VALIDATION FAILED\n- '+'\n- '.join(errors))
 
-    Defined tokens are replaced with prefix-relative URLs.
-    Any unrecognised token fails the build immediately.
-    """
-    tokens = {
-        '{{PREFIX}}':              prefix,
-        '{{ASSETS}}':              f'{prefix}assets/',
-        '{{CV}}':                  f'{prefix}{CV_FILENAME}',
-        '{{ROUTE:home}}':          prefix or 'index.html',
-        '{{ROUTE:works}}':         f'{prefix}{ROUTE_PATHS["works"]}',
-        '{{ROUTE:black-bird}}':    f'{prefix}{ROUTE_PATHS["black-bird"]}',
-        '{{ROUTE:winter-road}}':   f'{prefix}{ROUTE_PATHS["winter-road"]}',
-        '{{ROUTE:grave-machine}}': f'{prefix}{ROUTE_PATHS["grave-machine"]}',
-        '{{ROUTE:taroke-remixer}}':f'{prefix}{ROUTE_PATHS["taroke-remixer"]}',
-        '{{ROUTE:grave-machine-run}}': f'{prefix}{ROUTE_PATHS["grave-machine-run"]}',
-        '{{ROUTE:practice}}':      f'{prefix}{ROUTE_PATHS["practice"]}',
-        '{{ROUTE:about}}':         f'{prefix}{ROUTE_PATHS["about"]}',
-        '{{ROUTE:contact}}':       f'{prefix}{ROUTE_PATHS["contact"]}',
-    }
-    unknown = set(_TOKEN_RE.findall(html)) - set(tokens.keys())
-    if unknown:
-        sys.exit(f'ERROR: Unknown tokens in {label}: {sorted(unknown)}')
-    for token, value in tokens.items():
-        html = html.replace(token, value)
-    return html
-
-
-# ---------------------------------------------------------------------------
-# Meta helpers
-# ---------------------------------------------------------------------------
-
-def og_image_url(meta):
-    img = meta.get('og_image')
-    if not img:
-        return None
-    return f'{SITE_ORIGIN}/{img}'
-
-
-def meta_tags(meta):
-    canonical = SITE_ORIGIN + meta['route']
-    img_url = og_image_url(meta)
-    img_tags = ''
-    if img_url:
-        img_tags = (
-            f'\n  <meta property="og:image" content="{escape(img_url)}">'
-            f'\n  <meta name="twitter:image" content="{escape(img_url)}">'
-        )
-    return (
-        f'  <link rel="canonical" href="{escape(canonical)}">\n'
-        f'  <meta property="og:title" content="{escape(meta["title"])}">\n'
-        f'  <meta property="og:description" content="{escape(meta["description"])}">\n'
-        f'  <meta property="og:url" content="{escape(canonical)}">\n'
-        f'  <meta property="og:type" content="website">\n'
-        f'  <meta property="og:site_name" content="{escape(SITE_TITLE)}">'
-        f'{img_tags}\n'
-        f'  <meta name="twitter:card" content="summary_large_image">\n'
-        f'  <meta name="twitter:title" content="{escape(meta["title"])}">\n'
-        f'  <meta name="twitter:description" content="{escape(meta["description"])}">'
-    )
-
-
-# ---------------------------------------------------------------------------
-# CV downloader JS (embeds PDF as base64)
-# ---------------------------------------------------------------------------
-
-def build_cv_downloader():
-    pdf_path = PUBLIC / 'documents' / CV_FILENAME
-    _assert_exists(pdf_path, 'CV PDF')
-    encoded = b64encode(pdf_path.read_bytes()).decode('ascii')
-    script = f'''(() => {{
-  'use strict';
-  const filename = '{CV_FILENAME}';
-  const base64 = '{encoded}';
-  const toBlob = () => {{
-    const raw = atob(base64);
-    const bytes = new Uint8Array(raw.length);
-    for (let i = 0; i < raw.length; i += 1) bytes[i] = raw.charCodeAt(i);
-    return new Blob([bytes], {{ type: 'application/pdf' }});
-  }};
-  document.addEventListener('click', (event) => {{
-    const link = event.target.closest('[data-cv-download]');
-    if (!link) return;
-    event.preventDefault();
-    const url = URL.createObjectURL(toBlob());
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = filename;
-    anchor.hidden = true;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
-  }});
-}})();'''
-    out = DIST / 'assets' / 'js' / 'cv-download.js'
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(script, encoding='utf-8')
-
-
-# ---------------------------------------------------------------------------
-# Page generation
-# ---------------------------------------------------------------------------
-
-def _assert_exists(path, label):
-    if not path.exists():
-        sys.exit(f'ERROR: required {label} not found: {path}')
-
-
-def _sha256(path):
-    h = hashlib.sha256()
-    h.update(path.read_bytes())
-    return h.hexdigest()
-
-
-def build_page(key, meta):
-    output = meta['output']
-    prefix = root_prefix(output)
-
-    fragment_path = PAGES_DIR / meta['fragment']
-    _assert_exists(fragment_path, f'page fragment {meta["fragment"]}')
-    body_raw = fragment_path.read_text(encoding='utf-8')
-    body = apply_tokens(body_raw, prefix, label=meta['fragment'])
-
-    css_files = ('tokens.css', 'base.css', 'components.css', 'pages.css', 'responsive.css')
-    css = ''.join(
-        f'<link rel="stylesheet" href="{prefix}assets/css/{f}">'
-        for f in css_files
-    )
-    scripts = (
-        f'<script defer src="{prefix}assets/js/site.js"></script>'
-        f'<script defer src="{prefix}assets/js/cv-download.js"></script>'
-    )
-    if meta.get('atlas'):
-        scripts += f'<script defer src="{prefix}assets/js/atlas.js"></script>'
-
-    html = f'''<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="{escape(meta['description'])}">
-  <meta name="color-scheme" content="light">
-  <title>{escape(meta['title'])}</title>
-{meta_tags(meta)}
-  {css}
-  {scripts}
-</head>
-<body class="{meta['class']}">
-{header(meta['current'], prefix)}
-<main id="main">{body}</main>
-{footer(meta['current'], prefix)}
-</body>
-</html>'''
-
-    out = DIST / output
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(html, encoding='utf-8')
-
-
-# ---------------------------------------------------------------------------
-# Legacy redirect stubs
-# ---------------------------------------------------------------------------
-
-def build_legacy_redirects():
-    for old_name, route_key in LEGACY_REDIRECTS:
-        meta = ROUTES[route_key]
-        canonical = SITE_ORIGIN + meta['route']
-        # From a root-level file, route paths are already correct as-is.
-        rel_target = ROUTE_PATHS[route_key]
-        html = f'''<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <link rel="canonical" href="{escape(canonical)}">
-  <meta name="robots" content="noindex">
-  <meta http-equiv="refresh" content="0;url={rel_target}">
-  <title>Redirecting — {escape(SITE_TITLE)}</title>
-</head>
-<body>
-  <script>
-    (function () {{
-      var t = '{rel_target}';
-      var qs = location.search || '';
-      var hash = location.hash || '';
-      location.replace(t + qs + hash);
-    }})();
-  </script>
-  <p>This page has moved. <a href="{rel_target}">Continue →</a></p>
-</body>
-</html>'''
-        out = DIST / old_name
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(html, encoding='utf-8')
-
-
-# ---------------------------------------------------------------------------
-# Sitemap and robots
-# ---------------------------------------------------------------------------
-
-def build_sitemap():
-    urls = '\n'.join(
-        f'  <url>\n    <loc>{SITE_ORIGIN}{meta["route"]}</loc>\n  </url>'
-        for meta in ROUTES.values()
-        if meta.get('sitemap', True)
-    )
-    xml = f'''<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{urls}
-</urlset>
-'''
-    (DIST / 'sitemap.xml').write_text(xml, encoding='utf-8')
-
-
-def build_robots():
-    txt = f'User-agent: *\nAllow: /\nSitemap: {SITE_ORIGIN}/sitemap.xml\n'
-    (DIST / 'robots.txt').write_text(txt, encoding='utf-8')
-
-
-# ---------------------------------------------------------------------------
-# Public asset copying
-# ---------------------------------------------------------------------------
-
-def copy_public_assets():
-    # CSS and JS (cv-download.js is generated separately)
-    for subdir in ('css', 'js'):
-        src = PUBLIC / 'assets' / subdir
-        _assert_exists(src, f'public/assets/{subdir}')
-        dst = DIST / 'assets' / subdir
-        dst.mkdir(parents=True, exist_ok=True)
-        for f in src.iterdir():
-            if f.name != 'cv-download.js':
-                shutil.copy2(f, dst / f.name)
-
-    # Work media directories
-    for work in ('black-bird', 'winter-road', 'grave-machine', 'taroke-remixer'):
-        src = PUBLIC / 'assets' / work
-        if src.exists():
-            dst = DIST / 'assets' / work
-            if dst.exists():
-                shutil.rmtree(dst)
-            shutil.copytree(src, dst)
-
-    # Grave-Machine runtime at canonical run/ path (byte-identical)
-    grave_src = PUBLIC / 'works' / 'grave-machine' / 'index.html'
-    _assert_exists(grave_src, 'Grave-Machine runtime')
-    grave_dst = DIST / GRAVE_RUNTIME_OUTPUT
-    grave_dst.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(grave_src, grave_dst)
-
-    # CV document (fallback href for non-JS browsers)
-    cv_src = PUBLIC / 'documents' / CV_FILENAME
-    _assert_exists(cv_src, 'CV PDF')
-    shutil.copy2(cv_src, DIST / CV_FILENAME)
-
-
-# ---------------------------------------------------------------------------
-# Checksum verification
-# ---------------------------------------------------------------------------
-
-def verify_checksums():
-    if not CHECKSUMS_FILE.exists():
-        print('WARNING: checksums.json not found; skipping checksum verification')
-        return
-    expected = json.loads(CHECKSUMS_FILE.read_text())
-    grave_key = 'grave_machine_bilingual_v1_1'
-    if grave_key in expected:
-        actual = _sha256(DIST / GRAVE_RUNTIME_OUTPUT)
-        if actual != expected[grave_key]:
-            sys.exit(
-                f'CHECKSUM MISMATCH for Grave-Machine runtime:\n'
-                f'  expected: {expected[grave_key]}\n'
-                f'  actual:   {actual}'
-            )
-        print(f'  checksum OK: {grave_key}')
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+def build(strict_protected=True):
+    site=load_site(); works=load_works(); authority=load_protected_artifacts()
+    validate_sources(site,works,authority,strict_protected)
+    if DIST.exists(): shutil.rmtree(DIST)
+    DIST.mkdir()
+    shutil.copy2(PUBLIC/'site.css',DIST/'site.css'); shutil.copy2(PUBLIC/'site.js',DIST/'site.js')
+    shutil.copytree(PUBLIC/'assets',DIST/'assets')
+    (DIST/'.nojekyll').write_text('',encoding='utf8')
+    (DIST/'CNAME').write_text(site['site_origin'].removeprefix('https://').removeprefix('http://')+'\n',encoding='utf8')
+    grave_path,grave,cv_path,cv=protected_paths(authority)
+    if cv_path.is_file():
+        cvout=DIST/cv['output_path']; cvout.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(cv_path,cvout)
+    if grave_path.is_file():
+        out=DIST/grave['output_path']; out.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(grave_path,out)
+    output,title,desc,main=render_home(site,works)
+    write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+'/',body_class='home-page',current='home',main=main,site=site,works=works,og_image=asset('poster',works[0])))
+    output,title,desc,main=render_works(site,works)
+    write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+'/works/',body_class='works-page',current='works',main=main,site=site,works=works,og_image=asset(works[0]['feature_image'],works[0])))
+    for w in works:
+        output,title,desc,main,cls=render_project(site,works,w)
+        write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+f"/works/{w['slug']}/",body_class=cls,current='works',main=main,site=site,works=works,og_image=asset('poster',w)))
+    for renderer,key,cls in [(render_practice,'practice','practice-page'),(render_about,'about','about-page'),(render_contact,'contact','contact-page')]:
+        output,title,desc,main=renderer(site,works)
+        write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+f'/{key}/',body_class=cls,current=key,main=main,site=site,works=works,og_image=asset('poster',works[0]) if key!='contact' else None))
+    for old,target in LEGACY.items(): write(old,legacy_stub(old,target,site['site_origin']))
+    urls=['/','/works/']+[f"/works/{w['slug']}/" for w in works]+['/practice/','/about/','/contact/']
+    xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{escape(site["site_origin"]+u)}</loc></url>\n' for u in urls)+'</urlset>\n'
+    write('sitemap.xml',xml); write('robots.txt',f'User-agent: *\nAllow: /\nSitemap: {site["site_origin"]}/sitemap.xml\n')
+    return site,works
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--check', action='store_true', help='verify checksums after build')
-    args = parser.parse_args()
-
-    if DIST.exists():
-        shutil.rmtree(DIST)
-    DIST.mkdir()
-
-    print('Copying public assets...')
-    copy_public_assets()
-
-    print('Generating cv-download.js...')
-    build_cv_downloader()
-
-    print('Building canonical pages...')
-    for key, meta in ROUTES.items():
-        build_page(key, meta)
-        print(f'  {meta["output"]}')
-
-    print('Building legacy redirect stubs...')
-    for old_name, _ in LEGACY_REDIRECTS:
-        print(f'  {old_name}')
-    build_legacy_redirects()
-
-    print('Generating sitemap.xml and robots.txt...')
-    build_sitemap()
-    build_robots()
-
-    if args.check:
-        print('Verifying checksums...')
-        verify_checksums()
-
-    page_count = len(list(DIST.rglob('*.html')))
-    print(f'\nBuild complete: {page_count} HTML files → {DIST}')
-
-
-if __name__ == '__main__':
-    main()
+    ap=argparse.ArgumentParser(); ap.add_argument('--package-preview',action='store_true',help='build portfolio shell before protected current-production binaries are inherited'); ap.add_argument('--check',action='store_true')
+    a=ap.parse_args(); strict=not a.package_preview
+    if a.check and not strict: raise SystemExit('--check cannot be combined with --package-preview')
+    site,works=build(strict_protected=strict)
+    print(f'Built {len(works)}-work portfolio → {DIST}')
+    if not strict: print('PACKAGE PREVIEW ONLY: protected Grave runtime and CV are intentionally inherited during migration into the current clone.')
+if __name__=='__main__': main()

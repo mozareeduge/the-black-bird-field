@@ -23,7 +23,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pytest playwright axe-playwright-python
+        run: pip install -r requirements-test.txt -r requirements-tools.txt
 
       - name: Install Playwright Chromium
         run: playwright install chromium --with-deps
@@ -31,26 +31,11 @@ jobs:
       - name: Build production site
         run: python src/build.py --check
 
-      - name: Production static tests
+      - name: Static tests
         run: python -m pytest tests/static/ -v
 
-      - name: Production browser tests (root and subpath)
+      - name: Browser tests (root and subpath)
         run: python -m pytest tests/browser/ -v
-
-      - name: Build /next/ preview site
-        run: python src/build.py --check
-        working-directory: next
-
-      - name: Preview static tests
-        run: python -m pytest tests/static/ -v --deselect tests/static/test_build.py::test_cname_copied_for_custom_domain
-        working-directory: next
-
-      - name: Preview browser tests
-        run: python -m pytest tests/browser/ -v
-        working-directory: next
-
-      - name: Merge production and preview into one dist/
-        run: python scripts/build_combined_site.py --check
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

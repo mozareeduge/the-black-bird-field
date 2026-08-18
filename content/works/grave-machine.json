@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "grave-machine",
+  "asset_slug": "grave-machine",
+  "order": 4,
+  "title": "Grave-Machine",
+  "title_parts": [
+    "Grave-Machine"
+  ],
+  "mode": "Remain",
+  "form": "A bilingual generative e-poem",
+  "year": 2026,
+  "summary": "Material from the play Grave enters the Taroko Gorge remix lineage. Generated language remains beside a quieter runtime trace, keeping recurrence and construction in the same field.",
+  "responsibility": "generation can keep its trace",
+  "meta_description": "Grave-Machine is a bilingual generative e-poem by Mozare that carries material from the play Grave into the remix lineage of Taroko Gorge.",
+  "live_url": "https://theblackbirdfield.com/works/grave-machine/run/",
+  "repository_url": "https://github.com/mozareeduge/grave-machine",
+  "poster_caption": "Release v1.1.0 · English / Persian",
+  "feature_caption": "Release v1.1.0 · English / Persian",
+  "feature_image": "view-midpoint",
+  "hero_lead": "Grave-Machine carries burial, paperwork, and unfinished return into a bilingual generative surface. The poem continues beside a quieter record of how each line arrived.",
+  "prelude": {
+    "label": "READING CONDITIONS",
+    "items": [
+      [
+        "01 / RETURN",
+        "The work develops across recurrence.",
+        ""
+      ],
+      [
+        "02 / TRACE",
+        "Construction remains beside the poem.",
+        ""
+      ],
+      [
+        "03 / LANGUAGE",
+        "English and Persian retain distinct systems.",
+        ""
+      ]
+    ]
+  },
+  "views": {
+    "title": "Three views",
+    "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
+    "items": [
+      [
+        "01",
+        "First event",
+        "One generated line and one receipt establish the two reading surfaces.",
+        "view-first_change",
+        "Grave-Machine: First event"
+      ],
+      [
+        "02",
+        "Accumulation",
+        "Recurrence becomes visible across a temporary field of lines.",
+        "view-midpoint",
+        "Grave-Machine: Accumulation"
+      ],
+      [
+        "03",
+        "Bilingual surface",
+        "The same release holds English and Persian as separately authored systems.",
+        "view-last_change",
+        "Grave-Machine: Bilingual surface"
+      ]
+    ]
+  },
+  "context": {
+    "title": "From dramatic material to generative return",
+    "paragraphs": [
+      "Grave was written as the practical component of Mohammad Zare’s MA in Dramatic Literature. Its scenes place bodies beside paperwork; rooms become processing sites, and burial begins to resemble administration.",
+      "Grave-Machine extracts this field of pressure rather than adapting the play as plot. The English and Persian versions share one runtime while retaining distinct materials, grammatical devices, language direction, and typographic proportions."
+    ],
+    "coda": ""
+  },
+  "identity": {
+    "edition": "Bilingual release v1.1.0 · release commit b948455",
+    "language": "English / Persian",
+    "encounter": "Continuous poem beside a runtime trace"
+  },
+  "citation": {
+    "author": "Zare, Mohammad.",
+    "title": "Grave-Machine: An Iranian Remix of Taroko Gorge",
+    "rest": "Bilingual generative electronic poem, version 1.1.0, 2026."
+  },
+  "motion": {
+    "enabled": true,
+    "home_preview": true,
+    "project_hero": true,
+    "desktop_file": "motion-loop-desktop.mp4",
+    "mobile_file": "motion-loop-mobile.mp4",
+    "fallback_role": "view-midpoint",
+    "source_roles": [
+      "view-first_change",
+      "view-midpoint",
+      "view-last_change"
+    ],
+    "verb": "tick / accrue / retain trace",
+    "duration_seconds": 10.8,
+    "provenance": "authentic captured states from the released work; assembled without invented interface states"
+  }
+}
