@@ -23,7 +23,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pytest playwright axe-playwright-python
+        run: pip install -r requirements-test.txt
 
       - name: Install Playwright Chromium
         run: playwright install chromium --with-deps
