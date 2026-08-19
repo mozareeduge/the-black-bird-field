@@ -83,6 +83,7 @@ def build(strict_protected=True):
     if DIST.exists(): shutil.rmtree(DIST)
     DIST.mkdir()
     shutil.copy2(PUBLIC/'site.css',DIST/'site.css'); shutil.copy2(PUBLIC/'site.js',DIST/'site.js')
+    shutil.copy2(PUBLIC/'favicon.svg',DIST/'favicon.svg'); shutil.copy2(PUBLIC/'favicon.ico',DIST/'favicon.ico')
     shutil.copytree(PUBLIC/'assets',DIST/'assets')
     (DIST/'.nojekyll').write_text('',encoding='utf8')
     (DIST/'CNAME').write_text(site['site_origin'].removeprefix('https://').removeprefix('http://')+'\n',encoding='utf8')

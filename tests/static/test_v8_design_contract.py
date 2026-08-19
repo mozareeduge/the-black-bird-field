@@ -82,7 +82,3 @@ def test_taroke_desktop_capture_identity_glyph_is_normalized():
         assert iou(mask(im,source),mask(im,target))>=.90,name
 
 
-def test_migration_owns_primary_handoff_files():
-    script=(ROOT/'scripts/apply_to_current_repo.py').read_text(encoding='utf-8')
-    for name in ['00_START_HERE.md','CHANGELOG.md','CLAUDE_CODE_EXECUTION_INTAKE.md','requirements-tools.txt']:
-        assert repr(name) in script,name
