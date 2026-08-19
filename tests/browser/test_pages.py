@@ -29,18 +29,19 @@ def test_responsive_matrix(server):
         page=b.new_page()
         errors=[]; page.on('pageerror',lambda e: errors.append(str(e)))
         for route in PAGES:
-            page.goto(server+route,wait_until='networkidle')
+            # 'load', not 'networkidle': the animated favicon runs a perpetual
+            # canvas-update timer, so the page never goes network-idle by design.
+            page.goto(server+route,wait_until='load')
             for width,height in VIEWPORTS:
                 page.set_viewport_size({'width':width,'height':height})
                 page.wait_for_timeout(150)
-                page.wait_for_load_state('networkidle')
                 m=page.evaluate('''() => ({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,h1:document.querySelectorAll('h1').length,bad:[...document.images].filter(i=>!i.complete||!i.naturalWidth).length})''')
                 assert m['sw']<=m['cw']+1,(route,width,m); assert m['h1']==1; assert m['bad']==0
         assert not errors,errors; b.close()
 
 def test_home_preview_mapping_interaction(server):
     with sync_playwright() as pw:
-        b=launch_chromium(pw); page=b.new_page(viewport={'width':1440,'height':900}); page.goto(server+'/',wait_until='networkidle')
+        b=launch_chromium(pw); page=b.new_page(viewport={'width':1440,'height':900}); page.goto(server+'/',wait_until='load')
         links=page.locator('[data-preview-index]')
         for i in range(links.count()):
             link=links.nth(i); slug=link.get_attribute('data-work-slug'); link.focus()

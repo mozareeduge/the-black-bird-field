@@ -5,11 +5,11 @@
     "grave_machine_runtime": {
       "source_path": "public/works/grave-machine/index.html",
       "output_path": "works/grave-machine/run/index.html",
-      "sha256": "32efce8cf9d756cff92175ff7419bcd449689ed731ec93c978cbdc9216629068",
+      "sha256": "ea58b790953fc0da90523b7d7384486e069bd1b16f8983ba4543b9ef7aa89a4c",
       "required_for_production": true,
       "policy": "byte-identical inherited artifact; portfolio work must never rewrite it",
-      "git_blob_sha1": "8ec8846c9f885d195952fd98923cb2ce0defd6bd",
-      "size_bytes": 359458
+      "git_blob_sha1": "0836779e8b5eafb86411cc28d47b70892242c48f",
+      "size_bytes": 359741
     },
     "academic_cv": {
       "source_path": "public/documents/Mohammad_Zare_AcademicCV.pdf",

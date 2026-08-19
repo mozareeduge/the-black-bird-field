@@ -83,7 +83,7 @@ def build(strict_protected=True):
     if DIST.exists(): shutil.rmtree(DIST)
     DIST.mkdir()
     shutil.copy2(PUBLIC/'site.css',DIST/'site.css'); shutil.copy2(PUBLIC/'site.js',DIST/'site.js')
-    shutil.copy2(PUBLIC/'favicon.svg',DIST/'favicon.svg'); shutil.copy2(PUBLIC/'favicon.ico',DIST/'favicon.ico')
+    shutil.copytree(PUBLIC/'favicon',DIST/'favicon')
     shutil.copytree(PUBLIC/'assets',DIST/'assets')
     (DIST/'.nojekyll').write_text('',encoding='utf8')
     (DIST/'CNAME').write_text(site['site_origin'].removeprefix('https://').removeprefix('http://')+'\n',encoding='utf8')
@@ -92,6 +92,7 @@ def build(strict_protected=True):
         cvout=DIST/cv['output_path']; cvout.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(cv_path,cvout)
     if grave_path.is_file():
         out=DIST/grave['output_path']; out.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(grave_path,out)
+        shutil.copytree(grave_path.parent/'favicon',out.parent/'favicon')
     output,title,desc,main=render_home(site,works)
     write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+'/',body_class='home-page',current='home',main=main,site=site,works=works,og_image=asset('poster',works[0])))
     output,title,desc,main=render_works(site,works)
