@@ -91,6 +91,25 @@ risk: >
 
 executed: 2026-08-30 · 3305ed6980c454bbfa79690451ec8db8d5dd2936
 
+amended: 2026-08-30 · first execution reduced each module from an
+  exhaustive roll call to one or two named works ("Grave-Machine tests...
+  TAROKE REMIXER goes further...") — this satisfied the literal acceptance
+  bullet (no 3+ enumeration) but not the actual finding: a module that
+  names one or two specific works is still not count-agnostic, still reads
+  as an arbitrary subset once a reader notices the site has more works
+  than get named, and still leaves an implicit, undocumented human
+  decision at the next work's launch ("does the new work's name get added
+  here too?"). Flagged directly: "you did not solve the problems, you
+  just made more text, but they are still about specific works." Correct
+  fix: remove every work proper noun from practice.modules[].text
+  entirely — the module's concrete instance is already carried by its
+  image + caption fields (unchanged, unflagged), so the running text is
+  free to state the mechanism in general terms that need no edit, ever,
+  regardless of work count. Acceptance bullet 1 is superseded by: "no
+  practice.modules[].text field names a specific work by proper noun,
+  under any count." Re-executed and re-validated (build + tests + fresh
+  screenshot) in the same session.
+
 PF-01 in prose: the Practice page currently says less than the site knows
 about itself, and says it in a way that cannot survive a sixth work without
 a manual rewrite. Both problems have the same fix — write the three
