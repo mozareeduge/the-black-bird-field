@@ -33,7 +33,7 @@ content/site.json + content/works/*.json
 
 ## Canonical public surface
 
-Canonical pages are `/`, `/works/`, five `/works/<slug>/` pages, `/practice/`, `/about/`, and `/contact/`. Root `.html` compatibility outputs are redirects only and remain out of the canonical sitemap.
+Canonical pages are `/`, `/works/`, one `/works/<slug>/` page per work, `/practice/`, `/about/`, and `/contact/`. Root `.html` compatibility outputs are redirects only and remain out of the canonical sitemap.
 
 The Grave-Machine live runtime and academic CV are protected current-production artifacts. Migration preserves their source bytes exactly; the portfolio build copies them to their declared output paths during strict production build.
 

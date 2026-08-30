@@ -42,9 +42,3 @@ The current package loops are constructed from authentic v07/v08 captured work s
 ## Reproduction
 
 `python scripts/build_motion_media.py`
-
-Technical validation:
-
-`python validation/check_motion_media.py`
-
-The capture/spelling-normalization utility for inherited TAROKE desktop evidence is `scripts/normalize_taroke_capture_identity.py`; it is idempotent and changes only the title glyph cell required by the owner-locked identity correction.

@@ -61,7 +61,7 @@ Canonical pages are generated as directory indexes:
 | `/about/` | `about/index.html` |
 | `/contact/` | `contact/index.html` |
 
-Eight legacy redirect stubs at the old flat paths (`/about.html` etc.) redirect
+Nine legacy redirect stubs at the old flat paths (`/about.html` etc.) redirect
 to the canonical directory routes with `meta-refresh` and `location.replace()`.
 
 ## Adding a new work
