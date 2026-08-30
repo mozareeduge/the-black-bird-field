@@ -89,6 +89,8 @@ risk: >
   must be rewritten, not footnoted.
 ```
 
+executed: 2026-08-30 · 3305ed6980c454bbfa79690451ec8db8d5dd2936
+
 PF-01 in prose: the Practice page currently says less than the site knows
 about itself, and says it in a way that cannot survive a sixth work without
 a manual rewrite. Both problems have the same fix — write the three
@@ -147,3 +149,5 @@ acceptance:
   - "grep -rn 'Eight legacy' returns nothing; the stub count in prose matches len(LEGACY) in src/build.py."
   - "No doc references a script or module absent from the actual scripts/ or validation/ tree."
 ```
+
+executed: 2026-08-30 · 3305ed6980c454bbfa79690451ec8db8d5dd2936
