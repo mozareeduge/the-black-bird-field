@@ -2,7 +2,7 @@
 
 Portfolio site for five browser-native works by Mozare (Mohammad Zare).
 
-**Works:** The Black Bird · Winter Road · UNHAPPY Scenario · Grave-Machine · TAROKE RIMIXER
+**Works:** The Black Bird · Winter Road · UNHAPPY Scenario · Grave-Machine · TAROKE REMIXER
 
 ## Local development
 
@@ -44,7 +44,7 @@ docs/         design system, architecture, deployment and domain notes
 | Winter Road | `mozareeduge/winter-road` | Canonical public source archive |
 | UNHAPPY Scenario | `mozareeduge/UNHAPPY-scenario` | Canonical public source archive |
 | Grave-Machine | `mozareeduge/grave-machine` | Canonical public source archive; live runtime remains in the portfolio |
-| TAROKE RIMIXER | `mozareeduge/taroke-remixer` | Active construction; excluded from this alignment pass |
+| TAROKE REMIXER | `mozareeduge/taroke-remixer` | Active construction; excluded from this alignment pass |
 
 ## Domain
 
@@ -62,5 +62,5 @@ the full record.
 ## Routes
 
 The build produces directory-style canonical routes (`/works/the-black-bird/`,
-`/practice/`, etc.) and eight legacy redirect stubs at the old flat paths
+`/practice/`, etc.) and nine legacy redirect stubs at the old flat paths
 (`/black-bird.html` → `/works/the-black-bird/`, etc.).
