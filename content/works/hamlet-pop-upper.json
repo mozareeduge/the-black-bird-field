@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "hamlet-pop-upper",
+  "asset_slug": "hamlet-pop-upper",
+  "order": 6,
+  "title": "Hamlet Pop-Upper",
+  "title_parts": [
+    "Hamlet Pop-Upper"
+  ],
+  "mode": "Encounter",
+  "form": "A browser-native miniature adaptation",
+  "year": 2026,
+  "summary": "Hamlet's question enters the recurring procedure of a popup. A stored answer and a deferred question meet a fixed score of deaths moving on its own time.",
+  "responsibility": "an interface carries an answer forward; the next encounter gives it authority again",
+  "meta_description": "Hamlet Pop-Upper is Mohammad Zare's browser-native miniature adaptation, composing Hamlet's question through popup recurrence, stored choice, deferral, and a fixed score of deaths.",
+  "live_url": "https://hamlet-popupper.theblackbirdfield.com/",
+  "repository_url": "https://github.com/mozareeduge/HAMLET-POP-UPPER",
+  "poster_caption": "Release v1.8",
+  "feature_caption": "Release v1.8",
+  "feature_image": "view-encounter",
+  "hero_lead": "Father is dead before the first question appears. Hamlet's sentence then returns through an apparatus that remembers selections, schedules deferrals, and meets each death in another state.",
+  "prelude": {
+    "label": "READING CONDITIONS",
+    "items": [
+      [
+        "01 / TIME",
+        "Allow about ninety seconds for one uninterrupted encounter.",
+        ""
+      ],
+      [
+        "02 / SOUND",
+        "Sound is optional and begins only after visitor input.",
+        ""
+      ],
+      [
+        "03 / MEMORY",
+        "“Remember this answer” stores the selected answer in this browser.",
+        ""
+      ]
+    ]
+  },
+  "views": {
+    "title": "Three views",
+    "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
+    "items": [
+      [
+        "01",
+        "The question",
+        "The popup carries “To be” and “Not to be” as two selectable states.",
+        "view-question",
+        "Hamlet Pop-Upper: The question"
+      ],
+      [
+        "02",
+        "The encounter",
+        "A scored death crosses the current state of the asking apparatus and marks its surface.",
+        "view-encounter",
+        "Hamlet Pop-Upper: The encounter"
+      ],
+      [
+        "03",
+        "The afterimage",
+        "After the final dialog closes, its skull-like afterimage sits behind the accumulated list of deaths.",
+        "view-afterimage",
+        "Hamlet Pop-Upper: The afterimage"
+      ]
+    ]
+  },
+  "context": {
+    "title": "Two inherited forms",
+    "paragraphs": [
+      "Hamlet Pop-Upper works with two inherited forms: Hamlet's question and the popup's procedure for interrupting attention, requesting a decision, retaining a selection, and returning. Their contact becomes the material of the adaptation. Literary language enters an interface process; the interface acquires a dramatic role.",
+      "The work uses an in-page HTML dialog rather than a separate browser window. The fixed death score and the visitor's variable responses keep separate times inside that dialog. Each death is classified by the state it encounters, and the classification changes the line, position, and density of the trace left on the apparatus. A remembered answer therefore participates in later events as active state, while a deferral composes the interval in which an event may arrive."
+    ],
+    "coda": "The selection persists as data. At the next call, the person decides how it speaks for them."
+  },
+  "identity": {
+    "edition": "Release v1.8 · source head b4ea5b1",
+    "language": "English",
+    "encounter": "Answer, remember, or defer; the score keeps its own time"
+  },
+  "citation": {
+    "author": "Zare, Mohammad (Mozare).",
+    "title": "Hamlet Pop-Upper",
+    "rest": "Browser-native miniature adaptation, version 1.8, 2026."
+  }
+}

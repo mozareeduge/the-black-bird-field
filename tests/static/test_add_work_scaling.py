@@ -21,10 +21,10 @@ def test_sixth_work_is_one_record_plus_assets(tmp_path):
             shutil.copy2(src/f'{source_role}-{size}.webp',dst/f'{role}-{size}.webp')
     subprocess.run([sys.executable,'src/build.py','--package-preview'],cwd=clone,check=True,capture_output=True,text=True)
     home=BeautifulSoup((clone/'dist/index.html').read_text(encoding='utf8'),'html.parser')
-    assert len(home.select('[data-preview-index]'))==6
-    assert len(home.select('[data-preview-frame]'))==6
+    assert len(home.select('[data-preview-index]'))==7
+    assert len(home.select('[data-preview-frame]'))==7
     assert [x['data-work-slug'] for x in home.select('[data-preview-index]')]==[x['data-work-slug'] for x in home.select('[data-preview-frame]')]
-    assert 'Six works' in home.get_text(' ',strip=True)
+    assert 'Seven works' in home.get_text(' ',strip=True)
     assert (clone/'dist/works/test-sixth/index.html').is_file()
     assert 'https://theblackbirdfield.com/works/test-sixth/' in (clone/'dist/sitemap.xml').read_text()
 
@@ -33,7 +33,7 @@ def test_twelve_works_build_from_manifests_without_shared_code_changes(tmp_path)
     clone=tmp_path/'repo12'
     shutil.copytree(ROOT,clone,ignore=shutil.ignore_patterns('dist','validation','.pytest_cache','__pycache__'))
     src=clone/'public/assets/black-bird'
-    for n in range(6,13):
+    for n in range(6,12):
         slug=f'test-work-{n}'
         subprocess.run([sys.executable,'scripts/add_work.py','--slug',slug,'--title',f'Test Work {n}','--form','A test work','--mode','Test'],cwd=clone,check=True,capture_output=True,text=True)
         p=clone/f'content/works/{slug}.json'; d=json.loads(p.read_text(encoding='utf8'))
@@ -52,4 +52,4 @@ def test_twelve_works_build_from_manifests_without_shared_code_changes(tmp_path)
     assert len(home.select('[data-preview-index]'))==12
     assert len(home.select('[data-preview-frame]'))==12
     assert 'Twelve works' in home.get_text(' ',strip=True)
-    assert all((clone/f'dist/works/test-work-{n}/index.html').is_file() for n in range(6,13))
+    assert all((clone/f'dist/works/test-work-{n}/index.html').is_file() for n in range(6,12))
