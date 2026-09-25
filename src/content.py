@@ -71,15 +71,15 @@ def _validate_work(work: dict, path: Path) -> None:
     prelude = work["prelude"]
     _nonempty(prelude.get("label"), f"{name}.prelude.label")
     items = prelude.get("items")
-    if not isinstance(items, list) or len(items) != 3 or any(not isinstance(x, list) or len(x) != 3 for x in items):
-        raise ValueError(f"{name}.prelude.items: exactly three [label,title,note] records required")
+    if not isinstance(items, list) or len(items) != 3 or any(not isinstance(x, dict) or set(x) != {"label", "title", "note"} for x in items):
+        raise ValueError(f"{name}.prelude.items: exactly three labeled condition records required")
     views = work["views"]
     _nonempty(views.get("title"), f"{name}.views.title")
     _nonempty(views.get("intro"), f"{name}.views.intro")
     items = views.get("items")
-    if not isinstance(items, list) or len(items) != 3 or any(not isinstance(x, list) or len(x) != 5 for x in items):
-        raise ValueError(f"{name}.views.items: exactly three [no,title,text,role,alt] records required")
-    roles = {x[3] for x in items}
+    if not isinstance(items, list) or len(items) != 3 or any(not isinstance(x, dict) or set(x) != {"number", "title", "text", "role", "alt"} for x in items):
+        raise ValueError(f"{name}.views.items: exactly three labeled view records required")
+    roles = {x["role"] for x in items}
     if work["feature_image"] not in roles:
         raise ValueError(f"{name}.feature_image: must name one selected-view role")
     context = work["context"]

@@ -46,7 +46,7 @@ def validate_sources(site,works,authority,strict_protected=True):
     walk(site,'site')
     for w in works:
         walk(w, w['slug'])
-        roles=['poster',w['feature_image']]+[x[3] for x in w['views']['items']]
+        roles=['poster',w['feature_image']]+[x['role'] for x in w['views']['items']]
         for role in set(roles):
             for size in ('desktop','mobile'):
                 p=PUBLIC/'assets'/w['asset_slug']/f'{role}-{size}.webp'
@@ -85,6 +85,7 @@ def build(strict_protected=True):
     shutil.copy2(PUBLIC/'site.css',DIST/'site.css'); shutil.copy2(PUBLIC/'site.js',DIST/'site.js')
     shutil.copytree(PUBLIC/'favicon',DIST/'favicon')
     shutil.copytree(PUBLIC/'assets',DIST/'assets')
+    shutil.copytree(PUBLIC/'admin',DIST/'admin')
     (DIST/'.nojekyll').write_text('',encoding='utf8')
     (DIST/'CNAME').write_text(site['site_origin'].removeprefix('https://').removeprefix('http://')+'\n',encoding='utf8')
     grave_path,grave,cv_path,cv=protected_paths(authority)
@@ -114,6 +115,6 @@ def main():
     a=ap.parse_args(); strict=not a.package_preview
     if a.check and not strict: raise SystemExit('--check cannot be combined with --package-preview')
     site,works=build(strict_protected=strict)
-    print(f'Built {len(works)}-work portfolio → {DIST}')
+    print(f'Built {len(works)}-work portfolio -> {DIST}')
     if not strict: print('PACKAGE PREVIEW ONLY: protected Grave runtime and CV are intentionally inherited during migration into the current clone.')
 if __name__=='__main__': main()

@@ -24,48 +24,48 @@
   "prelude": {
     "label": "BEFORE ENTERING",
     "items": [
-      [
-        "01 / TIME",
-        "Allow one continuous interval",
-        "The work keeps its own durations."
-      ],
-      [
-        "02 / WINDOW",
-        "Give it the whole browser",
-        "The black surface is composed as one field."
-      ],
-      [
-        "03 / PRIVACY",
-        "Nothing leaves the browser",
-        "No file, message, report, analytics request, cookie, or persistent storage is used."
-      ]
+      {
+        "label": "01 / TIME",
+        "title": "Allow one continuous interval",
+        "note": "The work keeps its own durations."
+      },
+      {
+        "label": "02 / WINDOW",
+        "title": "Give it the whole browser",
+        "note": "The black surface is composed as one field."
+      },
+      {
+        "label": "03 / PRIVACY",
+        "title": "Nothing leaves the browser",
+        "note": "No file, message, report, analytics request, cookie, or persistent storage is used."
+      }
     ]
   },
   "views": {
     "title": "Three notices",
     "intro": "The images keep each view inside the surface that gives it pressure. They document the work without replacing its duration.",
     "items": [
-      [
-        "01",
-        "Upload failed",
-        "A pale image remains close to arrival. The notice is calm enough to belong anywhere.",
-        "view-upload",
-        "UNHAPPY Scenario: Upload failed"
-      ],
-      [
-        "02",
-        "Reconnecting…",
-        "The ellipsis holds the promise open. Its duration becomes more legible than its assurance.",
-        "view-reconnecting",
-        "UNHAPPY Scenario: Reconnecting…"
-      ],
-      [
-        "03",
-        "Reporting failed",
-        "The language of accountability reaches a sentence that cannot reach its recipient.",
-        "view-reporting",
-        "UNHAPPY Scenario: Reporting failed"
-      ]
+      {
+        "number": "01",
+        "title": "Upload failed",
+        "text": "A pale image remains close to arrival. The notice is calm enough to belong anywhere.",
+        "role": "view-upload",
+        "alt": "UNHAPPY Scenario: Upload failed"
+      },
+      {
+        "number": "02",
+        "title": "Reconnecting…",
+        "text": "The ellipsis holds the promise open. Its duration becomes more legible than its assurance.",
+        "role": "view-reconnecting",
+        "alt": "UNHAPPY Scenario: Reconnecting…"
+      },
+      {
+        "number": "03",
+        "title": "Reporting failed",
+        "text": "The language of accountability reaches a sentence that cannot reach its recipient.",
+        "role": "view-reporting",
+        "alt": "UNHAPPY Scenario: Reporting failed"
+      }
     ]
   },
   "context": {

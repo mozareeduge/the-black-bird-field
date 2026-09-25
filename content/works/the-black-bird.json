@@ -22,48 +22,48 @@
   "prelude": {
     "label": "READING CONDITIONS",
     "items": [
-      [
-        "01 / FIELD",
-        "Begin with relation before explanation.",
-        ""
-      ],
-      [
-        "02 / READ",
-        "Give one object textual duration.",
-        ""
-      ],
-      [
-        "03 / ROUTE",
-        "Let movement remain partial.",
-        ""
-      ]
+      {
+        "label": "01 / FIELD",
+        "title": "Begin with relation before explanation.",
+        "note": ""
+      },
+      {
+        "label": "02 / READ",
+        "title": "Give one object textual duration.",
+        "note": ""
+      },
+      {
+        "label": "03 / ROUTE",
+        "title": "Let movement remain partial.",
+        "note": ""
+      }
     ]
   },
   "views": {
     "title": "Three views",
     "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
     "items": [
-      [
-        "01",
-        "Threshold",
-        "Entry before the field becomes visible.",
-        "view-first_frame",
-        "The Black Bird: Threshold"
-      ],
-      [
-        "02",
-        "Mapping note",
-        "A local poetic surface remains linked to the wider relation field.",
-        "view-midpoint",
-        "The Black Bird: Mapping note"
-      ],
-      [
-        "03",
-        "Relation field",
-        "Objects, names, sources, and relation bodies remain simultaneously addressable.",
-        "view-last_change",
-        "The Black Bird: Relation field"
-      ]
+      {
+        "number": "01",
+        "title": "Threshold",
+        "text": "Entry before the field becomes visible.",
+        "role": "view-first_frame",
+        "alt": "The Black Bird: Threshold"
+      },
+      {
+        "number": "02",
+        "title": "Mapping note",
+        "text": "A local poetic surface remains linked to the wider relation field.",
+        "role": "view-midpoint",
+        "alt": "The Black Bird: Mapping note"
+      },
+      {
+        "number": "03",
+        "title": "Relation field",
+        "text": "Objects, names, sources, and relation bodies remain simultaneously addressable.",
+        "role": "view-last_change",
+        "alt": "The Black Bird: Relation field"
+      }
     ]
   },
   "context": {

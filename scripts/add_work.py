@@ -22,8 +22,8 @@ def main():
       'mode':args.mode,'form':args.form,'year':args.year,'summary':'TODO: concise portfolio summary.','responsibility':'TODO: what new literary responsibility this work gives the browser','meta_description':'TODO: project-specific metadata description.',
       'live_url':'TODO: https://…','repository_url':'TODO: https://github.com/…','poster_caption':'TODO: release/build identity','feature_caption':'TODO: release/build identity','feature_image':'view-02',
       'hero_lead':'TODO: project-page lead.',
-      'prelude':{'label':'READING CONDITIONS','items':[['01 / CONDITION','TODO',''],['02 / CONDITION','TODO',''],['03 / CONDITION','TODO','']]},
-      'views':{'title':'Three views','intro':'Three images hold distinct reading conditions without reducing the work to a single representative screen.','items':[['01','TODO','TODO','view-01',f'{args.title}: TODO'],['02','TODO','TODO','view-02',f'{args.title}: TODO'],['03','TODO','TODO','view-03',f'{args.title}: TODO']]},
+      'prelude':{'label':'READING CONDITIONS','items':[{'label':f'{i:02d} / CONDITION','title':'TODO','note':''} for i in range(1,4)]},
+      'views':{'title':'Three views','intro':'Three images hold distinct reading conditions without reducing the work to a single representative screen.','items':[{'number':f'{i:02d}','title':'TODO','text':'TODO','role':f'view-{i:02d}','alt':f'{args.title}: TODO'} for i in range(1,4)]},
       'context':{'title':'TODO','paragraphs':['TODO','TODO'],'coda':''},
       'identity':{'edition':'TODO: exact release/build identity','language':'TODO','encounter':'TODO'},
       'citation':{'author':'Mohammad Zare.','title':args.title,'rest':'TODO: citation remainder.'}

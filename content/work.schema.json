@@ -122,9 +122,24 @@
           "minItems": 3,
           "maxItems": 3,
           "items": {
-            "type": "array",
-            "minItems": 3,
-            "maxItems": 3
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "title",
+              "note"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            }
           }
         }
       }
@@ -150,9 +165,32 @@
           "minItems": 3,
           "maxItems": 3,
           "items": {
-            "type": "array",
-            "minItems": 5,
-            "maxItems": 5
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "number",
+              "title",
+              "text",
+              "role",
+              "alt"
+            ],
+            "properties": {
+              "number": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "alt": {
+                "type": "string"
+              }
+            }
           }
         }
       }

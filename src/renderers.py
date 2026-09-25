@@ -101,9 +101,14 @@ def render_project(site,works,w):
     p="../../"; cls="project-page"+(" "+w.get('body_class','') if w.get('body_class') else '')
     title_html=''.join(f'<span>{esc(x)}</span>' for x in w.get('title_parts',[w['title']])) if len(w.get('title_parts',[w['title']]))>1 else esc(w['title'])
     hero_pic=motion_picture(p,w,f"{w['title']} threshold or primary surface",caption=("Primary surface",w['poster_caption']),eager=True,surface='project')
-    conditions=''.join(f'<article><span class="step">{esc(x[0])}</span><h2>{esc(x[1])}</h2>{f"<p>{esc(x[2])}</p>" if x[2] else ""}</article>' for x in w['prelude']['items'])
+    conditions=[]
+    for condition in w["prelude"]["items"]:
+        note = f'<p>{esc(condition["note"])}</p>' if condition["note"] else ""
+        conditions.append(f'<article><span class="step">{esc(condition["label"])}</span><h2>{esc(condition["title"])}</h2>{note}</article>')
+    conditions="".join(conditions)
     view_articles=[]
-    for no,title,text,role,alt in w['views']['items']:
+    for view in w['views']['items']:
+        no,title,text,role,alt=(view[k] for k in ('number','title','text','role','alt'))
         asset=w['asset_slug']; img=f'<picture><source media="(max-width:760px)" srcset="{p}assets/{esc(asset)}/{esc(role)}-mobile.webp"><img alt="{esc(alt)}" src="{p}assets/{esc(asset)}/{esc(role)}-desktop.webp"></picture>'
         view_articles.append(f'<article class="view-plate"><div class="view-image">{img}</div><div class="view-copy"><span class="view-no">{esc(no)}</span><h3>{esc(title)}</h3><p>{esc(text)}</p></div></article>')
     context=''.join(f'<p>{esc(x)}</p>' for x in w['context']['paragraphs'])
@@ -126,7 +131,8 @@ def render_practice(site,works):
 def render_about(site,works):
     a=site['about']; paras=''.join(f'<p>{esc(fmt(x,works))}</p>' for x in a['paragraphs'])
     facts=[]
-    for dt,dd in a['facts']:
+    for fact in a['facts']:
+        dt,dd=fact['term'],fact['detail']
         facts.append(f'<div class="fact"><dt>{esc(dt)}</dt><dd>{"<br>".join(esc(x) for x in dd.split(chr(10)))}</dd></div>')
     cv=site["documents"]["cv"]
     cv_href=site['site_origin'].rstrip('/')+'/'+cv['path'].lstrip('/')

@@ -22,48 +22,48 @@
   "prelude": {
     "label": "READING CONDITIONS",
     "items": [
-      [
-        "01 / DISTANCE",
-        "Most of the field remains dark.",
-        ""
-      ],
-      [
-        "02 / PROXIMITY",
-        "Legibility arrives locally.",
-        ""
-      ],
-      [
-        "03 / DURATION",
-        "A kept poem remains temporary.",
-        ""
-      ]
+      {
+        "label": "01 / DISTANCE",
+        "title": "Most of the field remains dark.",
+        "note": ""
+      },
+      {
+        "label": "02 / PROXIMITY",
+        "title": "Legibility arrives locally.",
+        "note": ""
+      },
+      {
+        "label": "03 / DURATION",
+        "title": "A kept poem remains temporary.",
+        "note": ""
+      }
     ]
   },
   "views": {
     "title": "Three views",
     "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
     "items": [
-      [
-        "01",
-        "Entry",
-        "The root phrase appears while the poems remain undisclosed.",
-        "view-first_frame",
-        "Winter Road: Entry"
-      ],
-      [
-        "02",
-        "Discovery",
-        "A poem becomes legible by degrees before it can be read in full.",
-        "view-midpoint",
-        "Winter Road: Discovery"
-      ],
-      [
-        "03",
-        "Kept relation",
-        "One poem remains while another begins to appear elsewhere.",
-        "view-last_change",
-        "Winter Road: Kept relation"
-      ]
+      {
+        "number": "01",
+        "title": "Entry",
+        "text": "The root phrase appears while the poems remain undisclosed.",
+        "role": "view-first_frame",
+        "alt": "Winter Road: Entry"
+      },
+      {
+        "number": "02",
+        "title": "Discovery",
+        "text": "A poem becomes legible by degrees before it can be read in full.",
+        "role": "view-midpoint",
+        "alt": "Winter Road: Discovery"
+      },
+      {
+        "number": "03",
+        "title": "Kept relation",
+        "text": "One poem remains while another begins to appear elsewhere.",
+        "role": "view-last_change",
+        "alt": "Winter Road: Kept relation"
+      }
     ]
   },
   "context": {

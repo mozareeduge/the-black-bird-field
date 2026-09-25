@@ -22,48 +22,48 @@
   "prelude": {
     "label": "READING CONDITIONS",
     "items": [
-      [
-        "01 / TIME",
-        "Allow about ninety seconds for one uninterrupted encounter.",
-        ""
-      ],
-      [
-        "02 / SOUND",
-        "Sound is optional and begins only after visitor input.",
-        ""
-      ],
-      [
-        "03 / MEMORY",
-        "“Remember this answer” stores the selected answer in this browser.",
-        ""
-      ]
+      {
+        "label": "01 / TIME",
+        "title": "Allow about ninety seconds for one uninterrupted encounter.",
+        "note": ""
+      },
+      {
+        "label": "02 / SOUND",
+        "title": "Sound is optional and begins only after visitor input.",
+        "note": ""
+      },
+      {
+        "label": "03 / MEMORY",
+        "title": "“Remember this answer” stores the selected answer in this browser.",
+        "note": ""
+      }
     ]
   },
   "views": {
     "title": "Three views",
     "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
     "items": [
-      [
-        "01",
-        "The question",
-        "The popup carries “To be” and “Not to be” as two selectable states.",
-        "view-question",
-        "Hamlet Pop-Upper: The question"
-      ],
-      [
-        "02",
-        "The encounter",
-        "A scored death crosses the current state of the asking apparatus and marks its surface.",
-        "view-encounter",
-        "Hamlet Pop-Upper: The encounter"
-      ],
-      [
-        "03",
-        "The afterimage",
-        "After the final dialog closes, its skull-like afterimage sits behind the accumulated list of deaths.",
-        "view-afterimage",
-        "Hamlet Pop-Upper: The afterimage"
-      ]
+      {
+        "number": "01",
+        "title": "The question",
+        "text": "The popup carries “To be” and “Not to be” as two selectable states.",
+        "role": "view-question",
+        "alt": "Hamlet Pop-Upper: The question"
+      },
+      {
+        "number": "02",
+        "title": "The encounter",
+        "text": "A scored death crosses the current state of the asking apparatus and marks its surface.",
+        "role": "view-encounter",
+        "alt": "Hamlet Pop-Upper: The encounter"
+      },
+      {
+        "number": "03",
+        "title": "The afterimage",
+        "text": "After the final dialog closes, its skull-like afterimage sits behind the accumulated list of deaths.",
+        "role": "view-afterimage",
+        "alt": "Hamlet Pop-Upper: The afterimage"
+      }
     ]
   },
   "context": {

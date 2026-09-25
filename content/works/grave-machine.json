@@ -22,48 +22,48 @@
   "prelude": {
     "label": "READING CONDITIONS",
     "items": [
-      [
-        "01 / RETURN",
-        "The work develops across recurrence.",
-        ""
-      ],
-      [
-        "02 / TRACE",
-        "Construction remains beside the poem.",
-        ""
-      ],
-      [
-        "03 / LANGUAGE",
-        "English and Persian retain distinct systems.",
-        ""
-      ]
+      {
+        "label": "01 / RETURN",
+        "title": "The work develops across recurrence.",
+        "note": ""
+      },
+      {
+        "label": "02 / TRACE",
+        "title": "Construction remains beside the poem.",
+        "note": ""
+      },
+      {
+        "label": "03 / LANGUAGE",
+        "title": "English and Persian retain distinct systems.",
+        "note": ""
+      }
     ]
   },
   "views": {
     "title": "Three views",
     "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
     "items": [
-      [
-        "01",
-        "First event",
-        "One generated line and one receipt establish the two reading surfaces.",
-        "view-first_change",
-        "Grave-Machine: First event"
-      ],
-      [
-        "02",
-        "Accumulation",
-        "Recurrence becomes visible across a temporary field of lines.",
-        "view-midpoint",
-        "Grave-Machine: Accumulation"
-      ],
-      [
-        "03",
-        "Bilingual surface",
-        "The same release holds English and Persian as separately authored systems.",
-        "view-last_change",
-        "Grave-Machine: Bilingual surface"
-      ]
+      {
+        "number": "01",
+        "title": "First event",
+        "text": "One generated line and one receipt establish the two reading surfaces.",
+        "role": "view-first_change",
+        "alt": "Grave-Machine: First event"
+      },
+      {
+        "number": "02",
+        "title": "Accumulation",
+        "text": "Recurrence becomes visible across a temporary field of lines.",
+        "role": "view-midpoint",
+        "alt": "Grave-Machine: Accumulation"
+      },
+      {
+        "number": "03",
+        "title": "Bilingual surface",
+        "text": "The same release holds English and Persian as separately authored systems.",
+        "role": "view-last_change",
+        "alt": "Grave-Machine: Bilingual surface"
+      }
     ]
   },
   "context": {

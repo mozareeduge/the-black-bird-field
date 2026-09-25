@@ -46,7 +46,7 @@ def test_contact_is_key_value_action_row_not_far_edge_arrow():
 def test_all_motion_assets_resolve_and_budget():
     import json
     for p in (ROOT/'content/works').glob('*.json'):
-        w=json.loads(p.read_text()); m=w.get('motion') or {}
+        w=json.loads(p.read_text(encoding='utf-8')); m=w.get('motion') or {}
         if not m.get('enabled'): continue
         for key in ('desktop_file','mobile_file'):
             f=ROOT/'public/assets'/w['asset_slug']/m[key]

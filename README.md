@@ -12,6 +12,8 @@ python src/build.py --check  # build + checksum verification
 python -m http.server 8080 --directory dist   # local preview
 ```
 
+See [docs/CMS.md](docs/CMS.md) for the portfolio editor and media workflow.
+
 ## Testing
 
 ```bash

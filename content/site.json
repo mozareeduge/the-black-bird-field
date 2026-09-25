@@ -70,22 +70,22 @@
       "The {count_word} works in this portfolio are where those trajectories currently meet. They are presented under the name Mozare; the formal name, Mohammad Zare, remains attached to citations, rights, the CV, and academic records."
     ],
     "facts": [
-      [
-        "Artistic name",
-        "Mozare"
-      ],
-      [
-        "Formal name",
-        "Mohammad Zare"
-      ],
-      [
-        "Education",
-        "MA Dramatic Literature\nBSc Industrial Engineering"
-      ],
-      [
-        "Current field",
-        "Born-digital literature\nResearch poetry\nGenerative writing"
-      ]
+      {
+        "term": "Artistic name",
+        "detail": "Mozare"
+      },
+      {
+        "term": "Formal name",
+        "detail": "Mohammad Zare"
+      },
+      {
+        "term": "Education",
+        "detail": "MA Dramatic Literature\nBSc Industrial Engineering"
+      },
+      {
+        "term": "Current field",
+        "detail": "Born-digital literature\nResearch poetry\nGenerative writing"
+      }
     ]
   },
   "contact": {

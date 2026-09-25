@@ -22,48 +22,48 @@
   "prelude": {
     "label": "READING CONDITIONS",
     "items": [
-      [
-        "01 / MATERIAL",
-        "Composition begins with authored banks.",
-        ""
-      ],
-      [
-        "02 / GRAMMAR",
-        "Transformations remain inspectable.",
-        ""
-      ],
-      [
-        "03 / RUNTIME",
-        "Generated events return evidence.",
-        ""
-      ]
+      {
+        "label": "01 / MATERIAL",
+        "title": "Composition begins with authored banks.",
+        "note": ""
+      },
+      {
+        "label": "02 / GRAMMAR",
+        "title": "Transformations remain inspectable.",
+        "note": ""
+      },
+      {
+        "label": "03 / RUNTIME",
+        "title": "Generated events return evidence.",
+        "note": ""
+      }
     ]
   },
   "views": {
     "title": "Three views",
     "intro": "Three images hold distinct reading conditions without reducing the work to a single representative screen.",
     "items": [
-      [
-        "01",
-        "Material",
-        "Banks and samples remain visible as authored material.",
-        "view-first_change",
-        "TAROKE REMIXER: Material"
-      ],
-      [
-        "02",
-        "Grammar",
-        "Forms and devices show how material may change.",
-        "view-midpoint",
-        "TAROKE REMIXER: Grammar"
-      ],
-      [
-        "03",
-        "Runtime",
-        "Generated events return evidence to the composition.",
-        "view-last_change",
-        "TAROKE REMIXER: Runtime"
-      ]
+      {
+        "number": "01",
+        "title": "Material",
+        "text": "Banks and samples remain visible as authored material.",
+        "role": "view-first_change",
+        "alt": "TAROKE REMIXER: Material"
+      },
+      {
+        "number": "02",
+        "title": "Grammar",
+        "text": "Forms and devices show how material may change.",
+        "role": "view-midpoint",
+        "alt": "TAROKE REMIXER: Grammar"
+      },
+      {
+        "number": "03",
+        "title": "Runtime",
+        "text": "Generated events return evidence to the composition.",
+        "role": "view-last_change",
+        "alt": "TAROKE REMIXER: Runtime"
+      }
     ]
   },
   "context": {
