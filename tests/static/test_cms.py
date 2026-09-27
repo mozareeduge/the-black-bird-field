@@ -1,4 +1,4 @@
-﻿"""CMS field coverage protects JSON content from silent loss on editor saves."""
+"""CMS field coverage protects JSON content from silent loss on editor saves."""
 import json
 from pathlib import Path
 
@@ -37,7 +37,10 @@ def test_cms_maps_current_site_and_every_work_field():
 
 def test_admin_uses_token_auth_and_existing_asset_folder():
     assert CONFIG['backend']['repo'] == 'mozareeduge/the-black-bird-field'
-    assert CONFIG['backend']['auth_methods'] == ['token']
+    assert CONFIG['backend']['auth_methods'] == ['oauth', 'token']
+    assert CONFIG['backend']['base_url'] == 'https://theblackbirdfield.com'
+    assert CONFIG['backend']['auth_endpoint'] == 'admin/login/'
+    assert (ROOT / 'public/admin/login/index.html').is_file()
     assert CONFIG['media_folder'] == '/public/assets'
     assert CONFIG['public_folder'] == '/assets'
     assert (ROOT / 'dist/admin/index.html').is_file()
