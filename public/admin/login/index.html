@@ -16,7 +16,7 @@
 </style>
 </head>
 <body>
-<form id="f" autocomplete="on">
+<form id="f" autocomplete="on" action="javascript:void 0" onsubmit="return false">
   <h1>The Black Bird Field — editor</h1>
   <input id="u" name="username" placeholder="Username" autocomplete="username" required>
   <input id="p" name="password" type="password" placeholder="Password" autocomplete="current-password" required>
@@ -27,11 +27,10 @@
 (async () => {
   const msg = document.getElementById('msg');
   const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-  let vault;
-  try { vault = await (await fetch('./vault.json', {cache: 'no-store'})).json(); }
-  catch { msg.textContent = 'Sign-in is not configured yet.'; return; }
+  const vaultReady = fetch('./vault.json', {cache: 'no-store'}).then(r => r.json());
 
   async function unlock(user, pass) {
+    const vault = await vaultReady;
     const users = vault.users || {};
     const rec = users[user.trim().toLowerCase()];
     if (!rec) throw new Error('bad');
