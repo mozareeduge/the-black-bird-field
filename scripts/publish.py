@@ -161,7 +161,15 @@ def main():
             log(f'dry run ok at {head}'); return 0
         # 5. publish
         if git('rev-list', '--count', 'origin/main..HEAD') != '0':
-            git('push', '-q', 'origin', 'main')
+            for attempt in range(3):  # a CMS save may land mid-run: rebase, rebuild, retry
+                try:
+                    git('push', '-q', 'origin', 'main'); break
+                except RuntimeError:
+                    if attempt == 2: raise
+                    git('pull', '-q', '--rebase', 'origin', 'main')
+                    run(PY, 'src/build.py', '--check')
+                    run(PY, '-m', 'pytest', 'tests/static', '-q', '-p', 'no:cacheprovider')
+            head = git('rev-parse', '--short', 'HEAD')
         ensure_live_worktree()
         changed = sync_live(f'Publish {head}')
         msg = f'PUBLISHED {head}' if changed else f'UP TO DATE {head}'
