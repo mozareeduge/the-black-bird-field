@@ -1,0 +1,10 @@
+{
+  "users": {
+    "mozare": {
+      "salt": "j7Li3fBTZfpJJC/hhiMW2g==",
+      "iv": "mG8+4GsehhXACYNX",
+      "iterations": 1200000,
+      "data": "TFJUiNlD3VW/ntcexZUlAa6rWMAHawSgg7akWvwqb27lpKgo7yS71ig+Lgj5zO4Dv23YREx7H9LJhoiaNy7EJFQtjHluhI8hImY7GPbdjDVm2XifHJS5hqQsfdMB9iIXFE32FzMG9NSftaD57w=="
+    }
+  }
+}
