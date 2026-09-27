@@ -5,8 +5,11 @@
     "repo": "mozareeduge/the-black-bird-field",
     "branch": "main",
     "auth_methods": [
+      "oauth",
       "token"
-    ]
+    ],
+    "base_url": "https://theblackbirdfield.com",
+    "auth_endpoint": "admin/login/"
   },
   "site_url": "https://theblackbirdfield.com",
   "media_folder": "/public/assets",

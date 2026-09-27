@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Sign in · The Black Bird Field</title>
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#111;color:#eee;font:16px/1.4 system-ui,sans-serif}
+  form{display:grid;gap:.8rem;width:min(20rem,86vw)}
+  h1{font-size:1.1rem;font-weight:500;margin:0 0 .4rem}
+  input,button{font:inherit;padding:.65rem .75rem;border-radius:4px;border:1px solid #444;background:#1c1c1c;color:#eee}
+  button{background:#eee;color:#111;border:0;cursor:pointer}
+  #msg{min-height:1.4em;color:#e88}
+</style>
+</head>
+<body>
+<form id="f" autocomplete="on">
+  <h1>The Black Bird Field — editor</h1>
+  <input id="u" name="username" placeholder="Username" autocomplete="username" required>
+  <input id="p" name="password" type="password" placeholder="Password" autocomplete="current-password" required>
+  <button>Sign in</button>
+  <div id="msg" role="status"></div>
+</form>
+<script>
+(async () => {
+  const msg = document.getElementById('msg');
+  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  let vault;
+  try { vault = await (await fetch('./vault.json', {cache: 'no-store'})).json(); }
+  catch { msg.textContent = 'Sign-in is not configured yet.'; return; }
+
+  async function unlock(user, pass) {
+    const users = vault.users || {};
+    const rec = users[user.trim().toLowerCase()];
+    if (!rec) throw new Error('bad');
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      {name: 'PBKDF2', salt: b64(rec.salt), iterations: rec.iterations, hash: 'SHA-256'},
+      base, {name: 'AES-GCM', length: 256}, false, ['decrypt']);
+    const plain = await crypto.subtle.decrypt({name: 'AES-GCM', iv: b64(rec.iv)}, key, b64(rec.data));
+    return new TextDecoder().decode(plain);
+  }
+
+  function handOver(token) {
+    const provider = 'github';
+    const opener = window.opener;
+    if (!opener) {  // opened directly: store nothing, send the user to the editor
+      msg.style.color = '#8c8'; msg.textContent = 'Password correct. Open the editor and choose “Sign in with GitHub”.';
+      return;
+    }
+    const payload = 'authorization:' + provider + ':success:' + JSON.stringify({provider, token});
+    const origin = location.origin;
+    window.addEventListener('message', e => {
+      if (e.origin === origin && e.data === 'authorizing:' + provider) {
+        opener.postMessage(payload, origin);
+        setTimeout(() => window.close(), 300);
+      }
+    });
+    opener.postMessage('authorizing:' + provider, origin);
+    msg.style.color = '#8c8'; msg.textContent = 'Signed in…';
+  }
+
+  document.getElementById('f').addEventListener('submit', async e => {
+    e.preventDefault(); msg.style.color = ''; msg.textContent = '';
+    try { handOver(await unlock(document.getElementById('u').value, document.getElementById('p').value)); }
+    catch { msg.textContent = 'Wrong username or password.'; }
+  });
+})();
+</script>
+</body>
+</html>
