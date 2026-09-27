@@ -61,10 +61,45 @@
     msg.style.color = '#8c8'; msg.textContent = 'Signed in…';
   }
 
+  // Lockout (policy lives in vault.json; owner changes it with scripts/set_login.py).
+  const LS = 'tbbf-login-guard';
+  const vault0 = await vaultReady.catch(() => ({}));
+  const policy = Object.assign({max_attempts: 4, lock_hours: 3, reset_id: ''}, vault0.policy || {});
+  const readGuard = () => {
+    let g = {}; try { g = JSON.parse(localStorage.getItem(LS)) || {}; } catch {}
+    if (g.reset_id !== policy.reset_id) g = {reset_id: policy.reset_id, fails: 0, until: 0};
+    return g;
+  };
+  const saveGuard = g => localStorage.setItem(LS, JSON.stringify(g));
+  const btn = document.querySelector('#f button');
+  function showLock(g) {
+    if (Date.now() < g.until) {
+      btn.disabled = true;
+      msg.textContent = 'Too many wrong attempts. Locked until ' +
+        new Date(g.until).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) + '.';
+      setTimeout(() => { btn.disabled = false; msg.textContent = ''; }, g.until - Date.now());
+      return true;
+    }
+    return false;
+  }
+  showLock(readGuard());
+
   document.getElementById('f').addEventListener('submit', async e => {
     e.preventDefault(); msg.style.color = ''; msg.textContent = '';
-    try { handOver(await unlock(document.getElementById('u').value, document.getElementById('p').value)); }
-    catch { msg.textContent = 'Wrong username or password.'; }
+    const g = readGuard();
+    if (showLock(g)) return;
+    btn.disabled = true;
+    try {
+      const token = await unlock(document.getElementById('u').value, document.getElementById('p').value);
+      saveGuard({reset_id: policy.reset_id, fails: 0, until: 0});
+      handOver(token);
+    } catch {
+      g.fails = (g.fails || 0) + 1;
+      if (g.fails >= policy.max_attempts) { g.fails = 0; g.until = Date.now() + policy.lock_hours * 3600e3; }
+      saveGuard(g);
+      if (!showLock(g)) msg.textContent = 'Wrong username or password. ' +
+        (policy.max_attempts - g.fails) + ' attempt(s) left.';
+    } finally { if (Date.now() >= readGuard().until) btn.disabled = false; }
   });
 })();
 </script>
