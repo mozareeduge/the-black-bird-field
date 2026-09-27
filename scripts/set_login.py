@@ -23,7 +23,7 @@ def main():
     a = ap.parse_args()
     token = os.environ.get('TBBF_TOKEN') or getpass.getpass('GitHub token: ')
     pw = os.environ.get('TBBF_PASSWORD') or getpass.getpass('Password: ')
-    if len(pw) < 12: raise SystemExit('password must be at least 12 characters')
+    if len(pw) < 8: raise SystemExit('password must be at least 8 characters')
     salt, iv = os.urandom(16), os.urandom(12)
     key = pbkdf2_hmac('sha256', pw.encode(), salt, ITER, 32)
     data = AESGCM(key).encrypt(iv, token.strip().encode(), None)
