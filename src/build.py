@@ -1,5 +1,5 @@
 from __future__ import annotations
-import argparse, hashlib, shutil
+import argparse, hashlib, json, shutil
 from pathlib import Path
 from html import escape
 from content import load_site, load_works, load_protected_artifacts
@@ -86,6 +86,8 @@ def build(strict_protected=True):
     shutil.copytree(PUBLIC/'favicon',DIST/'favicon')
     shutil.copytree(PUBLIC/'assets',DIST/'assets')
     shutil.copytree(PUBLIC/'admin',DIST/'admin')
+    # Published content for the editor preview (public/admin/preview.js) to draw pages the editor has not opened.
+    (DIST/'admin'/'preview-data.json').write_text(json.dumps({'site':site,'works':works},ensure_ascii=False),encoding='utf8')
     (DIST/'.nojekyll').write_text('',encoding='utf8')
     (DIST/'CNAME').write_text(site['site_origin'].removeprefix('https://').removeprefix('http://')+'\n',encoding='utf8')
     grave_path,grave,cv_path,cv=protected_paths(authority)
