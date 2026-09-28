@@ -16,6 +16,12 @@ Visit the editor, choose **Sign In with GitHub**, and sign in as `mozare` with t
 
 For local editing, run `python src/build.py --check`, then `python -m http.server 8000 --directory dist`. Open `http://localhost:8000/admin/` in Chrome or Edge and choose **Work with Local Repository**. Select the `the-black-bird-field` repository folder. After saving locally, run the build and tests, then commit and push through Git. Local mode needs no token.
 
+## Preview
+
+The editor's Preview pane draws the real page: the site's own `site.css` and the markup the build publishes, inside a real 1440×900, 1024×768, or 390×844 screen scaled to fit the pane. Choose the page (a work entry can also show Home and the Works list) and the screen size at the top of the pane. **Taller view** fills the pane with more of the page, but sections sized to the screen height, such as the Home hero, then look taller than on a real screen. Links in the preview do not navigate, and motion media shows its still frame. An image uploaded but not yet converted to WebP shows from the upload itself.
+
+`public/admin/preview-render.js` is a JavaScript twin of `src/renderers.py`. When a renderer changes, change the same function in the twin; `tests/static/test_preview_parity.py` compares both outputs for every page and fails the publish if they differ. Pages the editor has not opened are drawn from `admin/preview-data.json`, which the build writes from the published content.
+
 ## Media and new works
 
 The Asset Library can browse work subfolders and upload images. A work image role needs two WebP files, `<role>-desktop.webp` and `<role>-mobile.webp`, in `public/assets/<asset_slug>/`. For example, `view-midpoint-desktop.webp` and `view-midpoint-mobile.webp`. The form's `feature_image` and view `role` fields hold the role name only; uploading one image or a JPG under a different name will not satisfy the build. Keep both responsive variants and meaningful alt text. Motion files have their own size and provenance rules in `docs/MOTION_MEDIA.md`.
