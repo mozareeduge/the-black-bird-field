@@ -36,8 +36,14 @@ def log(msg: str):
         f.write(line + '\n')
 
 
+# The scheduled task runs this under pythonw (no console); without this flag every git/test
+# call would open its own console window, which flashes on screen every 10 minutes.
+NO_WINDOW = getattr(subprocess, 'CREATE_NO_WINDOW', 0)
+
+
 def run(*cmd, cwd=ROOT, check=True) -> str:
-    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, encoding='utf-8', errors='replace')
+    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, encoding='utf-8', errors='replace',
+                       creationflags=NO_WINDOW)
     if check and r.returncode:
         raise RuntimeError(f"{' '.join(cmd)} failed:\n{r.stdout[-3000:]}\n{r.stderr[-3000:]}")
     return r.stdout.strip()
