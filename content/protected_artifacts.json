@@ -14,10 +14,10 @@
     "academic_cv": {
       "source_path": "public/documents/Mohammad_Zare_AcademicCV.pdf",
       "output_path": "documents/Mohammad_Zare_AcademicCV.pdf",
-      "git_blob_sha1": "8d2de052d73890c4a48afd7f4b4ea83cf9269394",
-      "size_bytes": 54724,
+      "git_blob_sha1": "1089db29e5c446bd1bffe0dd220ff1c18eb477d5",
+      "size_bytes": 116526,
       "required_for_production": true,
-      "policy": "preserve exact current production document unless the user explicitly supplies/replaces the CV"
+      "policy": "preserve the owner-authorized public CV PDF (2026-10-01; no phone or grade appendices) unless the owner explicitly replaces it"
     }
   }
 }

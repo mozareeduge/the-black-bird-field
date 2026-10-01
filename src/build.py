@@ -70,6 +70,9 @@ def validate_sources(site,works,authority,strict_protected=True):
         if not cv_path.is_file():
             errors.append(f"missing protected CV: {cv['source_path']}")
         else:
+            with cv_path.open('rb') as cv_file:
+                if cv_file.read(5)!=b'%PDF-':
+                    errors.append('protected CV is not a PDF')
             if cv_path.stat().st_size!=cv['size_bytes']:
                 errors.append(f"protected CV size mismatch: {cv_path.stat().st_size}")
             actual=git_blob_sha1(cv_path)
