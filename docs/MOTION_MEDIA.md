@@ -35,7 +35,7 @@ Still-only surfaces:
 | Winter Road | approach → condense → recede | `view-midpoint` |
 | UNHAPPY Scenario | fail → reconnect → report → return | `view-reconnecting` |
 | Grave-Machine | tick → accrue → retain trace | `view-midpoint` |
-| TAROKE REMIXER | edit → propagate → inspect evidence | `view-midpoint` |
+| TAROKO REMIXER | edit → propagate → inspect evidence | `view-midpoint` |
 
 The current package loops are constructed from authentic v07/v08 captured work states with restrained cross-dissolve and minute optical drift. When a corrected live runtime can be captured directly, authentic runtime capture outranks reconstructed interpolation.
 

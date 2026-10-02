@@ -1,24 +1,24 @@
 {
   "schema_version": "1.0.0",
-  "slug": "taroke-remixer",
-  "asset_slug": "taroke-remixer",
+  "slug": "taroko-remixer",
+  "asset_slug": "taroko-remixer",
   "order": 5,
-  "title": "TAROKE REMIXER",
+  "title": "TAROKO REMIXER",
   "title_parts": [
-    "TAROKE REMIXER"
+    "TAROKO REMIXER"
   ],
   "mode": "Compose",
   "form": "A work for generative literature",
   "year": 2026,
   "summary": "The making of a generative poem becomes a visible, revisable encounter. Material, transformations, routes, and recurrence remain available for composition and testing.",
   "responsibility": "a compositional instrument can become an encounter of its own",
-  "meta_description": "TAROKE REMIXER is a browser-native work by Mozare that makes the composition of generative literature visible, editable, testable, and exportable.",
-  "live_url": "https://mozareeduge.github.io/taroke-remixer/",
-  "repository_url": "https://github.com/mozareeduge/taroke-remixer",
+  "meta_description": "TAROKO REMIXER is a browser-native work by Mozare that makes the composition of generative literature visible, editable, testable, and exportable.",
+  "live_url": "https://mozareeduge.github.io/taroko-remixer/",
+  "repository_url": "https://github.com/mozareeduge/taroko-remixer",
   "poster_caption": "Current v08 development line · cb8e5f3",
   "feature_caption": "Current v08 development line · cb8e5f3",
   "feature_image": "view-midpoint",
-  "hero_lead": "TAROKE REMIXER makes the construction of generative literature available as a work in its own right. Authored material and visible constraints remain near the lines they can produce.",
+  "hero_lead": "TAROKO REMIXER makes the construction of generative literature available as a work in its own right. Authored material and visible constraints remain near the lines they can produce.",
   "prelude": {
     "label": "READING CONDITIONS",
     "items": [
@@ -48,28 +48,28 @@
         "title": "Material",
         "text": "Banks and samples remain visible as authored material.",
         "role": "view-first_change",
-        "alt": "TAROKE REMIXER: Material"
+        "alt": "TAROKO REMIXER: Material"
       },
       {
         "number": "02",
         "title": "Grammar",
         "text": "Forms and devices show how material may change.",
         "role": "view-midpoint",
-        "alt": "TAROKE REMIXER: Grammar"
+        "alt": "TAROKO REMIXER: Grammar"
       },
       {
         "number": "03",
         "title": "Runtime",
         "text": "Generated events return evidence to the composition.",
         "role": "view-last_change",
-        "alt": "TAROKE REMIXER: Runtime"
+        "alt": "TAROKO REMIXER: Runtime"
       }
     ]
   },
   "context": {
     "title": "The poem and the means of making it",
     "paragraphs": [
-      "The work continues the proposition made public by Taroko Gorge: a compact generator can be read, altered, and carried into another ground. TAROKE REMIXER expands that proposition into a compositional environment.",
+      "The work continues the proposition made public by Taroko Gorge: a compact generator can be read, altered, and carried into another ground. TAROKO REMIXER expands that proposition into a compositional environment.",
       "Material is named. Transformations are local. Line-making devices remain inspectable. Stanza and flow determine how the poem changes over time, and a completed project can leave the workbench as a standalone artifact."
     ],
     "coda": ""
@@ -81,7 +81,7 @@
   },
   "citation": {
     "author": "Mohammad Zare (Mozare).",
-    "title": "TAROKE REMIXER",
+    "title": "TAROKO REMIXER",
     "rest": "Browser-native generative-poetry workbench, 2026."
   },
   "motion": {

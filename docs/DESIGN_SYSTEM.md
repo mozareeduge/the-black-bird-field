@@ -102,7 +102,7 @@ Current fallback authority:
 - Winter Road — `view-midpoint`;
 - UNHAPPY Scenario — `view-reconnecting`;
 - Grave-Machine — `view-midpoint`;
-- TAROKE REMIXER — `view-midpoint`.
+- TAROKO REMIXER — `view-midpoint`.
 
 ## 7. Responsive transformation
 

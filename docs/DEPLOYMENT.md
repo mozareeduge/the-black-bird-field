@@ -55,14 +55,16 @@ Canonical pages are generated as directory indexes:
 | `/works/winter-road/` | `works/winter-road/index.html` |
 | `/works/unhappy-scenario/` | `works/unhappy-scenario/index.html` |
 | `/works/grave-machine/` | `works/grave-machine/index.html` |
-| `/works/taroke-remixer/` | `works/taroke-remixer/index.html` |
+| `/works/taroko-remixer/` | `works/taroko-remixer/index.html` |
 | `/works/grave-machine/run/` | `works/grave-machine/run/index.html` (Grave runtime, noindex) |
 | `/practice/` | `practice/index.html` |
 | `/about/` | `about/index.html` |
 | `/contact/` | `contact/index.html` |
 
-Nine legacy redirect stubs at the old flat paths (`/about.html` etc.) redirect
-to the canonical directory routes with `meta-refresh` and `location.replace()`.
+Ten legacy redirect stubs at the old flat paths (`/about.html` etc.) redirect
+to the canonical directory routes with `meta-refresh` and `location.replace()`,
+plus the renamed-work compat path (`/works/taroke-remixer/` → `/works/taroko-remixer/`,
+and `/taroke-remixer.html` → `/works/taroko-remixer/`).
 
 ## Adding a new work
 

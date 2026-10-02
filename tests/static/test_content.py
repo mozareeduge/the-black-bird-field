@@ -10,7 +10,11 @@ def load():
 
 def test_foundational_five_preserve_order_and_identity():
     slugs=[w['slug'] for w in load()]
-    assert slugs[:5]==['the-black-bird','winter-road','unhappy-scenario','grave-machine','taroke-remixer']
+    # Canonical slug is taroko-remixer; the old taroke-remixer slug is kept
+    # only as a LEGACY redirect (src/build.py) so either value is accepted
+    # at position five, but exactly one of them must be present.
+    assert slugs[:4]==['the-black-bird','winter-road','unhappy-scenario','grave-machine']
+    assert slugs[4] in ('taroko-remixer','taroke-remixer'), slugs
     assert len(slugs)>=5
 
 def test_unique_order_and_identity():
@@ -21,11 +25,14 @@ def test_unique_order_and_identity():
 
 def test_upstream_identity_facts_locked():
     by={w['slug']:w for w in load()}
+    # Accept both the canonical taroko-remixer slug and the legacy
+    # taroke-remixer slug for the fifth-work identity facts.
+    fifth=by.get('taroko-remixer', by.get('taroke-remixer'))
     assert '5972b2b' in by['the-black-bird']['identity']['edition']
     assert 'v1.0.1' in by['winter-road']['identity']['edition']
     assert 'v2.6.0' in by['unhappy-scenario']['identity']['edition'] and '9f013ba' in by['unhappy-scenario']['identity']['edition']
     assert 'v1.1.0' in by['grave-machine']['identity']['edition'] and 'b948455' in by['grave-machine']['identity']['edition']
-    assert 'development line' in by['taroke-remixer']['identity']['edition'] and 'cb8e5f3' in by['taroke-remixer']['identity']['edition']
+    assert 'development line' in fifth['identity']['edition'] and 'cb8e5f3' in fifth['identity']['edition']
 
 def test_citation_titles_match_upstream_records():
     by={w['slug']:w for w in load()}

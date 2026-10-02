@@ -76,9 +76,11 @@ def test_taroke_desktop_capture_identity_glyph_is_normalized():
     def iou(a,b):
         inter=sum(x and y for x,y in zip(a,b)); union=sum(x or y for x,y in zip(a,b))
         return inter/union if union else 1.0
-    d=ROOT/'public/assets/taroke-remixer'
-    for name in ['poster-desktop.webp','view-first_change-desktop.webp','view-midpoint-desktop.webp','view-last_change-desktop.webp']:
-        im=Image.open(d/name)
-        assert iou(mask(im,source),mask(im,target))>=.90,name
+    for asset_slug in ['taroko-remixer','taroke-remixer']:
+        d=ROOT/f'public/assets/{asset_slug}'
+        if not d.is_dir(): continue
+        for name in ['poster-desktop.webp','view-first_change-desktop.webp','view-midpoint-desktop.webp','view-last_change-desktop.webp']:
+            im=Image.open(d/name)
+            assert iou(mask(im,source),mask(im,target))>=.90,(asset_slug,name)
 
 

@@ -18,6 +18,8 @@ DRIFT={
  'winter-road':[1.000,1.016,1.008,1.000],
  'unhappy-scenario':[1.000,1.010,1.012,1.000],
  'grave-machine':[1.000,1.008,1.010,1.000],
+ 'taroko-remixer':[1.000,1.010,1.014,1.000],
+ # Legacy alias: keep the old slug resolving if an older manifest is present.
  'taroke-remixer':[1.000,1.010,1.014,1.000],
 }
 

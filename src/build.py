@@ -9,7 +9,8 @@ ROOT=Path(__file__).resolve().parents[1]
 PUBLIC=ROOT/'public'; DIST=ROOT/'dist'
 LEGACY={
  'works.html':'works/index.html','black-bird.html':'works/the-black-bird/index.html','winter-road.html':'works/winter-road/index.html',
- 'unhappy-scenario.html':'works/unhappy-scenario/index.html','grave-machine.html':'works/grave-machine/index.html','taroke-remixer.html':'works/taroke-remixer/index.html',
+ 'unhappy-scenario.html':'works/unhappy-scenario/index.html','grave-machine.html':'works/grave-machine/index.html','taroke-remixer.html':'works/taroko-remixer/index.html',
+ 'works/taroke-remixer/index.html':'works/taroko-remixer/index.html',
  'practice.html':'practice/index.html','about.html':'about/index.html','contact.html':'contact/index.html',
 }
 
@@ -24,8 +25,11 @@ def write(rel,text):
     p=DIST/rel; p.parent.mkdir(parents=True,exist_ok=True); p.write_text(text,encoding='utf-8')
 
 def legacy_stub(old,target,origin):
+    import posixpath
     canonical=origin+'/'+target.replace('index.html','')
-    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,follow"><link rel="canonical" href="{escape(canonical)}"><meta http-equiv="refresh" content="0;url={escape(target)}"><title>Redirecting — The Black Bird Field</title></head><body><script>(function(){{var t={target!r};location.replace(t+(location.search||'')+(location.hash||''));}})();</script><p>This page has moved. <a href="{escape(target)}">Continue →</a></p></body></html>'''
+    old_dir=posixpath.dirname(old)
+    rel=posixpath.relpath(target,start=old_dir or '.')
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,follow"><link rel="canonical" href="{escape(canonical)}"><meta http-equiv="refresh" content="0;url={escape(rel)}"><title>Redirecting — The Black Bird Field</title></head><body><script>(function(){{var t={rel!r};location.replace(t+(location.search||'')+(location.hash||''));}})();</script><p>This page has moved. <a href="{escape(rel)}">Continue →</a></p></body></html>'''
 
 def asset(role,work): return f"assets/{work['asset_slug']}/{role}-desktop.webp"
 

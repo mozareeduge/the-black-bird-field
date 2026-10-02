@@ -16,6 +16,12 @@ def test_expected_pages_and_legacy_redirects():
     for p in pages(): assert p.is_file(),p
     for p in ['works.html','black-bird.html','winter-road.html','unhappy-scenario.html','grave-machine.html','taroke-remixer.html','practice.html','about.html','contact.html']:
         assert (DIST/p).is_file()
+    # Renamed work: canonical page is taroko-remixer; both the old flat stub
+    # and the old nested route must redirect to it.
+    from src.build import LEGACY
+    assert LEGACY['taroke-remixer.html']=='works/taroko-remixer/index.html'
+    assert LEGACY['works/taroke-remixer/index.html']=='works/taroko-remixer/index.html'
+    assert (DIST/'works/taroke-remixer/index.html').read_text(encoding='utf8').find('/works/taroko-remixer/')>=0
 
 def test_one_h1_metadata_csp_and_safe_external_links():
     for p in pages():
