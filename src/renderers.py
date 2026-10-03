@@ -113,12 +113,18 @@ def render_project(site,works,w):
         view_articles.append(f'<article class="view-plate"><div class="view-image">{img}</div><div class="view-copy"><span class="view-no">{esc(no)}</span><h3>{esc(title)}</h3><p>{esc(text)}</p></div></article>')
     context=''.join(f'<p>{esc(x)}</p>' for x in w['context']['paragraphs'])
     coda=f'<p class="context-coda">{esc(w["context"]["coda"])}</p>' if w['context'].get('coda') else ''
+    annex=''
+    if w.get('annex'):
+        ax=w['annex']; ax_paras=''.join(f'<p>{esc(x)}</p>' for x in ax['paragraphs'])
+        ax_links=''.join(f'<a class="action secondary" href="{esc(l["url"])}" target="_blank" rel="noopener noreferrer"><span>{esc(l["label"])}</span><span>↗</span></a>' for l in ax.get('links',[]))
+        ax_actions=f'<div class="action-group context-actions">{ax_links}</div>' if ax_links else ''
+        annex=f'<section class="project-context project-annex"><div class="context-inner"><span class="section-no">{esc(ax["label"])}</span><h2>{esc(ax["title"])}</h2><div class="context-prose">{ax_paras}</div>{ax_actions}</div></section>'
     cite=w['citation']; citation=f'{esc(cite["author"])} <em>{esc(cite["title"])}</em>. {esc(cite["rest"])}'
     cells=[
       ("Form",esc(w['form'])),("Artist",esc(site['artistic_name'])),("Citation name",esc(site['formal_name'])),("Edition / build",esc(w['identity']['edition'])),("Language",esc(w['identity']['language'])),("Encounter",esc(w['identity']['encounter'])),
       ("Live work",f'<a href="{esc(w["live_url"])}" target="_blank" rel="noopener noreferrer">Open work ↗</a>'),("Repository",f'<a href="{esc(w["repository_url"])}" target="_blank" rel="noopener noreferrer">Open source record ↗</a>'),("Citation",citation)]
     cells_html=''.join(f'<div class="edition-cell"><span class="meta-label">{esc(label)}</span>{value if value.startswith("<a") else f"<strong>{value}</strong>"}</div>' for label,value in cells)
-    main=f'''<section class="project-hero inverse"><div class="project-hero-inner"><div class="project-copy"><p class="project-form">{esc(w['form'])} · by {esc(site['artistic_name'])} · {esc(w['year'])}</p><h1>{title_html}</h1><p class="lead">{esc(w['hero_lead'])}</p><div class="action-group"><a class="action primary" href="{esc(w['live_url'])}" target="_blank" rel="noopener noreferrer"><span>Enter the work</span><span>↗</span></a><a class="action secondary" href="{esc(w['repository_url'])}" target="_blank" rel="noopener noreferrer"><span>Source and rights</span><span>↗</span></a></div></div><div class="project-hero-media">{hero_pic}</div></div></section><section class="prelude"><span class="section-no">{esc(w['prelude']['label'])}</span>{conditions}</section><section class="selected-views"><div class="views-inner"><div class="views-head"><span class="section-no">SELECTED VIEWS</span><h2>{esc(w['views']['title'])}</h2><p>{esc(w['views']['intro'])}</p></div>{''.join(view_articles)}</div></section><section class="project-context"><div class="context-inner"><span class="section-no">CONTEXT</span><h2>{esc(w['context']['title'])}</h2><div class="context-prose">{context}</div>{coda}</div></section><section class="edition inverse"><div class="edition-inner"><div class="edition-head"><span class="section-no">EDITION AND ACCESS</span><h2>Work identity</h2></div><div class="edition-grid">{cells_html}</div></div></section>'''
+    main=f'''<section class="project-hero inverse"><div class="project-hero-inner"><div class="project-copy"><p class="project-form">{esc(w['form'])} · by {esc(site['artistic_name'])} · {esc(w['year'])}</p><h1>{title_html}</h1><p class="lead">{esc(w['hero_lead'])}</p><div class="action-group"><a class="action primary" href="{esc(w['live_url'])}" target="_blank" rel="noopener noreferrer"><span>Enter the work</span><span>↗</span></a><a class="action secondary" href="{esc(w['repository_url'])}" target="_blank" rel="noopener noreferrer"><span>Source and rights</span><span>↗</span></a></div></div><div class="project-hero-media">{hero_pic}</div></div></section><section class="prelude"><span class="section-no">{esc(w['prelude']['label'])}</span>{conditions}</section><section class="selected-views"><div class="views-inner"><div class="views-head"><span class="section-no">SELECTED VIEWS</span><h2>{esc(w['views']['title'])}</h2><p>{esc(w['views']['intro'])}</p></div>{''.join(view_articles)}</div></section><section class="project-context"><div class="context-inner"><span class="section-no">CONTEXT</span><h2>{esc(w['context']['title'])}</h2><div class="context-prose">{context}</div>{coda}</div></section>{annex}<section class="edition inverse"><div class="edition-inner"><div class="edition-head"><span class="section-no">EDITION AND ACCESS</span><h2>Work identity</h2></div><div class="edition-grid">{cells_html}</div></div></section>'''
     return f"works/{w['slug']}/index.html",f"{w['title']} — {site['site_title']}",w['meta_description'],main,cls
 
 def render_practice(site,works):
@@ -133,7 +139,9 @@ def render_about(site,works):
     facts=[]
     for fact in a['facts']:
         dt,dd=fact['term'],fact['detail']
-        facts.append(f'<div class="fact"><dt>{esc(dt)}</dt><dd>{"<br>".join(esc(x) for x in dd.split(chr(10)))}</dd></div>')
+        lines="<br>".join(esc(x) for x in dd.split(chr(10)))
+        if fact.get('url'): lines=f'<a href="{esc(fact["url"])}" target="_blank" rel="noopener noreferrer">{lines}</a>'
+        facts.append(f'<div class="fact"><dt>{esc(dt)}</dt><dd>{lines}</dd></div>')
     cv=site["documents"]["cv"]
     cv_href=site['site_origin'].rstrip('/')+'/'+cv['path'].lstrip('/')
     cv_link=f'<div class="action-group about-actions"><a class="action primary" href="{esc(cv_href)}" download="Mohammad_Zare_AcademicCV.pdf"><span>{esc(cv["label"])}</span><span>↓</span></a></div>'

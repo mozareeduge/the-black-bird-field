@@ -1,8 +1,8 @@
 # The Black Bird Field
 
-Portfolio site for five browser-native works by Mozare (Mohammad Zare).
+Portfolio site for six browser-native works by Mohammad Zare (Mozare).
 
-**Works:** The Black Bird · Winter Road · UNHAPPY Scenario · Grave-Machine · TAROKO REMIXER
+**Works:** The Black Bird · Winter Road · UNHAPPY Scenario · Grave-Machine · TAROKO REMIXER · Hamlet Pop-Upper
 
 ## Local development
 
@@ -46,7 +46,8 @@ docs/         design system, architecture, deployment and domain notes
 | Winter Road | `mozareeduge/winter-road` | Canonical public source archive |
 | UNHAPPY Scenario | `mozareeduge/UNHAPPY-scenario` | Canonical public source archive |
 | Grave-Machine | `mozareeduge/grave-machine` | Canonical public source archive; live runtime remains in the portfolio |
-| TAROKO REMIXER | `mozareeduge/taroko-remixer` | Active construction; excluded from this alignment pass |
+| TAROKO REMIXER | `mozareeduge/taroko-remixer` | Canonical public source archive; v1.0.4 live at `taroke-remixer.theblackbirdfield.com` |
+| Hamlet Pop-Upper | `mozareeduge/HAMLET-POP-UPPER` | Canonical public source archive |
 
 ## Domain
 

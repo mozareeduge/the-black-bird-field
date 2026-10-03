@@ -8,33 +8,33 @@
     "TAROKO REMIXER"
   ],
   "mode": "Compose",
-  "form": "A work for generative literature",
+  "form": "A no-code platform for procedural poems",
   "year": 2026,
-  "summary": "The making of a generative poem becomes a visible, revisable encounter. Material, transformations, routes, and recurrence remain available for composition and testing.",
-  "responsibility": "a compositional instrument can become an encounter of its own",
-  "meta_description": "TAROKO REMIXER is a browser-native work by Mozare that makes the composition of generative literature visible, editable, testable, and exportable.",
-  "live_url": "https://mozareeduge.github.io/taroko-remixer/",
+  "summary": "Taroko Gorge kept its word lists in plain view, and writers changed them to make poems of their own. TAROKO REMIXER turns those decisions into modules, so a working poem-machine can be designed, run, and exported without writing code.",
+  "responsibility": "a remix can be made without writing code",
+  "meta_description": "TAROKO REMIXER is a browser-native no-code platform by Mohammad Zare (Mozare) for composing, running, and exporting procedural poems in the remix lineage of Nick Montfort's Taroko Gorge (2009).",
+  "live_url": "https://taroke-remixer.theblackbirdfield.com/",
   "repository_url": "https://github.com/mozareeduge/taroko-remixer",
-  "poster_caption": "Current v08 development line · cb8e5f3",
-  "feature_caption": "Current v08 development line · cb8e5f3",
+  "poster_caption": "Release v1.0.4",
+  "feature_caption": "Release v1.0.4",
   "feature_image": "view-midpoint",
-  "hero_lead": "TAROKO REMIXER makes the construction of generative literature available as a work in its own right. Authored material and visible constraints remain near the lines they can produce.",
+  "hero_lead": "Nick Montfort's Taroko Gorge (2009) kept its word lists in plain view, and writers copied the page, changed the words, and published their own versions. TAROKO REMIXER carries that openness toward no-code creation: banks, routes, stanzas, and rules become modules wired together in the browser.",
   "prelude": {
     "label": "READING CONDITIONS",
     "items": [
       {
         "label": "01 / MATERIAL",
-        "title": "Composition begins with authored banks.",
+        "title": "Words are kept in Banks.",
         "note": ""
       },
       {
-        "label": "02 / GRAMMAR",
-        "title": "Transformations remain inspectable.",
+        "label": "02 / INSTRUMENT",
+        "title": "Routes build lines from them.",
         "note": ""
       },
       {
-        "label": "03 / RUNTIME",
-        "title": "Generated events return evidence.",
+        "label": "03 / PERFORMANCE",
+        "title": "Every line can be unmixed.",
         "note": ""
       }
     ]
@@ -45,44 +45,45 @@
     "items": [
       {
         "number": "01",
-        "title": "Material",
-        "text": "Banks and samples remain visible as authored material.",
+        "title": "Materials",
+        "text": "Banks hold Materials with weights and roles. The Taroko Gorge baseline arrives as seven Banks and fifty Materials, each editable in place.",
         "role": "view-first_change",
-        "alt": "TAROKO REMIXER: Material"
+        "alt": "TAROKO REMIXER: the Materials chamber with Banks and Materials"
       },
       {
         "number": "02",
-        "title": "Grammar",
-        "text": "Forms and devices show how material may change.",
+        "title": "Instruments",
+        "text": "Inputs receive Materials, and weighted Routes turn them into lines through templates such as {above} {trans} {below}.",
         "role": "view-midpoint",
-        "alt": "TAROKO REMIXER: Grammar"
+        "alt": "TAROKO REMIXER: the Instruments chamber with Inputs and Routes"
       },
       {
         "number": "03",
-        "title": "Runtime",
-        "text": "Generated events return evidence to the composition.",
+        "title": "Unmix",
+        "text": "A line taken from the running Surface opens the Flow, Stanza, Instrument, Route, Materials, and Rules that produced it.",
         "role": "view-last_change",
-        "alt": "TAROKO REMIXER: Runtime"
+        "alt": "TAROKO REMIXER: Unmix trace for a generated line"
       }
     ]
   },
   "context": {
-    "title": "The poem and the means of making it",
+    "title": "A platform for remixes",
     "paragraphs": [
-      "The work continues the proposition made public by Taroko Gorge: a compact generator can be read, altered, and carried into another ground. TAROKO REMIXER expands that proposition into a compositional environment.",
-      "Material is named. Transformations are local. Line-making devices remain inspectable. Stanza and flow determine how the poem changes over time, and a completed project can leave the workbench as a standalone artifact."
+      "At the Electronic Literature Organization's 2012 panel “Taroko Gorge Remixed,” Sonny Rae Tempest, speaking “from a non-academic place” and without knowing JavaScript, described using Montfort's poem “as a template”: the code was simple enough that friends could see the input and the output and “go and do this themselves.” That simplicity is one reason a remix lineage grew around Taroko Gorge.",
+      "TAROKO REMIXER follows that aspect toward no-code creation. The decisions a remixer once made inside the source file (which words, in which Banks, with what weights, through which line patterns, in what order, under which exceptions) become modules that are configured and wired in the browser. A person can design a working poem-machine, run it, and export it as a standalone HTML work without writing a line of code.",
+      "Every programming language is an interface over a more basic one, and no-code carries that track further toward access. Montfort and Bogost's platform studies (Racing the Beam, 2009, and the Platform Studies series) give a name to what the app becomes: a platform for an open-ended number of procedural e-poems, each of them a remix. Fifteen works from the Taroko Gorge lineage, Montfort's original among them, can be opened as editable baselines."
     ],
-    "coda": ""
+    "coda": "After Nick Montfort, Taroko Gorge (2009). The bundled baselines remain the work of their authors."
   },
   "identity": {
-    "edition": "Current v08 development line · source head cb8e5f3",
-    "language": "Interface in English; authored projects may vary",
-    "encounter": "Local-first compositional workbench"
+    "edition": "Release v1.0.4 · 2026-10-02",
+    "language": "Interface in English; baselines in English and Polish",
+    "encounter": "No-code workbench; remixes export as standalone HTML"
   },
   "citation": {
-    "author": "Mohammad Zare (Mozare).",
+    "author": "Zare, Mohammad (Mozare).",
     "title": "TAROKO REMIXER",
-    "rest": "Browser-native generative-poetry workbench, 2026."
+    "rest": "Version 1.0.4, 2026. https://taroke-remixer.theblackbirdfield.com/"
   },
   "motion": {
     "enabled": true,
@@ -96,8 +97,8 @@
       "view-midpoint",
       "view-last_change"
     ],
-    "verb": "edit / propagate / inspect evidence",
+    "verb": "configure / run / unmix",
     "duration_seconds": 10,
-    "provenance": "authentic captured states from the released work; assembled without invented interface states"
+    "provenance": "authentic states captured from the live v1.0.4 app on 2026-10-03; assembled without invented interface states"
   }
 }

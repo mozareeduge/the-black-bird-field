@@ -82,9 +82,9 @@
     "encounter": "Standalone browser work; no network request or persistent storage"
   },
   "citation": {
-    "author": "Mohammad Zare.",
+    "author": "Zare, Mohammad (Mozare).",
     "title": "UNHAPPY Scenario: An Internet Blackout Poem",
-    "rest": "Version 2.6.0, 2026."
+    "rest": "Version 2.6.0, 2026. https://unhappy.theblackbirdfield.com/"
   },
   "motion": {
     "enabled": true,

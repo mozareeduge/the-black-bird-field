@@ -91,6 +91,18 @@ def _validate_work(work: dict, path: Path) -> None:
     identity = work["identity"]
     for key in ("edition", "language", "encounter"):
         _nonempty(identity.get(key), f"{name}.identity.{key}")
+    annex = work.get("annex")
+    if annex is not None:
+        _nonempty(annex.get("label"), f"{name}.annex.label")
+        _nonempty(annex.get("title"), f"{name}.annex.title")
+        if not isinstance(annex.get("paragraphs"), list) or not annex["paragraphs"]:
+            raise ValueError(f"{name}.annex.paragraphs: at least one paragraph required")
+        for i, text in enumerate(annex["paragraphs"]):
+            _nonempty(text, f"{name}.annex.paragraphs[{i}]")
+        for i, link in enumerate(annex.get("links", [])):
+            _nonempty(link.get("label"), f"{name}.annex.links[{i}].label")
+            if urlparse(link.get("url", "")).scheme != "https":
+                raise ValueError(f"{name}.annex.links[{i}].url: must be an HTTPS URL")
     citation = work["citation"]
     for key in ("author", "title", "rest"):
         _nonempty(citation.get(key), f"{name}.citation.{key}")

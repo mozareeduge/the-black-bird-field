@@ -15,8 +15,8 @@
   "meta_description": "The Black Bird is a hypergraph research poem by Mozare. The reader moves between a field of linked materials and the text held in its Reader.",
   "live_url": "https://poem.theblackbirdfield.com/",
   "repository_url": "https://github.com/mozareeduge/the-black-bird",
-  "poster_caption": "Current public build · 5972b2b",
-  "feature_caption": "Current public build · 5972b2b",
+  "poster_caption": "Release v1.0.0",
+  "feature_caption": "Release v1.0.0",
   "feature_image": "view-midpoint",
   "hero_lead": "A black bird appears beside a body. The scene does not remain singular. It draws other materials toward it, each carrying its own form and degree of support.",
   "prelude": {
@@ -74,15 +74,33 @@
     ],
     "coda": ""
   },
+  "annex": {
+    "label": "RESEARCH ANNEX",
+    "title": "Speculative Indices v1.0",
+    "paragraphs": [
+      "The work's first research annex, Speculative Indices for a Research-Field (2026), counts what the field already holds. Two matrices carry the calculation. The first records which of the eighteen Field Objects appear in each of the four source-bearing Research Note Objects; the second records which Field Objects take part in each of the twelve Relation Objects. Three index families follow: Object Incidence, how often an object recurs across the research notes; Relational Thickness, how often two objects share a note or a relation; and Mediational Incidence, how many relations hold an object.",
+      "The indices give recurrence and mediation a small surface, so a reader can return to the field knowing where it has already thickened. Their first finding is a difference the graph alone does not show. Black Bird and Corpse each appear in all four research notes, but nine of the twelve relations hold Corpse and eight hold Black Bird: the object that opens the work and the densest relation-body are not the same."
+    ],
+    "links": [
+      {
+        "label": "Read the annex",
+        "url": "https://poem.theblackbirdfield.com/research/speculative-indices/"
+      },
+      {
+        "label": "Data package",
+        "url": "https://poem.theblackbirdfield.com/research/speculative-indices/data/the-black-bird-speculative-indices-data-v1.zip"
+      }
+    ]
+  },
   "identity": {
-    "edition": "Current public build · commit 5972b2b",
+    "edition": "Release v1.0.0 · commit 5972b2b",
     "language": "English with source-language Name Objects",
     "encounter": "Graph field and linked reading chambers"
   },
   "citation": {
-    "author": "Mohammad Zare.",
+    "author": "Zare, Mohammad (Mozare).",
     "title": "The Black Bird: A Hypergraph Research Poem",
-    "rest": "Born-digital web work, 2026."
+    "rest": "Version 1.0.0, 2026. https://poem.theblackbirdfield.com/"
   },
   "motion": {
     "enabled": true,

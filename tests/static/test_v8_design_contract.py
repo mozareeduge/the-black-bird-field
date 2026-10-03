@@ -71,8 +71,11 @@ def test_about_cv_uses_final_public_url():
 
 def test_taroke_desktop_capture_identity_glyph_is_normalized():
     from PIL import Image
-    source=(57,16,66,35); target=(82,16,91,35)
-    def mask(im,box): return [px>30 for px in im.crop(box).convert('L').get_flattened_data()]
+    # Header reads "TAROKO REMIXER": the two O glyphs (4th and 6th letters) must match.
+    # Boxes follow the v1.0.4 header layout recaptured from the live app on 2026-10-03.
+    source=(58,14,69,26); target=(77,14,88,26)
+    # Threshold 80 ignores anti-aliased edge pixels of the current header face.
+    def mask(im,box): return [px>80 for px in im.crop(box).convert('L').get_flattened_data()]
     def iou(a,b):
         inter=sum(x and y for x,y in zip(a,b)); union=sum(x or y for x,y in zip(a,b))
         return inter/union if union else 1.0

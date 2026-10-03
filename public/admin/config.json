@@ -241,6 +241,12 @@
                       "name": "detail",
                       "label": "Fact detail",
                       "widget": "string"
+                    },
+                    {
+                      "name": "url",
+                      "label": "Fact link (optional)",
+                      "required": false,
+                      "widget": "string"
                     }
                   ],
                   "summary": "{{term}}"
@@ -561,6 +567,54 @@
               "label": "Coda",
               "required": false,
               "widget": "string"
+            }
+          ]
+        },
+        {
+          "name": "annex",
+          "label": "Research annex",
+          "required": false,
+          "widget": "object",
+          "fields": [
+            {
+              "name": "label",
+              "label": "Section label",
+              "widget": "string"
+            },
+            {
+              "name": "title",
+              "label": "Title",
+              "widget": "string"
+            },
+            {
+              "name": "paragraphs",
+              "label": "Paragraphs",
+              "widget": "list",
+              "min": 1,
+              "field": {
+                "name": "value",
+                "label": "Text",
+                "widget": "text"
+              }
+            },
+            {
+              "name": "links",
+              "label": "Links",
+              "required": false,
+              "widget": "list",
+              "fields": [
+                {
+                  "name": "label",
+                  "label": "Label",
+                  "widget": "string"
+                },
+                {
+                  "name": "url",
+                  "label": "URL",
+                  "widget": "string"
+                }
+              ],
+              "summary": "{{label}}"
             }
           ]
         },

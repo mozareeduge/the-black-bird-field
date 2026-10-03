@@ -31,8 +31,17 @@ def test_upstream_identity_facts_locked():
     assert '5972b2b' in by['the-black-bird']['identity']['edition']
     assert 'v1.0.1' in by['winter-road']['identity']['edition']
     assert 'v2.6.0' in by['unhappy-scenario']['identity']['edition'] and '9f013ba' in by['unhappy-scenario']['identity']['edition']
-    assert 'v1.1.0' in by['grave-machine']['identity']['edition'] and 'b948455' in by['grave-machine']['identity']['edition']
-    assert 'development line' in fifth['identity']['edition'] and 'cb8e5f3' in fifth['identity']['edition']
+    assert 'v1.1.1' in by['grave-machine']['identity']['edition'] and '6940d2e' in by['grave-machine']['identity']['edition']
+    assert 'v1.0.4' in fifth['identity']['edition']
+
+def test_citations_follow_one_pattern():
+    # Zare, Mohammad (Mozare). *Title*. Version X, 2026. <URL>
+    import re
+    for w in load():
+        c=w['citation']
+        assert c['author']=='Zare, Mohammad (Mozare).', w['slug']
+        assert re.fullmatch(r'Version [0-9][0-9.]*, 20[0-9]{2}\. https://\S+', c['rest']), (w['slug'], c['rest'])
+        assert c['rest'].endswith(w['live_url']), w['slug']
 
 def test_citation_titles_match_upstream_records():
     by={w['slug']:w for w in load()}
