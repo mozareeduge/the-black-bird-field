@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "taroko-gorge-ecosystem",
+  "title": "Taroko Gorge Ecosystem",
+  "subtitle": "*Research archive · Version 2.0.0 · 2026*",
+  "meta_description": "Taroko Gorge Ecosystem, a research archive by Mohammad Zare (Mozare): remixes of Nick Montfort's Taroko Gorge and the editors' introductions, statements and biographies that frame them. Version 2.0.0, 2026.",
+  "source": "Cleared final text (Apply/site-drafts/taroko-gorge-ecosystem.final.md). Do not rewrite. Inline Markdown is rendered: *em*, **strong**, `code`, [text](url).",
+  "paragraphs": [
+    "In 2009 Nick Montfort published *Taroko Gorge*, a short program that writes an endless nature poem. Its source was readable in the page's HTML, and other writers copied it, replaced its word lists and published their own versions: *Tokyo Garage*, *Tournedo Gorge*, *Takei, George*, versions in Polish. This archive collects those remixes and the texts that frame them (editors' introductions, authors' statements, biographies) to ask how a procedure moves into another setting or language, and who writes about the move.",
+    "The archive found three things the question did not assume. The corpus is mostly Montfort's own list: 57 of the 61 candidate addresses are his index page and the links on it, and 47 of the 55 downloaded pages sit on his site, so any pattern here is first a pattern in what he chose to host and link. The makers seldom speak: the local statement table holds two explicit author statements, one being Eric Snodgrass's blog post on *Yoko Engorged*; the source of the other has not yet been re-checked. And remixing could reach the code's structure: where two Polish versions keep single `above` and `below` lists, two others, *Garaż w Tokio* and *Oko na Donbas*, split each into three. For a study of paratext, the makers' own account of their moves rests on two texts.",
+    "An early reading sorted the pages into eight kinds of transformation: the original landscape; a city (Scott Rettberg's *Tokyo Garage*); typography (J. R. Carpenter's *GORGE*); objects and food (*TOY GARBAGE*, *Tournedo Gorge*); a person (Mark Sample's *Takei, George*); the archive itself (*At, or To Take Regret*); translation; and encoding (Roman Kalinovski's hexadecimal *54 61 72 6F 6B 6F*). Word lists could be extracted for only four works, so this is a working classification, not a measured result.",
+    "A small Python pipeline starts from four seed addresses (Montfort's page, the *Electronic Literature Collection* volume 3, and two ELMCIP Knowledge Base addresses that returned HTTP 403) and logs every fetch with a content hash: 61 candidate addresses, 55 downloaded. A second stage reconciles pages into works. The program with its word lists is the work; a screenshot is one trace of one run. Two remixes that differ only in word lists are two works; one remix posted on two sites, like *GORGE*, stays one. The 55 pages reduce to 48 entries, two of them collection pages.",
+    "Following Gérard Genette (*Paratexts*, 1997), the archive records paratext by kind: an editor's framing, an author's statement, a biography, generated output. An early version counted biographies as author statements; with them separated, two remain, and the correction is documented in the repository next to the reports it corrects.",
+    "The repository publishes the code and descriptive tables: fetch logs, validation checks, a 0–5 keyword score for each page, and each word list's name, size and hash, without the words. Raw pages and full word lists stay on my machine, because they reproduce other people's poems. The archive is not a complete census, and most remix authorship in it is inferred from titles and links.",
+    "Two of my own works make the move the archive studies. [*Grave-Machine*](/works/grave-machine/) fills the Taroko procedure's word banks with material from my play *Grave*; its release names it \"An Iranian Remix of Taroko Gorge\". [TAROKO REMIXER](/works/taroko-remixer/) is an authoring tool in which word banks, rules and timing are edited in an interface, so the change the remixers made in page source can be made without writing JavaScript."
+  ],
+  "record": [
+    {
+      "term": "Repository",
+      "text": "[github.com/mozareeduge/Taroko-Gorge-Ecosystem](https://github.com/mozareeduge/Taroko-Gorge-Ecosystem) (release [v2.0.0](https://github.com/mozareeduge/Taroko-Gorge-Ecosystem/releases/tag/v2.0.0))"
+    },
+    {
+      "term": "Rights",
+      "text": "code under the MIT License; public tables under CC0 1.0. *Taroko Gorge* and its remixes remain the works of their authors; the archive reproduces none of them."
+    },
+    {
+      "term": "Cite as",
+      "text": "Zare, Mohammad (Mozare). *Taroko Gorge Ecosystem*. Version 2.0.0, 2026. https://github.com/mozareeduge/Taroko-Gorge-Ecosystem"
+    }
+  ]
+}

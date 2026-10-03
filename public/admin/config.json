@@ -567,6 +567,25 @@
               "label": "Coda",
               "required": false,
               "widget": "string"
+            },
+            {
+              "name": "links",
+              "label": "Links (optional; https URL or site route like /research/taroko-gorge-ecosystem/)",
+              "required": false,
+              "widget": "list",
+              "fields": [
+                {
+                  "name": "label",
+                  "label": "Label",
+                  "widget": "string"
+                },
+                {
+                  "name": "url",
+                  "label": "URL",
+                  "widget": "string"
+                }
+              ],
+              "summary": "{{label}}"
             }
           ]
         },

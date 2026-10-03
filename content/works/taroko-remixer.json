@@ -73,7 +73,13 @@
       "TAROKO REMIXER follows that aspect toward no-code creation. The decisions a remixer once made inside the source file (which words, in which Banks, with what weights, through which line patterns, in what order, under which exceptions) become modules that are configured and wired in the browser. A person can design a working poem-machine, run it, and export it as a standalone HTML work without writing a line of code.",
       "Every programming language is an interface over a more basic one, and no-code carries that track further toward access. Montfort and Bogost's platform studies (Racing the Beam, 2009, and the Platform Studies series) use “platform” for the computing system underneath creative work, whose design shapes what can be made on it. TAROKO REMIXER is a platform in that sense: its design admits one family of works, procedural e-poems built from Banks, Routes, Stanzas and Rules, and an open-ended number of them, each a remix. Fifteen works from the Taroko Gorge lineage, Montfort's original among them, can be opened as editable baselines."
     ],
-    "coda": "After Nick Montfort, Taroko Gorge (2009). The bundled baselines remain the work of their authors."
+    "coda": "After Nick Montfort, Taroko Gorge (2009). The bundled baselines remain the work of their authors.",
+    "links": [
+      {
+        "label": "Research: Taroko Gorge Ecosystem",
+        "url": "/research/taroko-gorge-ecosystem/"
+      }
+    ]
   },
   "identity": {
     "edition": "Release v1.0.4 · 2026-10-02",

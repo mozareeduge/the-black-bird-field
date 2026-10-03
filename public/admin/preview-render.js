@@ -11,6 +11,9 @@
   const str = v => (v === null || v === undefined) ? 'None' : (typeof v === 'boolean' ? (v ? 'True' : 'False') : String(v));
   const esc = v => str(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;');
   const get = (o, k, d) => (o && o[k] !== undefined && o[k] !== null) ? o[k] : d;
+  const isRoute = u => str(u).startsWith('/') && !str(u).startsWith('//');
+  const siteHref = (u, prefix) => { if (!isRoute(u)) return str(u); const p = str(u).replace(/^\/+/, ''); return prefix + (p === '' || p.endsWith('/') ? p + 'index.html' : p); };
+  const linkAttrs = u => isRoute(u) ? '' : ' target="_blank" rel="noopener noreferrer"';
 
   function fmt(text, works) {
     const n = works.length;
@@ -100,6 +103,8 @@
     }).join('');
     const context = w.context.paragraphs.map(x => `<p>${esc(x)}</p>`).join('');
     const coda = w.context.coda ? `<p class="context-coda">${esc(w.context.coda)}</p>` : '';
+    const ctxLinks = get(w.context, 'links', []).map(l => `<a class="action secondary" href="${esc(siteHref(l.url, p))}"${linkAttrs(l.url)}><span>${esc(l.label)}</span><span>${isRoute(l.url) ? '→' : '↗'}</span></a>`).join('');
+    const ctxActions = ctxLinks ? `<div class="action-group context-actions">${ctxLinks}</div>` : '';
     let annex = '';
     if (w.annex) {
       const ax = w.annex;
@@ -114,7 +119,7 @@
       ['Form', esc(w.form)], ['Artist', esc(site.artistic_name)], ['Citation name', esc(site.formal_name)], ['Edition / build', esc(w.identity.edition)], ['Language', esc(w.identity.language)], ['Encounter', esc(w.identity.encounter)],
       ['Live work', `<a href="${esc(w.live_url)}" target="_blank" rel="noopener noreferrer">Open work ↗</a>`], ['Repository', `<a href="${esc(w.repository_url)}" target="_blank" rel="noopener noreferrer">Open source record ↗</a>`], ['Citation', citation]];
     const cellsHtml = cells.map(([label, value]) => `<div class="edition-cell"><span class="meta-label">${esc(label)}</span>${value.startsWith('<a') ? value : `<strong>${value}</strong>`}</div>`).join('');
-    const main = `<section class="project-hero inverse"><div class="project-hero-inner"><div class="project-copy"><p class="project-form">${esc(w.form)} · by ${esc(site.artistic_name)} · ${esc(w.year)}</p><h1>${titleHtml}</h1><p class="lead">${esc(w.hero_lead)}</p><div class="action-group"><a class="action primary" href="${esc(w.live_url)}" target="_blank" rel="noopener noreferrer"><span>Enter the work</span><span>↗</span></a><a class="action secondary" href="${esc(w.repository_url)}" target="_blank" rel="noopener noreferrer"><span>Source and rights</span><span>↗</span></a></div></div><div class="project-hero-media">${heroPic}</div></div></section><section class="prelude"><span class="section-no">${esc(w.prelude.label)}</span>${conditions}</section><section class="selected-views"><div class="views-inner"><div class="views-head"><span class="section-no">SELECTED VIEWS</span><h2>${esc(w.views.title)}</h2><p>${esc(w.views.intro)}</p></div>${views}</div></section><section class="project-context"><div class="context-inner"><span class="section-no">CONTEXT</span><h2>${esc(w.context.title)}</h2><div class="context-prose">${context}</div>${coda}</div></section>${annex}<section class="edition inverse"><div class="edition-inner"><div class="edition-head"><span class="section-no">EDITION AND ACCESS</span><h2>Work identity</h2></div><div class="edition-grid">${cellsHtml}</div></div></section>`;
+    const main = `<section class="project-hero inverse"><div class="project-hero-inner"><div class="project-copy"><p class="project-form">${esc(w.form)} · by ${esc(site.artistic_name)} · ${esc(w.year)}</p><h1>${titleHtml}</h1><p class="lead">${esc(w.hero_lead)}</p><div class="action-group"><a class="action primary" href="${esc(w.live_url)}" target="_blank" rel="noopener noreferrer"><span>Enter the work</span><span>↗</span></a><a class="action secondary" href="${esc(w.repository_url)}" target="_blank" rel="noopener noreferrer"><span>Source and rights</span><span>↗</span></a></div></div><div class="project-hero-media">${heroPic}</div></div></section><section class="prelude"><span class="section-no">${esc(w.prelude.label)}</span>${conditions}</section><section class="selected-views"><div class="views-inner"><div class="views-head"><span class="section-no">SELECTED VIEWS</span><h2>${esc(w.views.title)}</h2><p>${esc(w.views.intro)}</p></div>${views}</div></section><section class="project-context"><div class="context-inner"><span class="section-no">CONTEXT</span><h2>${esc(w.context.title)}</h2><div class="context-prose">${context}</div>${coda}${ctxActions}</div></section>${annex}<section class="edition inverse"><div class="edition-inner"><div class="edition-head"><span class="section-no">EDITION AND ACCESS</span><h2>Work identity</h2></div><div class="edition-grid">${cellsHtml}</div></div></section>`;
     return { output: `works/${w.slug}/index.html`, bodyClass, current: 'works', main };
   }
 
@@ -132,7 +137,7 @@
     const paras = a.paragraphs.map(x => `<p>${esc(fmt(x, works))}</p>`).join('');
     const facts = a.facts.map(f => {
       const lines = str(f.detail).split('\n').map(esc).join('<br>');
-      const dd = f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer">${lines}</a>` : lines;
+      const dd = f.url ? `<a href="${esc(siteHref(f.url, '../'))}"${linkAttrs(f.url)}>${lines}</a>` : lines;
       return `<div class="fact"><dt>${esc(f.term)}</dt><dd>${dd}</dd></div>`;
     }).join('');
     const cv = site.documents.cv;

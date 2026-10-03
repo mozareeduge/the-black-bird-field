@@ -43,6 +43,15 @@ def _nonempty(value, where: str) -> None:
         raise ValueError(f"{where}: expected non-empty string")
 
 
+def _check_link_url(url, where: str) -> None:
+    """A link is either an HTTPS URL or a site route such as /research/<slug>/."""
+    if isinstance(url, str) and re.fullmatch(r"/(?:[a-z0-9-]+/)+", url):
+        return
+    parsed = urlparse(url if isinstance(url, str) else "")
+    if parsed.scheme != "https" or not parsed.netloc:
+        raise ValueError(f"{where}: must be an HTTPS URL or a site route like /research/<slug>/")
+
+
 def _validate_work(work: dict, path: Path) -> None:
     name = path.name
     missing = REQUIRED_WORK_KEYS - set(work)
@@ -103,6 +112,9 @@ def _validate_work(work: dict, path: Path) -> None:
             _nonempty(link.get("label"), f"{name}.annex.links[{i}].label")
             if urlparse(link.get("url", "")).scheme != "https":
                 raise ValueError(f"{name}.annex.links[{i}].url: must be an HTTPS URL")
+    for i, link in enumerate(context.get("links", [])):
+        _nonempty(link.get("label"), f"{name}.context.links[{i}].label")
+        _check_link_url(link.get("url", ""), f"{name}.context.links[{i}].url")
     citation = work["citation"]
     for key in ("author", "title", "rest"):
         _nonempty(citation.get(key), f"{name}.citation.{key}")
@@ -128,6 +140,33 @@ def load_works() -> list[dict]:
     if len(set(asset_slugs)) != len(asset_slugs):
         raise ValueError("Work asset_slug values must be unique")
     return sorted(works, key=lambda w: w["order"])
+
+
+def load_research() -> list[dict]:
+    """Research pages: cleared text stored as data in content/research/<slug>.json.
+
+    Paragraphs and record texts carry inline Markdown only (*em*, **strong**, `code`, [text](url)).
+    They are not works: no images, modes or order; they render at /research/<slug>/.
+    """
+    pages = []
+    for path in sorted((CONTENT / "research").glob("*.json")):
+        page = _read_json(path)
+        name = path.name
+        if page.get("schema_version") != "1.0.0":
+            raise ValueError(f"{name}: unsupported schema_version {page.get('schema_version')!r}")
+        if page.get("slug") != path.stem or not SLUG_RE.fullmatch(page.get("slug", "")):
+            raise ValueError(f"{name}: slug must equal filename stem")
+        for key in ("title", "subtitle", "meta_description"):
+            _nonempty(page.get(key), f"{name}.{key}")
+        if not isinstance(page.get("paragraphs"), list) or not page["paragraphs"]:
+            raise ValueError(f"{name}.paragraphs: at least one paragraph required")
+        for i, text in enumerate(page["paragraphs"]):
+            _nonempty(text, f"{name}.paragraphs[{i}]")
+        for i, row in enumerate(page.get("record", [])):
+            _nonempty(row.get("term"), f"{name}.record[{i}].term")
+            _nonempty(row.get("text"), f"{name}.record[{i}].text")
+        pages.append(page)
+    return pages
 
 
 def load_protected_artifacts() -> dict:

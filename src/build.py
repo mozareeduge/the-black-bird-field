@@ -2,8 +2,8 @@ from __future__ import annotations
 import argparse, hashlib, json, shutil
 from pathlib import Path
 from html import escape
-from content import load_site, load_works, load_protected_artifacts
-from renderers import document, render_home, render_works, render_project, render_practice, render_about, render_contact
+from content import load_site, load_works, load_research, load_protected_artifacts
+from renderers import document, render_home, render_works, render_project, render_practice, render_about, render_contact, render_research
 
 ROOT=Path(__file__).resolve().parents[1]
 PUBLIC=ROOT/'public'; DIST=ROOT/'dist'
@@ -85,7 +85,7 @@ def validate_sources(site,works,authority,strict_protected=True):
     if errors: raise SystemExit('SOURCE VALIDATION FAILED\n- '+'\n- '.join(errors))
 
 def build(strict_protected=True):
-    site=load_site(); works=load_works(); authority=load_protected_artifacts()
+    site=load_site(); works=load_works(); research=load_research(); authority=load_protected_artifacts()
     validate_sources(site,works,authority,strict_protected)
     if DIST.exists(): shutil.rmtree(DIST)
     DIST.mkdir()
@@ -113,8 +113,13 @@ def build(strict_protected=True):
     for renderer,key,cls in [(render_practice,'practice','practice-page'),(render_about,'about','about-page'),(render_contact,'contact','contact-page')]:
         output,title,desc,main=renderer(site,works)
         write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+f'/{key}/',body_class=cls,current=key,main=main,site=site,works=works,og_image=asset('poster',works[0]) if key!='contact' else None))
+    # Research pages share the About layout; their share image is the Taroko work poster when present.
+    og_work=next((w for w in works if w['slug']=='taroko-remixer'),works[0])
+    for r in research:
+        output,title,desc,main=render_research(site,works,r)
+        write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+f"/research/{r['slug']}/",body_class='about-page research-page',current='research',main=main,site=site,works=works,og_image=asset('poster',og_work)))
     for old,target in LEGACY.items(): write(old,legacy_stub(old,target,site['site_origin']))
-    urls=['/','/works/']+[f"/works/{w['slug']}/" for w in works]+['/practice/','/about/','/contact/']
+    urls=['/','/works/']+[f"/works/{w['slug']}/" for w in works]+['/practice/','/about/','/contact/']+[f"/research/{r['slug']}/" for r in research]
     xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{escape(site["site_origin"]+u)}</loc></url>\n' for u in urls)+'</urlset>\n'
     write('sitemap.xml',xml); write('robots.txt',f'User-agent: *\nAllow: /\nSitemap: {site["site_origin"]}/sitemap.xml\n')
     return site,works

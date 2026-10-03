@@ -72,7 +72,13 @@
       "Grave was written as the practical component of Mohammad Zare’s MA in Dramatic Literature. Its scenes place bodies beside paperwork; rooms become processing sites, and burial begins to resemble administration.",
       "Grave-Machine extracts this field of pressure rather than adapting the play as plot. The English and Persian versions share one runtime while retaining distinct materials, grammatical devices, language direction, and typographic proportions."
     ],
-    "coda": "After Nick Montfort, Taroko Gorge (2009)."
+    "coda": "After Nick Montfort, Taroko Gorge (2009).",
+    "links": [
+      {
+        "label": "Research: Taroko Gorge Ecosystem",
+        "url": "/research/taroko-gorge-ecosystem/"
+      }
+    ]
   },
   "identity": {
     "edition": "Bilingual release v1.1.1 · release commit 6940d2e",

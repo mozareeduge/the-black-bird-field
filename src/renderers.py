@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 from html import escape
 from pathlib import Path
 
@@ -20,6 +21,31 @@ def ext_attrs(url:str) -> str:
 
 def esc(s) -> str:
     return escape(str(s), quote=True)
+
+def site_href(url:str, prefix:str) -> str:
+    """Site routes ('/research/x/') become relative file links like every other internal link."""
+    if url.startswith("/") and not url.startswith("//"):
+        path=url.lstrip("/")
+        return prefix+(path+"index.html" if path=="" or path.endswith("/") else path)
+    return url
+
+def link_attrs(url:str) -> str:
+    return "" if url.startswith("/") and not url.startswith("//") else ' target="_blank" rel="noopener noreferrer"'
+
+MD_TOKEN=re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`")
+
+def inline_md(text:str, prefix:str) -> str:
+    """Inline Markdown subset used by cleared research text: [text](url), **strong**, *em*, `code`."""
+    out=[]; pos=0
+    for m in MD_TOKEN.finditer(text):
+        out.append(esc(text[pos:m.start()])); pos=m.end()
+        label,url,strong,em,code=m.groups()
+        if url is not None: out.append(f'<a href="{esc(site_href(url,prefix))}"{link_attrs(url)}>{inline_md(label,prefix)}</a>')
+        elif strong is not None: out.append(f'<strong>{inline_md(strong,prefix)}</strong>')
+        elif em is not None: out.append(f'<em>{inline_md(em,prefix)}</em>')
+        else: out.append(f'<code>{esc(code)}</code>')
+    out.append(esc(text[pos:]))
+    return "".join(out)
 
 def fmt(text:str, works:list[dict]) -> str:
     n=len(works); titles=", ".join(w["title"] for w in works[:-1]) + ((", and " if n>2 else " and ") + works[-1]["title"] if n>1 else works[0]["title"])
@@ -113,6 +139,8 @@ def render_project(site,works,w):
         view_articles.append(f'<article class="view-plate"><div class="view-image">{img}</div><div class="view-copy"><span class="view-no">{esc(no)}</span><h3>{esc(title)}</h3><p>{esc(text)}</p></div></article>')
     context=''.join(f'<p>{esc(x)}</p>' for x in w['context']['paragraphs'])
     coda=f'<p class="context-coda">{esc(w["context"]["coda"])}</p>' if w['context'].get('coda') else ''
+    ctx_links=''.join(f'<a class="action secondary" href="{esc(site_href(l["url"],p))}"{link_attrs(l["url"])}><span>{esc(l["label"])}</span><span>{"→" if l["url"].startswith("/") else "↗"}</span></a>' for l in w['context'].get('links',[]))
+    ctx_actions=f'<div class="action-group context-actions">{ctx_links}</div>' if ctx_links else ''
     annex=''
     if w.get('annex'):
         ax=w['annex']; ax_paras=''.join(f'<p>{esc(x)}</p>' for x in ax['paragraphs'])
@@ -124,7 +152,7 @@ def render_project(site,works,w):
       ("Form",esc(w['form'])),("Artist",esc(site['artistic_name'])),("Citation name",esc(site['formal_name'])),("Edition / build",esc(w['identity']['edition'])),("Language",esc(w['identity']['language'])),("Encounter",esc(w['identity']['encounter'])),
       ("Live work",f'<a href="{esc(w["live_url"])}" target="_blank" rel="noopener noreferrer">Open work ↗</a>'),("Repository",f'<a href="{esc(w["repository_url"])}" target="_blank" rel="noopener noreferrer">Open source record ↗</a>'),("Citation",citation)]
     cells_html=''.join(f'<div class="edition-cell"><span class="meta-label">{esc(label)}</span>{value if value.startswith("<a") else f"<strong>{value}</strong>"}</div>' for label,value in cells)
-    main=f'''<section class="project-hero inverse"><div class="project-hero-inner"><div class="project-copy"><p class="project-form">{esc(w['form'])} · by {esc(site['artistic_name'])} · {esc(w['year'])}</p><h1>{title_html}</h1><p class="lead">{esc(w['hero_lead'])}</p><div class="action-group"><a class="action primary" href="{esc(w['live_url'])}" target="_blank" rel="noopener noreferrer"><span>Enter the work</span><span>↗</span></a><a class="action secondary" href="{esc(w['repository_url'])}" target="_blank" rel="noopener noreferrer"><span>Source and rights</span><span>↗</span></a></div></div><div class="project-hero-media">{hero_pic}</div></div></section><section class="prelude"><span class="section-no">{esc(w['prelude']['label'])}</span>{conditions}</section><section class="selected-views"><div class="views-inner"><div class="views-head"><span class="section-no">SELECTED VIEWS</span><h2>{esc(w['views']['title'])}</h2><p>{esc(w['views']['intro'])}</p></div>{''.join(view_articles)}</div></section><section class="project-context"><div class="context-inner"><span class="section-no">CONTEXT</span><h2>{esc(w['context']['title'])}</h2><div class="context-prose">{context}</div>{coda}</div></section>{annex}<section class="edition inverse"><div class="edition-inner"><div class="edition-head"><span class="section-no">EDITION AND ACCESS</span><h2>Work identity</h2></div><div class="edition-grid">{cells_html}</div></div></section>'''
+    main=f'''<section class="project-hero inverse"><div class="project-hero-inner"><div class="project-copy"><p class="project-form">{esc(w['form'])} · by {esc(site['artistic_name'])} · {esc(w['year'])}</p><h1>{title_html}</h1><p class="lead">{esc(w['hero_lead'])}</p><div class="action-group"><a class="action primary" href="{esc(w['live_url'])}" target="_blank" rel="noopener noreferrer"><span>Enter the work</span><span>↗</span></a><a class="action secondary" href="{esc(w['repository_url'])}" target="_blank" rel="noopener noreferrer"><span>Source and rights</span><span>↗</span></a></div></div><div class="project-hero-media">{hero_pic}</div></div></section><section class="prelude"><span class="section-no">{esc(w['prelude']['label'])}</span>{conditions}</section><section class="selected-views"><div class="views-inner"><div class="views-head"><span class="section-no">SELECTED VIEWS</span><h2>{esc(w['views']['title'])}</h2><p>{esc(w['views']['intro'])}</p></div>{''.join(view_articles)}</div></section><section class="project-context"><div class="context-inner"><span class="section-no">CONTEXT</span><h2>{esc(w['context']['title'])}</h2><div class="context-prose">{context}</div>{coda}{ctx_actions}</div></section>{annex}<section class="edition inverse"><div class="edition-inner"><div class="edition-head"><span class="section-no">EDITION AND ACCESS</span><h2>Work identity</h2></div><div class="edition-grid">{cells_html}</div></div></section>'''
     return f"works/{w['slug']}/index.html",f"{w['title']} — {site['site_title']}",w['meta_description'],main,cls
 
 def render_practice(site,works):
@@ -140,13 +168,20 @@ def render_about(site,works):
     for fact in a['facts']:
         dt,dd=fact['term'],fact['detail']
         lines="<br>".join(esc(x) for x in dd.split(chr(10)))
-        if fact.get('url'): lines=f'<a href="{esc(fact["url"])}" target="_blank" rel="noopener noreferrer">{lines}</a>'
+        if fact.get('url'): lines=f'<a href="{esc(site_href(fact["url"],"../"))}"{link_attrs(fact["url"])}>{lines}</a>'
         facts.append(f'<div class="fact"><dt>{esc(dt)}</dt><dd>{lines}</dd></div>')
     cv=site["documents"]["cv"]
     cv_href=site['site_origin'].rstrip('/')+'/'+cv['path'].lstrip('/')
     cv_link=f'<div class="action-group about-actions"><a class="action primary" href="{esc(cv_href)}" download="Mohammad_Zare_AcademicCV.pdf"><span>{esc(cv["label"])}</span><span>↓</span></a></div>'
     main=f'<section class="page-mast"><h1>About</h1><p>{esc(a["mast"])}</p></section><section class="about-layout"><div class="about-copy">{paras}{cv_link}</div><aside class="about-facts"><dl>{"".join(facts)}</dl></aside></section>'
     return "about/index.html",f"About — {site['site_title']}",site['metadata']['about'],main
+
+def render_research(site,works,r):
+    p="../../"; paras=''.join(f'<p>{inline_md(x,p)}</p>' for x in r['paragraphs'])
+    record=''.join(f'<div class="fact"><dt>{esc(x["term"])}</dt><dd>{inline_md(x["text"],p)}</dd></div>' for x in r.get('record',[]))
+    aside=f'<aside class="about-facts"><dl>{record}</dl></aside>' if record else ''
+    main=f'<section class="page-mast"><h1>{esc(r["title"])}</h1><p>{inline_md(r["subtitle"],p)}</p></section><section class="about-layout"><div class="about-copy">{paras}</div>{aside}</section>'
+    return f"research/{r['slug']}/index.html",f"{r['title']} — {site['site_title']}",r['meta_description'],main
 
 def render_contact(site,works):
     main=f'''<section class="page-mast"><h1>Contact</h1><p>{esc(site['contact']['mast'])}</p></section><section class="contact-layout"><div class="contact-list"><a class="contact-row" href="mailto:{esc(site['email'])}"><span>Email</span><strong>{esc(site['email'])}</strong><b>→</b></a><a class="contact-row" href="{esc(site['github_profile'])}" target="_blank" rel="noopener noreferrer"><span>GitHub</span><strong>mozareeduge</strong><b>↗</b></a><a class="contact-row" href="{esc(site['linkedin'])}" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><strong>{esc(site['formal_name'])}</strong><b>↗</b></a></div></section>'''
