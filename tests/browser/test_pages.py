@@ -6,7 +6,8 @@ from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[2]; DIST=ROOT/'dist'
 WORKS=sorted((json.loads(p.read_text(encoding='utf8')) for p in (ROOT/'content/works').glob('*.json')),key=lambda w:w['order'])
 RESEARCH=sorted(p.stem for p in (ROOT/'content/research').glob('*.json'))
-PAGES=['/','/works/',*[f"/works/{w['slug']}/" for w in WORKS],'/practice/','/about/','/contact/',*[f"/research/{s}/" for s in RESEARCH]]
+WRITING=sorted(p.stem for p in (ROOT/'content/writing').glob('*.json'))
+PAGES=['/','/works/',*[f"/works/{w['slug']}/" for w in WORKS],'/practice/','/about/','/contact/',*[f"/research/{s}/" for s in RESEARCH],*[f"/writing/{s}/" for s in WRITING]]
 VIEWPORTS=[(1440,900),(1101,800),(1024,768),(760,900),(390,844),(320,760)]
 
 def launch_chromium(pw):

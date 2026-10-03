@@ -2,8 +2,8 @@ from __future__ import annotations
 import argparse, hashlib, json, shutil
 from pathlib import Path
 from html import escape
-from content import load_site, load_works, load_research, load_protected_artifacts
-from renderers import document, render_home, render_works, render_project, render_practice, render_about, render_contact, render_research
+from content import load_site, load_works, load_research, load_writing, load_protected_artifacts
+from renderers import document, render_home, render_works, render_project, render_practice, render_about, render_contact, render_research, render_writing
 
 ROOT=Path(__file__).resolve().parents[1]
 PUBLIC=ROOT/'public'; DIST=ROOT/'dist'
@@ -85,7 +85,7 @@ def validate_sources(site,works,authority,strict_protected=True):
     if errors: raise SystemExit('SOURCE VALIDATION FAILED\n- '+'\n- '.join(errors))
 
 def build(strict_protected=True):
-    site=load_site(); works=load_works(); research=load_research(); authority=load_protected_artifacts()
+    site=load_site(); works=load_works(); research=load_research(); writing=load_writing(); authority=load_protected_artifacts()
     validate_sources(site,works,authority,strict_protected)
     if DIST.exists(): shutil.rmtree(DIST)
     DIST.mkdir()
@@ -118,8 +118,17 @@ def build(strict_protected=True):
     for r in research:
         output,title,desc,main=render_research(site,works,r)
         write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+f"/research/{r['slug']}/",body_class='about-page research-page',current='research',main=main,site=site,works=works,og_image=asset('poster',og_work)))
+    # Writing editions: complete texts in their own language/direction; the edition PDF ships beside them.
+    if writing: shutil.copytree(PUBLIC/'fonts',DIST/'fonts'); shutil.copytree(PUBLIC/'writing-assets',DIST/'writing-assets')
+    for wp in writing:
+        src=PUBLIC/wp['pdf']['path']
+        if sha256(src)!=wp['pdf']['sha256']: raise SystemExit(f"SOURCE VALIDATION FAILED\n- {wp['pdf']['path']}: sha256 differs from content/writing/{wp['slug']}.json")
+        out=DIST/wp['pdf']['path']; out.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,out)
+        output,title,desc,main,jsonld=render_writing(site,works,wp)
+        og=wp.get('og_image')
+        write(output,document(output=output,title=title,description=desc,canonical=site['site_origin']+f"/writing/{wp['slug']}/",body_class='writing-page',current='writing',main=main,site=site,works=works,og_image=og,lang='fa',direction='rtl',head_extra=jsonld+'<meta property="og:locale" content="fa_IR"><meta property="og:locale:alternate" content="en_US">'))
     for old,target in LEGACY.items(): write(old,legacy_stub(old,target,site['site_origin']))
-    urls=['/','/works/']+[f"/works/{w['slug']}/" for w in works]+['/practice/','/about/','/contact/']+[f"/research/{r['slug']}/" for r in research]
+    urls=['/','/works/']+[f"/works/{w['slug']}/" for w in works]+['/practice/','/about/','/contact/']+[f"/research/{r['slug']}/" for r in research]+[f"/writing/{wp['slug']}/" for wp in writing]
     xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{escape(site["site_origin"]+u)}</loc></url>\n' for u in urls)+'</urlset>\n'
     write('sitemap.xml',xml); write('robots.txt',f'User-agent: *\nAllow: /\nSitemap: {site["site_origin"]}/sitemap.xml\n')
     return site,works

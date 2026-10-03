@@ -184,6 +184,25 @@
                       "name": "caption",
                       "label": "Caption",
                       "widget": "string"
+                    },
+                    {
+                      "name": "links",
+                      "label": "Links (optional; https URL or site route like /writing/ten-research-poems/)",
+                      "required": false,
+                      "widget": "list",
+                      "fields": [
+                        {
+                          "name": "label",
+                          "label": "Label",
+                          "widget": "string"
+                        },
+                        {
+                          "name": "url",
+                          "label": "URL",
+                          "widget": "string"
+                        }
+                      ],
+                      "summary": "{{label}}"
                     }
                   ],
                   "summary": "{{index}} ? {{title}}"

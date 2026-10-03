@@ -10,8 +10,8 @@ def setup_module():
 def works(): return load_works()
 def slugs(): return [w['slug'] for w in works()]
 def pages():
-    from src.content import load_research
-    return [DIST/'index.html',DIST/'works/index.html',*(DIST/f'works/{s}/index.html' for s in slugs()),DIST/'practice/index.html',DIST/'about/index.html',DIST/'contact/index.html',*(DIST/f"research/{r['slug']}/index.html" for r in load_research())]
+    from src.content import load_research, load_writing
+    return [DIST/'index.html',DIST/'works/index.html',*(DIST/f'works/{s}/index.html' for s in slugs()),DIST/'practice/index.html',DIST/'about/index.html',DIST/'contact/index.html',*(DIST/f"research/{r['slug']}/index.html" for r in load_research()),*(DIST/f"writing/{w['slug']}/index.html" for w in load_writing())]
 
 def test_expected_pages_and_legacy_redirects():
     for p in pages(): assert p.is_file(),p
@@ -85,8 +85,8 @@ def test_project_hero_motion_wrapper_has_explicit_fill_contract():
 
 def test_sitemap_has_every_canonical_page_once():
     site=json.loads((ROOT/'content/site.json').read_text()); xml=(DIST/'sitemap.xml').read_text()
-    from src.content import load_research
-    expected=['/','/works/']+[f"/works/{s}/" for s in slugs()]+['/practice/','/about/','/contact/']+[f"/research/{r['slug']}/" for r in load_research()]
+    from src.content import load_research, load_writing
+    expected=['/','/works/']+[f"/works/{s}/" for s in slugs()]+['/practice/','/about/','/contact/']+[f"/research/{r['slug']}/" for r in load_research()]+[f"/writing/{w['slug']}/" for w in load_writing()]
     locs=re.findall(r'<loc>(.*?)</loc>',xml)
     assert locs==[site['site_origin']+route for route in expected]
 

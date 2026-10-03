@@ -84,12 +84,19 @@ def header(prefix:str,current:str,site:dict) -> str:
 def footer(prefix:str,site:dict,works:list[dict]) -> str:
     return f'''<footer class="site-footer"><div class="footer-identity"><strong>{esc(site['artistic_name'])}</strong><p>{esc(site['shared']['footer_identity'])}</p><small>{esc(site['shared']['name_boundary'])}</small></div><nav aria-label="Footer"><a href="{prefix}works/index.html">Works</a><a href="{prefix}practice/index.html">Practice</a><a href="{prefix}about/index.html">About</a><a href="{prefix}contact/index.html">Contact</a><a href="{esc(site['github_profile'])}" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav><div class="footer-meta"><p>{esc(fmt('The Black Bird Field presents {count_word} autonomous browser-native works.',works))}</p><p>© {esc(site['year'])} {esc(site['formal_name'])}.</p></div></footer>'''
 
-def document(*,output:str,title:str,description:str,canonical:str,body_class:str,current:str,main:str,site:dict,works:list[dict],og_image:str|None=None,robots:str|None=None) -> str:
+CHROME_TAGS=re.compile(r'<(a class="skip"|header class="site-header"|noscript><nav|dialog|footer class="site-footer")')
+
+def chrome(html:str, lang:str) -> str:
+    """Site chrome is English; on a page in another language its top-level blocks keep lang=en, dir=ltr."""
+    if lang=='en': return html
+    return CHROME_TAGS.sub(lambda m: '<'+m.group(1).replace('noscript><nav','noscript><nav dir="ltr" lang="en"',1) if m.group(1).startswith('noscript') else '<'+m.group(1).split(' ',1)[0]+' dir="ltr" lang="en"'+(' '+m.group(1).split(' ',1)[1] if ' ' in m.group(1) else ''),html)
+
+def document(*,output:str,title:str,description:str,canonical:str,body_class:str,current:str,main:str,site:dict,works:list[dict],og_image:str|None=None,robots:str|None=None,lang:str='en',direction:str|None=None,head_extra:str='') -> str:
     prefix=path_prefix(output)
     img = f'<meta property="og:image" content="{esc(site["site_origin"]+"/"+og_image)}"><meta name="twitter:image" content="{esc(site["site_origin"]+"/"+og_image)}">' if og_image else ''
     robot = f'<meta name="robots" content="{esc(robots)}">' if robots else ''
     csp="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
-    return f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="stylesheet" href="{prefix}site.css"><link id="dynamic-favicon" rel="icon" href="{prefix}favicon/favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="{prefix}favicon/favicon-16.png" sizes="16x16" type="image/png"><link rel="icon" href="{prefix}favicon/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="{prefix}favicon/favicon-180.png" sizes="180x180"><script src="{prefix}favicon/favicon.js" defer></script><link rel="canonical" href="{esc(canonical)}"><meta http-equiv="Content-Security-Policy" content="{esc(csp)}"><meta name="referrer" content="strict-origin-when-cross-origin">{robot}<meta property="og:type" content="website"><meta property="og:url" content="{esc(canonical)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}">{img}<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(description)}"></head><body class="{esc(body_class)}">{header(prefix,current,site)}<main id="main">{main}</main>{footer(prefix,site,works)}<script src="{prefix}site.js"></script></body></html>'''
+    return f'''<!DOCTYPE html><html lang="{esc(lang)}"{f' dir="{esc(direction)}"' if direction else ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="stylesheet" href="{prefix}site.css"><link id="dynamic-favicon" rel="icon" href="{prefix}favicon/favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="{prefix}favicon/favicon-16.png" sizes="16x16" type="image/png"><link rel="icon" href="{prefix}favicon/favicon-48.png" sizes="48x48" type="image/png"><link rel="apple-touch-icon" href="{prefix}favicon/favicon-180.png" sizes="180x180"><script src="{prefix}favicon/favicon.js" defer></script><link rel="canonical" href="{esc(canonical)}"><meta http-equiv="Content-Security-Policy" content="{esc(csp)}"><meta name="referrer" content="strict-origin-when-cross-origin">{robot}<meta property="og:type" content="website"><meta property="og:url" content="{esc(canonical)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}">{img}<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(description)}">{head_extra}</head><body class="{esc(body_class)}">{chrome(header(prefix,current,site),lang)}<main id="main">{main}</main>{chrome(footer(prefix,site,works),lang)}<script src="{prefix}site.js"></script></body></html>'''
 
 def render_home(site:dict,works:list[dict]) -> tuple[str,str,str,str]:
     prefix=""; n=len(works)
@@ -155,10 +162,14 @@ def render_project(site,works,w):
     main=f'''<section class="project-hero inverse"><div class="project-hero-inner"><div class="project-copy"><p class="project-form">{esc(w['form'])} · by {esc(site['artistic_name'])} · {esc(w['year'])}</p><h1>{title_html}</h1><p class="lead">{esc(w['hero_lead'])}</p><div class="action-group"><a class="action primary" href="{esc(w['live_url'])}" target="_blank" rel="noopener noreferrer"><span>Enter the work</span><span>↗</span></a><a class="action secondary" href="{esc(w['repository_url'])}" target="_blank" rel="noopener noreferrer"><span>Source and rights</span><span>↗</span></a></div></div><div class="project-hero-media">{hero_pic}</div></div></section><section class="prelude"><span class="section-no">{esc(w['prelude']['label'])}</span>{conditions}</section><section class="selected-views"><div class="views-inner"><div class="views-head"><span class="section-no">SELECTED VIEWS</span><h2>{esc(w['views']['title'])}</h2><p>{esc(w['views']['intro'])}</p></div>{''.join(view_articles)}</div></section><section class="project-context"><div class="context-inner"><span class="section-no">CONTEXT</span><h2>{esc(w['context']['title'])}</h2><div class="context-prose">{context}</div>{coda}{ctx_actions}</div></section>{annex}<section class="edition inverse"><div class="edition-inner"><div class="edition-head"><span class="section-no">EDITION AND ACCESS</span><h2>Work identity</h2></div><div class="edition-grid">{cells_html}</div></div></section>'''
     return f"works/{w['slug']}/index.html",f"{w['title']} — {site['site_title']}",w['meta_description'],main,cls
 
+def module_links(m,prefix):
+    links=''.join(f'<a class="action secondary" href="{esc(site_href(l["url"],prefix))}"{link_attrs(l["url"])}><span>{esc(l["label"])}</span><span>{"→" if l["url"].startswith("/") else "↗"}</span></a>' for l in m.get('links') or [])
+    return f'<div class="action-group module-actions">{links}</div>' if links else ''
+
 def render_practice(site,works):
     p=site['practice']; idx=''.join(f'<a href="#{esc(m["id"])}">{esc(m["index"])} · {esc(m["title"])}</a>' for m in p['modules'])
     intro=''.join(f'<p>{esc(x)}</p>' for x in p['intro'])
-    mods=''.join(f'''<article class="practice-module" id="{esc(m['id'])}"><header><span class="work-no">{esc(m['index'])}</span><h2>{esc(m['title'])}</h2></header><div class="reading"><p>{esc(m['text'])}</p></div><figure><img alt="{esc(m['alt'])}" src="../{esc(m['image'])}"><figcaption>{esc(m['caption'])}</figcaption></figure></article>''' for m in p['modules'])
+    mods=''.join(f'''<article class="practice-module" id="{esc(m['id'])}"><header><span class="work-no">{esc(m['index'])}</span><h2>{esc(m['title'])}</h2></header><div class="reading"><p>{esc(m['text'])}</p>{module_links(m,"../")}</div><figure><img alt="{esc(m['alt'])}" src="../{esc(m['image'])}"><figcaption>{esc(m['caption'])}</figcaption></figure></article>''' for m in p['modules'])
     main=f'<section class="page-mast"><h1>Practice</h1><p>{esc(fmt(p["mast"],works))}</p></section><section class="practice-intro"><div class="practice-index">{idx}</div><div class="practice-reading">{intro}</div></section><section class="practice-modules">{mods}</section>'
     return "practice/index.html",f"Practice — {site['site_title']}",site['metadata']['practice'],main
 
@@ -182,6 +193,80 @@ def render_research(site,works,r):
     aside=f'<aside class="about-facts"><dl>{record}</dl></aside>' if record else ''
     main=f'<section class="page-mast"><h1>{esc(r["title"])}</h1><p>{inline_md(r["subtitle"],p)}</p></section><section class="about-layout"><div class="about-copy">{paras}</div>{aside}</section>'
     return f"research/{r['slug']}/index.html",f"{r['title']} — {site['site_title']}",r['meta_description'],main
+
+TRP_HEAD=re.compile(r"^([۰-۹]+\.)(\s+.+)$")
+FA_RUN=re.compile(r"[\u0600-\u06FF][\u0600-\u06FF\u200c ]*[\u0600-\u06FF]")
+
+def fa_runs(html:str) -> str:
+    """Mark Persian runs inside English markup so they take the Persian face and direction."""
+    return FA_RUN.sub(lambda m: f'<span lang="fa" dir="rtl">{m.group(0)}</span>',html)
+
+def writing_jsonld(site,wp,canonical) -> str:
+    """schema.org Book record for a writing edition (data block; CSP does not execute it)."""
+    import json as _json
+    t=wp['text']; ed=wp['edition']; pdf=wp['pdf']
+    data={"@context":"https://schema.org","@type":"Book","@id":canonical+"#book","name":wp['title_fa'],"alternateName":wp['title_en'],
+      "inLanguage":"fa","url":canonical,"bookFormat":"https://schema.org/EBook","bookEdition":ed['version'],"version":ed['version'],
+      "author":{"@type":"Person","name":site['formal_name'],"alternateName":[wp['author_fa'],site['artistic_name']],"url":site['site_origin']+"/about/","sameAs":["https://orcid.org/0009-0002-9032-3614"]},
+      "datePublished":ed['first_published'],"copyrightYear":2025,"copyrightHolder":{"@type":"Person","name":site['formal_name']},
+      "copyrightNotice":ed['copyright_en'],"license":ed['license_en'],"isAccessibleForFree":True,
+      "publisher":{"@type":"Organization","name":site['site_title'],"url":site['site_origin']+"/"},
+      "hasPart":[{"@type":"CreativeWork","position":s['number'],"name":s['title'],"inLanguage":"fa","url":f"{canonical}#{s['anchor']}"} for s in t['sequences']],
+      "encoding":{"@type":"MediaObject","encodingFormat":"application/pdf","contentUrl":site['site_origin']+"/"+pdf['path'],"contentSize":f"{pdf['bytes']} B","sha256":pdf['sha256']}}
+    return '<script type="application/ld+json">'+_json.dumps(data,ensure_ascii=False).replace("</","<\\/")+'</script>'
+
+def render_writing(site,works,wp):
+    """Reading edition of a writing (text as data, content/writing/<slug>.json), Persian RTL.
+
+    The article #edition carries the docx text in source order; elements marked data-apparatus
+    (table of contents, cover metadata, cross-links) are navigation added by the edition."""
+    p="../../"; t=wp['text']; ed=wp['edition']; pdf=wp['pdf']; note=wp['note_en']
+    canonical=site['site_origin']+f"/writing/{wp['slug']}/"
+    pdf_href=p+pdf['path']; pdf_name=pdf['path'].rsplit('/',1)[-1]
+    def num_fa(n): return str(n).translate(str.maketrans("0123456789","۰۱۲۳۴۵۶۷۸۹"))
+    toc=''.join(f'<li><a href="#{esc(s["anchor"])}"><span class="trp-toc-no">{esc(s["numeral"])}</span><span>{esc(s["title"])}</span></a></li>' for s in t['sequences'])
+    seqs=[]
+    for s in t['sequences']:
+        m=TRP_HEAD.match(s['heading']); h=f'<span class="trp-num">{esc(m.group(1))}</span>{esc(m.group(2))}'
+        src=''.join(f'<h3 class="trp-label">{esc(x["text"])}</h3>' if x['type']=='label' else f'<p>{esc(x["text"])}</p>' for x in s['source'])
+        lines=[]
+        for x in s['poem']:
+            if x['type']=='break': lines.append('<span class="trp-gap" aria-hidden="true"></span>')
+            elif x['type']=='line': lines.append(f'<span class="trp-line">{esc(x["text"])}</span>')
+            elif x['type']=='label': lines.append(f'<span class="trp-poem-label">{esc(x["text"])}</span>')
+            else: lines.append(f'<span class="trp-xref">{esc(x["text"])}</span>')
+        seqs.append(f'<section class="trp-seq" id="{esc(s["anchor"])}" aria-labelledby="{esc(s["anchor"])}-h"><h2 id="{esc(s["anchor"])}-h">{h}</h2><div class="trp-source">{src}</div><p class="trp-sep" aria-hidden="true">{esc(t["separator"])}</p><div class="trp-poem">{"".join(lines)}</div><p class="trp-seq-foot" data-apparatus><a href="#sources-{s["number"]}">منابع این شعر ↓</a></p></section>')
+    bib=[]
+    for s in t['sequences']:
+        b=s['bibliography']
+        items=''.join(f'<li dir="ltr" lang="en">{esc(e["text"])}</li>' if e['lang']=='en' else f'<li>{esc(e["text"])}</li>' for e in b['entries'])
+        bib.append(f'<section class="trp-bib-group" id="sources-{s["number"]}"><h3><a href="#{esc(s["anchor"])}">{esc(b["heading"])}</a></h3><ul>{items}</ul></section>')
+    intro=''.join(f'<p>{esc(x)}</p>' for x in t['intro']['paragraphs'])
+    cover=(f'<header class="trp-cover"><p class="trp-kicker" data-apparatus>شعر پژوهشی · {esc(num_fa(ed["years"].split("–")[0]))}–{esc(num_fa(ed["years"].split("–")[1]))} · نسخه‌ی {esc(num_fa(ed["version"]).replace(".","٫"))}</p>'
+           f'<h1 class="trp-title">{esc(t["title"])}</h1><p class="trp-author">{esc(t["author"])}</p><p class="trp-mark" aria-hidden="true">{esc(t["mark"])}</p>'
+           f'<div class="trp-cover-meta" data-apparatus><p class="trp-en-line" dir="ltr" lang="en"><em>{esc(wp["title_en"])}</em> by {esc(wp["author_en"])} ({esc(site["artistic_name"])}), {esc(ed["years"])}. Published here in full in Persian. <a href="#english">A note in English ↓</a></p>'
+           f'<div class="action-group trp-actions"><a class="action primary" href="{esc(pdf_href)}" download="{esc(pdf_name)}"><span>دریافت PDF · {esc(num_fa(pdf["pages"]))} صفحه</span><span>↓</span></a><a class="action secondary" href="#colophon"><span>شناسنامه و شیوه‌ی ارجاع</span><span>↓</span></a></div></div></header>')
+    article=(f'<article class="trp" id="edition">{cover}<div class="trp-body"><nav class="trp-toc" aria-label="فهرست" data-apparatus><p class="trp-toc-head">فهرست</p><ol>{toc}</ol><p class="trp-toc-more"><a href="#sources">منابع</a><a href="#colophon">شناسنامه</a><a href="#english" lang="en">English</a></p></nav>'
+             f'<div class="trp-text"><section class="trp-intro" aria-labelledby="trp-intro-h"><h2 id="trp-intro-h">{esc(t["intro"]["heading"])}</h2>{intro}</section>{"".join(seqs)}'
+             f'<section class="trp-bib" id="sources" aria-labelledby="trp-bib-h"><h2 id="trp-bib-h">{esc(t["bibliography_heading"])}</h2>{"".join(bib)}</section></div></div></article>')
+    url=f'<span class="trp-url" dir="ltr">{esc(canonical)}</span>'
+    sha=f'<code class="trp-sha" dir="ltr">{esc(pdf["sha256"])}</code>'
+    fa_rows=[("عنوان",esc(wp['title_fa'])),("نویسنده",f'{esc(wp["author_fa"])} (<span lang="en">{esc(site["artistic_name"])}</span>)'),("نخستین انتشار برخط",esc(ed['first_published_fa'])),("نسخه",esc(num_fa(ed['version']).replace('.','٫'))),
+      ("حق نشر",esc(ed['copyright_fa'])),("اجازه‌ی استفاده",esc(ed['rights_fa'])),("شیوه‌ی ارجاع",f'{esc(ed["citation_fa"])} {url}'),
+      ("نسخه‌ی PDF",f'<a href="{esc(pdf_href)}" download="{esc(pdf_name)}">{esc(pdf_name)}</a> · {esc(num_fa(pdf["pages"]))} صفحه<br><span class="trp-sha-label">SHA-256</span> {sha}')]
+    en_rows=[("Title",f'<em>{esc(wp["title_en"])}</em> / <span lang="fa" dir="rtl">{esc(wp["title_fa"])}</span>'),("Author",f'{esc(wp["author_en"])} ({esc(site["artistic_name"])})'),("First published online",esc(ed['first_published_en'])),("Version",esc(ed['version'])),
+      ("Copyright",esc(ed['copyright_en'])),("Rights",esc(ed['rights_en'])),("Cite as",f'{fa_runs(inline_md(ed["citation_en"],p))} {esc(canonical)}'),
+      ("PDF",f'<a href="{esc(pdf_href)}" download="{esc(pdf_name)}">{esc(pdf_name)}</a> · {pdf["pages"]} pp.<br><span class="trp-sha-label">SHA-256</span> {sha}')]
+    def dl(rows): return '<dl>'+''.join(f'<div class="fact"><dt>{k}</dt><dd>{v}</dd></div>' for k,v in rows)+'</dl>'
+    colophon=(f'<section class="trp-colophon" id="colophon" aria-labelledby="trp-col-h"><div class="trp-col-fa"><h2 id="trp-col-h">شناسنامه</h2>{dl(fa_rows)}</div>'
+              f'<div class="trp-col-en" dir="ltr" lang="en"><h2>Publication record</h2>{dl(en_rows)}</div></section>')
+    titles=''.join(f'<li>{esc(x)}</li>' for x in note['titles'])
+    en=(f'<section class="trp-note" id="english" dir="ltr" lang="en" aria-labelledby="trp-note-h"><div class="trp-note-inner"><span class="section-no">A NOTE IN ENGLISH</span><h2 id="trp-note-h">{esc(wp["title_en"])}</h2><p class="trp-note-deck">{fa_runs(inline_md(note["deck"],p))}</p>'
+        f'<div class="trp-note-prose">{"".join(f"<p>{inline_md(x,p)}</p>" for x in note["paragraphs_before"])}<p>{esc(note["titles_intro"])}</p><ol class="trp-note-titles">{titles}</ol>{"".join(f"<p>{fa_runs(inline_md(x,p))}</p>" for x in note["paragraphs_after"])}'
+        f'<p class="trp-note-links"><a href="#edition">Back to the Persian text ↑</a> · <a href="{p}works/the-black-bird/index.html">The Black Bird →</a></p></div></div></section>')
+    main=article+colophon+en
+    title=f"{wp['title_fa']} · {wp['title_en']} — {site['site_title']}"
+    return f"writing/{wp['slug']}/index.html",title,wp['meta_description'],main,writing_jsonld(site,wp,canonical)
 
 def render_contact(site,works):
     main=f'''<section class="page-mast"><h1>Contact</h1><p>{esc(site['contact']['mast'])}</p></section><section class="contact-layout"><div class="contact-list"><a class="contact-row" href="mailto:{esc(site['email'])}"><span>Email</span><strong>{esc(site['email'])}</strong><b>→</b></a><a class="contact-row" href="{esc(site['github_profile'])}" target="_blank" rel="noopener noreferrer"><span>GitHub</span><strong>mozareeduge</strong><b>↗</b></a><a class="contact-row" href="{esc(site['linkedin'])}" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><strong>{esc(site['formal_name'])}</strong><b>↗</b></a></div></section>'''

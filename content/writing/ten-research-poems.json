@@ -1,0 +1,705 @@
+{
+  "schema_version": "1.0.0",
+  "slug": "ten-research-poems",
+  "title_en": "Ten Research Poems",
+  "title_fa": "ده شعر پژوهشی",
+  "author_en": "Mohammad Zare",
+  "author_fa": "محمد زارع",
+  "meta_description": "Ten Research Poems (ده شعر پژوهشی), a Persian research-poetry collection by Mohammad Zare (Mozare), 2025–2026, published here in full in Persian. Version 1.0, first published online 3 October 2026.",
+  "og_image": "writing-assets/ten-research-poems-share.webp",
+  "edition": {
+    "version": "1.0",
+    "years": "2025–2026",
+    "first_published": "2026-10-03",
+    "first_published_en": "3 October 2026",
+    "first_published_fa": "۱۱ مهر ۱۴۰۵ (۳ اکتبر ۲۰۲۶)",
+    "copyright_fa": "© ۲۰۲۵–۲۰۲۶ محمد زارع — همهٔ حقوق محفوظ است",
+    "copyright_en": "© 2025–2026 Mohammad Zare. All rights reserved.",
+    "rights_fa": "نقل‌قول از این اثر با ذکر نام نویسنده و نشانی این صفحه آزاد است. بازنشر یا اقتباس، کامل یا بخشی از آن، به اجازه‌ی نویسنده نیاز دارد.",
+    "rights_en": "Quotation with attribution to the author and this page is permitted. Republication or adaptation, in whole or in part, requires the author's permission.",
+    "license_en": "All rights reserved. Quotation with attribution permitted; republication or adaptation requires the author's permission.",
+    "citation_fa": "زارع، محمد (Mozare). ده شعر پژوهشی. نسخه‌ی ۱٫۰، ۲۰۲۶.",
+    "citation_en": "Zare, Mohammad (Mozare). *Ten Research Poems / ده شعر پژوهشی*. Version 1.0, 2026."
+  },
+  "pdf": {
+    "path": "documents/Mohammad_Zare_Ten_Research_Poems.pdf",
+    "sha256": "93d35d8645e4ed44af8af49529ceac485555bf6c11ded08bae06effe7221c8e2",
+    "bytes": 189795,
+    "pages": 34
+  },
+  "note_en": {
+    "deck": "Persian research-poetry collection (ده شعر پژوهشی) · 2025–2026 · published here in full in Persian",
+    "paragraphs_before": [
+      "*Ten Research Poems* is a collection of ten poem sequences written in Persian. Each sequence is built around one object of attention, from the glass frog to sites of mass killing. Around each object I gathered material from scientific articles, scriptural and mythic traditions, medical and historical sources, and museum and institutional records, and wrote the poems in contact with that material. A bibliography closes the collection as part of the work."
+    ],
+    "titles_intro": "The ten sequences, in working English titles (the Persian title pages remain authoritative):",
+    "titles": [
+      "Glassfrog",
+      "Elephant Skull",
+      "Sergeant Wojtek: Blood and Honey",
+      "Several Panels of Crow and Darkness",
+      "Forensic Medicine",
+      "Coil",
+      "Radiant Existence",
+      "Womb",
+      "Gesture",
+      "An Empty Square"
+    ],
+    "paragraphs_after": [
+      "The collection opens with a short statement of method that names the practice شعر پژوهشی گمانه‌زن. پژوهشی, the word in the title, means \"research.\" گمانه‌زن, which I render as \"speculative,\" names what the research may do inside the poem. The poem may use a possible relation between a source and the object, through analogy or montage, without presenting that relation as proof. The statement joins inquiry and poetry through mapping and cataloguing: it collects an object together with earlier attempts to formulate it. No kind of source is ranked above another in advance. A scientific description, a passage of scripture and a popular belief can all enter the map when they open a possible line to the object at the centre of the sequence. In English I call each of these a profile: one way the object becomes available under the conditions of its source. The statement calls the map partial and open to continuation. Another profile can still be added.",
+      "On the page, the map takes a fixed order. A typical unit holds two passages. The first is a source passage that establishes the object and its conditions. The second is the poem, which changes the duration, address, rhythm and image of what the source passage set down. A red separator stands between them. It marks their difference and leaves them in contact, so the poem can draw on a factual description while its own lines make no factual claim. The source passage, in turn, stays documented and does not fix how the poem is read. Because page direction, spacing, the separators and the pauses belong to this arrangement, a plain-text copy of the collection loses it.",
+      "The collection came before my born-digital poem *The Black Bird*. Both begin from an object and sources of different kinds, but they arrange the relation between them differently. *Ten Research Poems* sets the order in which a reader meets source passage, separator, poem and bibliography, so its map stays open to further profiles while its route is fixed by the page. *The Black Bird* spreads names, sources, notes and poetic passages across a hypergraph, a network in which one link can join more than two items. The reader traverses it, and the order of traversal becomes part of the reading."
+    ]
+  },
+  "text": {
+    "title": "ده شعر پژوهشی",
+    "author": "محمد زارع",
+    "mark": "—",
+    "separator": "───",
+    "intro": {
+      "heading": "شعر پژوهشی گمانه‌زن",
+      "paragraphs": [
+        "شعر پژوهشی گمانه‌زن، یا به اختصار شعر پژوهشی، در عین شعر بودن یک پژوهش جدی است. مسئله‌ی واقعیت در شعر پژوهشی گمانه‌زن نهایتاً توسط جهان هنر تصاحب نمی‌شود، بلکه این شعر به دنبال صورت‌بندی مناسب‌تری از مسئله است. چکیده‌ی روش شعر پژوهشی گمانه‌زن، نقشه‌برداری از چیزها و کاتالوگ‌کردن آن‌هاست، در کنار تلاش‌های پیشین بشر برای صورت‌بندی آن‌ها؛ به عنوان چیزهای احتمالاً مرتبط. در نهایت طرحی از یک نقشه ارائه خواهد شد: نقشه‌ای از چیزها و خطوط محوی از مسیرهای احتمالیِ ارتباطی میانشان.",
+        "وقتی چیزی موضوع مطالعه‌ی شعر پژوهشی می‌شود، برای کشف چیزهای مرتبط، همه‌ی نواحی وزن یکسانی دارند؛ از این جهت تفاوتی میان فرهنگ عمومی، علوم کامپیوتر، کتاب مقدس و کاتالوگ یک رادیوی قدیمی وجود ندارد. به سبب اهمیت چیزها، و گشودن فضا برای ادراک آشنا بودن چیزها، و ثبت حضور غریبگی درونی و گریزنده‌ی چیزها، شعر پژوهشی در شرح و بسط ارتباطات و استدلال کمینه‌گوست. اما همیشه طرحی از نقشه پیداست و دعوتی به نقشه‌خوانی و ادامه‌ی نقشه‌برداری. گمانه‌زن بودن یعنی پذیرفتن آینده‌ی نامعلوم: گشودگی و دعوت به همکاری؛ یعنی هر کسی که می‌خواند، می‌تواند با چیزهای خاص خودش، و با هر چیز در دسترس درباره‌ی آن‌ها، این پژوهش را ادامه دهد."
+      ]
+    },
+    "sequences": [
+      {
+        "number": 1,
+        "anchor": "poem-1",
+        "heading": "۱. قورباغه‌ی شیشه‌ای",
+        "numeral": "۱.",
+        "title": "قورباغه‌ی شیشه‌ای",
+        "source": [
+          {
+            "type": "para",
+            "text": "قورباغه‌های شیشه‌ای هنگام استراحت نزدیک به ۸۹٪ از گلبول‌های قرمز خون را از گردش خارج و در کبد انبار می‌کنند تا شفافیت بدنشان دو تا سه برابر شود. این کشف نشان می‌دهد نامرئی‌شدن، علاوه بر بافت‌های شفاف، نیازمند «پاکسازی فعال رنگدانه‌ی حیات» از بافت‌هاست؛ پدیده‌ای که در آن قوانین فیزیک نور به کار بقا می‌آیند."
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "اگر نور از من عبور کند"
+          },
+          {
+            "type": "line",
+            "text": "امشب هم باقی خواهم ماند"
+          }
+        ],
+        "bibliography": {
+          "heading": "۱. قورباغه‌ی شیشه‌ای",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎Taboada, Carlos, Jesse Delia, Maomao Chen, Chenshuo Ma, Xiaorui Peng, Xiaoyi Zhu, Laiming Jiang, Tri Vu, Qifa Zhou, Junjie Yao, Lauren O'Connell, and Sönke Johnsen. \"Glassfrogs Conceal Blood in Their Liver to Maintain Transparency.\" Science 378, no. 6626 (2022): 1315–1320. DOI: 10.1126/science.abl6620.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 2,
+        "anchor": "poem-2",
+        "heading": "۲. جمجمه‌ی فیل",
+        "numeral": "۲.",
+        "title": "جمجمه‌ی فیل",
+        "source": [
+          {
+            "type": "para",
+            "text": "در آزمایشی روی فیل‌های آفریقا اشیاء گوناگونی پیش رویشان گذاشتند: جمجمه‌ی فیل، جمجمه‌ی گاومیش، قطعه‌ای از چوب، تکه‌ای عاج. فیل‌ها جمجمه و عاج هم‌نوعانشان را با توجه آشکاری از دیگر اشیاء متمایز کردند؛ خرطوم می‌پیچیدند دورشان، با پا لمس‌شان می‌کردند، و بارها به این رفتارها بازمی‌گشتند. این رفتار با جمجمه‌ی سایر جانوران تکرار نمی‌شد. "
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "شاهزاده‌ی جوان"
+          },
+          {
+            "type": "line",
+            "text": "با خرطومی پیچیده"
+          },
+          {
+            "type": "line",
+            "text": "دور جمجمه‌ی پدر"
+          }
+        ],
+        "bibliography": {
+          "heading": "۲. جمجمه‌ی فیل",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎McComb, Karen, Lucy Baker, and Cynthia Moss. \"African Elephants Show High Levels of Interest in the Skulls and Ivory of Their Own Species.\" Biology Letters 2, no. 1 (2006): 26–28. DOI: 10.1098/rsbl.2005.0400.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 3,
+        "anchor": "poem-3",
+        "heading": "۳.  سرجوخه وُیتک؛ خون و عسل",
+        "numeral": "۳.",
+        "title": "سرجوخه وُیتک؛ خون و عسل",
+        "source": [
+          {
+            "type": "para",
+            "text": "سربازان لهستانی در طول جنگ جهانی دوم خرسی قهوه‌ای به نام وُیتک را بزرگ کردند. او را وقتی توله بود حوالی همدان یافته بودند. به علت ممنوعیت حمل‌ونقل حیوانات وحشی، برای همراه‌کردن او با واحد نظامی، نامش را به عنوان سربازی رسمی ثبت کردند. وُیتک یاد گرفت جعبه‌های مهمات را حمل کند و در نبرد مونته‌کاسینو کنار سربازان ایستاد. پس از جنگ، در باغ‌وحش ادینبرا ماند تا سال ۱۹۶۳ که درگذشت."
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "شب‌ها که زیر نور منورها"
+          },
+          {
+            "type": "line",
+            "text": "بر جعبه‌های پوک مهمات خوابش می‌برد"
+          },
+          {
+            "type": "line",
+            "text": "رؤیای آبشار عسل می‌دید"
+          }
+        ],
+        "bibliography": {
+          "heading": "۳. سرجوخه وُیتک؛ خون و عسل",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎Murtoff, Jennifer, and Encyclopaedia Britannica Editors. \"Wojtek the Bear.\" Encyclopaedia Britannica. Updated June 26, 2023.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 4,
+        "anchor": "poem-4",
+        "heading": "۴.  چند تابلو از کلاغ و تاریکی",
+        "numeral": "۴.",
+        "title": "چند تابلو از کلاغ و تاریکی",
+        "source": [
+          {
+            "type": "label",
+            "text": "یک."
+          },
+          {
+            "type": "para",
+            "text": "وقتی قابیل هابیل را کشت، سرگردان ماند که با جسد چه کند. قرآن می‌گوید خداوند کلاغی را برانگیخت که زمین را می‌کاوید تا به او نشان دهد چگونه پیکر برادرش را پنهان کند. در این روایت، نخستین درسِ دفن، نه از انسان، که از پرنده‌ای سیاه می‌آید. در برخی تفسیرهای کلاسیک، مسئله فقط قتل نیست؛ قابیل با خودِ مرگ و دگرگونیِ جسد نیز بیگانه است. او مرگ را از طریق کلاغ می‌آموزد و پنهان می‌کند."
+          },
+          {
+            "type": "label",
+            "text": "دو."
+          },
+          {
+            "type": "para",
+            "text": "در منابع نورس، اودین دو کلاغ دارد: هوگین و مونین؛ اندیشه و یاد. آن‌ها هر روز بر جهان می‌گردند و خبرها را به گوش او بازمی‌آورند. کلاغ حاملِ خبر، حافظه، و گزارشگر تصاویر خونین است."
+          },
+          {
+            "type": "label",
+            "text": "سه."
+          },
+          {
+            "type": "para",
+            "text": "در یک روایت‌ کهن ایرلندی، مرگ کوهولین، قهرمان اولستر، تنها وقتی قطعی دانسته شد که کلاغی بر شانه‌ی او نشست. او ایستاده و با سخت‌جانی مرده بود، چنان که دشمنان، حتی پس از جراحت مرگبار، هنوز به مرگش اطمینان نداشتند. کلاغ مُهر پایان است."
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "تا دید پشت پنجره‌ام، خیره"
+          },
+          {
+            "type": "line",
+            "text": "پر را گشود و رفت به تاریکی"
+          },
+          {
+            "type": "line",
+            "text": "وقتی صدای جمع کلاغان برخاست"
+          },
+          {
+            "type": "line",
+            "text": "انگار نور کوچه کمی لرزید"
+          }
+        ],
+        "bibliography": {
+          "heading": "۴. چند تابلو از کلاغ و تاریکی",
+          "entries": [
+            {
+              "lang": "fa",
+              "text": "قرآن، سوره‌ی مائده، آیه‌ی ۳۱. برای زمینه‌ی تفسیری: محمد بن جریر طبری، جامع البیان؛ جارالله زمخشری، الکشاف؛ فخرالدین رازی، مفاتیح الغیب، ذیل آیه‌ی ۵:۳۱."
+            },
+            {
+              "lang": "en",
+              "text": "‎Larrington, Carolyne, trans. The Poetic Edda. Oxford: Oxford University Press, 2014.‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎Sturluson, Snorri. The Prose Edda. Translated by Jesse L. Byock. London: Penguin Classics, 2005.‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎Stokes, Whitley, ed. and trans. \"The Death of Cú Chulainn.\" Revue Celtique 3 (1877): 175–185.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 5,
+        "anchor": "poem-5",
+        "heading": "۵.  پزشکی قانونی",
+        "numeral": "۵.",
+        "title": "پزشکی قانونی",
+        "source": [
+          {
+            "type": "para",
+            "text": "گونه‌ای کلاغ در آمریکا، وقتی با جسد هم‌نوعش روبه‌رو می‌شود، بانگ هشدارش کلاغ‌های دیگر را جمع می‌کند. پژوهش روی این رفتارها نشان داد که کلاغ‌ها از جسد برای شناختِ خطر استفاده می‌کنند؛ چهره‌ی تهدید را به خاطر می‌سپارند و دور می‌شوند. جسد تبدیل به اطلاعات می‌شود."
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "یک حلقه‌ی سیاه"
+          },
+          {
+            "type": "line",
+            "text": "دور لاشه"
+          },
+          {
+            "type": "line",
+            "text": "در غور و مشورت"
+          },
+          {
+            "type": "line",
+            "text": "پزشکی قانونی"
+          },
+          {
+            "type": "break"
+          },
+          {
+            "type": "note",
+            "text": "ر.ک. شماره‌ی ۴: کلاغ، قابیل، نخستین مرگ"
+          }
+        ],
+        "bibliography": {
+          "heading": "۵. پزشکی قانونی",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎Swift, Kaeli, and John M. Marzluff. \"Wild American Crows Gather Around Their Dead to Learn About Danger.\" Animal Behaviour 135 (2018): 107–114. DOI: 10.1016/j.anbehav.2017.11.002.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 6,
+        "anchor": "poem-6",
+        "heading": "۶.  چنبره",
+        "numeral": "۶.",
+        "title": "چنبره",
+        "source": [
+          {
+            "type": "label",
+            "text": "یک."
+          },
+          {
+            "type": "para",
+            "text": "گیلگمش از سفری در جست‌وجوی جاودانگی به اوروک بازمی‌گردد. در راه، کنار چشمه‌ای، گیاه جاودانگی را زمین می‌گذارد تا تن را بشوید. ماری می‌خزد، گیاه را می‌خورد، پوست می‌اندازد و تازه می‌شود. "
+          },
+          {
+            "type": "label",
+            "text": "دو."
+          },
+          {
+            "type": "para",
+            "text": "در سفر پیدایش، مار هوشیارترین جانور صحراست. او حوا را به خوردن از میوه‌ی درخت معرفت نیک و بد می‌کشاند. آدم و حوا از این میوه می‌خورند و چشمشان به برهنگی خود باز می‌شود؛ شرم، برگ انجیر، تبعید از باغ، و دشمنی میان انسان و مار از همین‌جا آغاز می‌شود."
+          },
+          {
+            "type": "label",
+            "text": "سه."
+          },
+          {
+            "type": "para",
+            "text": "به روایت اوید در دگردیسی‌ها، مدوسا پس از تجاوز به او در معبد آتنا، به هیولایی با گیسوانی از مارها بدل می‌شود؛ با چهره‌ای که نگاه‌کردن به آن، بیننده را درجا سنگ می‌کند. بعدتر پرسئوس با سپری آینه‌ای به سراغش می‌رود؛ نگاه مستقیم حذف می‌شود و تصویرِ بازتاب‌یافته، امکان کشتن مدوسا را به او می‌دهد."
+          },
+          {
+            "type": "label",
+            "text": "چهار."
+          },
+          {
+            "type": "para",
+            "text": "لین ایزبل در کتاب «میوه، درخت، مار: چرا ما این‌قدر خوب می‌بینیم؟» فرضیه‌ای فرگشتی پیش می‌گذارد: فشار شکارگریِ مارها در تاریخ نخستی‌ها، می‌تواند در شکل‌گیری حساسیت دستگاه بینایی و توجه سریع به الگوهای مارگون نقش داشته باشد. یعنی ترس از مار ردی است که شاید در خودِ سازوکار دیدن نشسته باشد."
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "درخشش فلس‌ها از لغزشی"
+          },
+          {
+            "type": "line",
+            "text": "در خاطره‌ی دور جنین"
+          },
+          {
+            "type": "line",
+            "text": "ماری چنبره زد"
+          }
+        ],
+        "bibliography": {
+          "heading": "۶. چنبره",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎George, Andrew, trans. The Epic of Gilgamesh. London: Penguin Classics, 1999.‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎The Hebrew Bible / Old Testament, Genesis 3.‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎Ovid. Metamorphoses, Book IV. Translated by A. D. Melville. Oxford: Oxford World's Classics, 1986.‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎Isbell, Lynne A. The Fruit, the Tree, and the Serpent: Why We See So Well. Cambridge, MA: Harvard University Press, 2009.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 7,
+        "anchor": "poem-7",
+        "heading": "۷.  هستیِ مشعشع",
+        "numeral": "۷.",
+        "title": "هستیِ مشعشع",
+        "source": [
+          {
+            "type": "label",
+            "text": "پیش‌درآمد"
+          },
+          {
+            "type": "label",
+            "text": "یک."
+          },
+          {
+            "type": "para",
+            "text": "در سنت غنایی-عرفانی ادبیات کلاسیک فارسی، پروانه (همان شب‌پره در فارسی امروز) نور گرمابخش شمع را طلب می‌کند؛ تا سرحد فنا در قلب پذیرنده‌ی آتش. گرد شعله‌ی لرزان می‌گردد تا بال‌هایش گُر بگیرند و در خاکستر به وصال فنا برسد."
+          },
+          {
+            "type": "label",
+            "text": "دو."
+          },
+          {
+            "type": "para",
+            "text": "پرومتئوس آتش را از قلمرو خدایان ربود و به فانیان سپرد. به تاوان بخشیدن ابزار خلق و طغیان به انسان، به صخره‌ای بسته شد. هر روز عقابی جگرش را می‌درید و هر شب گوشتش دوباره می‌جوشید تا روز بعد باز دریده شود."
+          },
+          {
+            "type": "label",
+            "text": "سه."
+          },
+          {
+            "type": "para",
+            "text": "هوشنگ، از نخستین شاهان اساطیری ایران، سنگی به قصد کشتن ماری سیاه پرتاب کرد. سنگ به مار نخورد؛ بر سنگی دیگر فرود آمد و از برخورد دو سنگ، جرقه‌ای جهید. هیولا گریخت، اما از خطای نشانه‌گیری، انسان آتش افروختن را فراگرفت."
+          },
+          {
+            "type": "label",
+            "text": "چهار."
+          },
+          {
+            "type": "para",
+            "text": "در روایتی زرتشتی، زرتشت سروی را در کاشمر کاشت با شاخه‌ای از بهشت. درخت هزاران سال قد کشید و موجود زنده‌ی شگفت‌آوری شد. متوکل عباسی فرمان داد آن را ببرند و برای استفاده در ساخت قصرش به سامرا ببرند. سرو با صدایی هولناک فرو افتاد و آسمان از گریز پرندگان سیاه شد. هنوز چوب درخت به سامرا نرسیده بود که خلیفه را کشته بودند."
+          }
+        ],
+        "poem": [
+          {
+            "type": "label",
+            "text": "پرده‌ی نخست و واپسین:"
+          },
+          {
+            "type": "line",
+            "text": "می‌خواهم ببینم لکه‌ی خون در نور فلوئورسنت چه شکلی می‌شود"
+          },
+          {
+            "type": "line",
+            "text": "می‌خواهم مثل شب‌پره‌‌ای "
+          },
+          {
+            "type": "line",
+            "text": "که در اتصالی تابلوی نئونی میکده‌ای می‌سوزد"
+          },
+          {
+            "type": "line",
+            "text": "مرگ باشکوه و مشعشعی داشته باشم"
+          },
+          {
+            "type": "line",
+            "text": "که دنیای مردگانی باشد"
+          },
+          {
+            "type": "line",
+            "text": "که شیوه‌ی مرگم را به رخ مردگان معمولی بکشم:"
+          },
+          {
+            "type": "line",
+            "text": "«ای بیچارگانی که در صف باجه‌ی داوری "
+          },
+          {
+            "type": "line",
+            "text": "به انتظاری عبث نشسته‌اید"
+          },
+          {
+            "type": "line",
+            "text": "و همه‌ی نغمه‌های هستی را با سوت می‌زنید"
+          },
+          {
+            "type": "line",
+            "text": "که زمان بگذرد، که شاید دل ملکوتیان نرم شود"
+          },
+          {
+            "type": "line",
+            "text": "من مثل انسان‌-خدایی سرکش "
+          },
+          {
+            "type": "line",
+            "text": "در تخطی از قلمرو ممکن‌ها تباه شدم"
+          },
+          {
+            "type": "line",
+            "text": "پژواک قصه‌ای، شبه‌قصه‌ای خواب‌آور، "
+          },
+          {
+            "type": "line",
+            "text": "مسکن اعصاب مرتعش"
+          },
+          {
+            "type": "line",
+            "text": "در گوش زائران خسته از راه که در مرز بی‌ایمانی"
+          },
+          {
+            "type": "line",
+            "text": "تاول‌ به پای زخم از خار و صخره و نمک، "
+          },
+          {
+            "type": "line",
+            "text": "گرسنه شکم، "
+          },
+          {
+            "type": "line",
+            "text": "همچنان راه می‌روند و راه می‌روند،"
+          },
+          {
+            "type": "line",
+            "text": "و شدم"
+          },
+          {
+            "type": "line",
+            "text": "تسلای گریه‌ی طفلی گرسنه که سینه‌ی بی‌شیر را "
+          },
+          {
+            "type": "line",
+            "text": "ناباورانه می‌مکد"
+          },
+          {
+            "type": "line",
+            "text": "پیش از آن از آسمان بر کمر سروها می‌زدم"
+          },
+          {
+            "type": "line",
+            "text": "یا روزنه‌ای از قله‌ی کوه‌ها می‌گشودم"
+          },
+          {
+            "type": "line",
+            "text": "آن هنگام که آهنی در کوره می‌گدازد، منم که سرخ درخشانم"
+          },
+          {
+            "type": "line",
+            "text": "آن هنگام که ساقه‌ای زمین را می‌شکافد، منم که خاک را می‌ترکانم"
+          },
+          {
+            "type": "line",
+            "text": "آن هنگام که خشکی به نهایت می‌رسد، منم که خاک را می‌ترکانم"
+          },
+          {
+            "type": "line",
+            "text": "منم که سنگ را می‌غلتانم، آب را بر بستر تاریخی‌اش می‌شورانم"
+          },
+          {
+            "type": "line",
+            "text": "با این همه کدام خدا می‌تواند ادعا کند که جان از من ستانده است؟"
+          },
+          {
+            "type": "line",
+            "text": "و سیاهه‌ی اعمالم در دفتر کدام ملک جا می‌شود؟»"
+          }
+        ],
+        "bibliography": {
+          "heading": "۷. هستیِ مشعشع",
+          "entries": [
+            {
+              "lang": "fa",
+              "text": "برای سنت شمع و پروانه در شعر کلاسیک فارسی: رجوع شود به نمونه‌های متعدد در شعر عطار، مولوی، حافظ و دیگران؛ و زمینه‌ی عرفانی فنا و سوختن در ادبیات فارسی."
+            },
+            {
+              "lang": "en",
+              "text": "‎Hesiod. Theogony and Works and Days. For the Prometheus myth.‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎Encyclopaedia Britannica Editors. \"Prometheus.\" Encyclopaedia Britannica.‎"
+            },
+            {
+              "lang": "fa",
+              "text": "ابوالقاسم فردوسی، شاهنامه، داستان هوشنگ و پیدایش آتش و جشن سده. چاپ پیشنهادی برای ارجاع متنی: تصحیح جلال خالقی مطلق."
+            },
+            {
+              "lang": "en",
+              "text": "‎Encyclopaedia Iranica. \"Cypress.\" Published December 15, 1993.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 8,
+        "anchor": "poem-8",
+        "heading": "۸. زهدان",
+        "numeral": "۸.",
+        "title": "زهدان",
+        "source": [
+          {
+            "type": "para",
+            "text": "در بسیاری از اختاپوس‌ها، تخم‌گذاری آغاز مراقبت و هم‌زمان آغاز زوال است. مادر کنار خوشه‌ی تخم‌ها می‌ماند، با جریان آب آن‌ها را زنده نگه می‌دارد، تغذیه را کنار می‌گذارد و وارد دوره‌ای از فرسایش سریع می‌شود. پژوهش‌ها نشان می‌دهند که در این دوره، غده‌ی بینایی ــ اندامی درون‌ریز در سر اختاپوس ــ مسیرهای سوخت‌وساز کلسترول و تولید هورمون‌های استروئیدی را تغییر می‌دهد. در آزمایش‌های کلاسیک، برداشتن این غده باعث شد ماده‌ها تخم‌ها را ترک کنند، دوباره غذا بخورند و مدت بیشتری زنده بمانند. به بیان دقیق‌تر، مادر می‌میرد چون بعد از مراقبت برنامه‌ی زیستی‌اش تمام شده است."
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "بر توده‌ی حیات "
+          },
+          {
+            "type": "line",
+            "text": "نشسته مادر"
+          },
+          {
+            "type": "line",
+            "text": "بازو کشیده در خود"
+          },
+          {
+            "type": "line",
+            "text": "در شیب احتضار"
+          },
+          {
+            "type": "line",
+            "text": "مراقب و مضطرب"
+          }
+        ],
+        "bibliography": {
+          "heading": "۸. زهدان",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎Wodinsky, Jerome. \"Hormonal Inhibition of Feeding and Death in Octopus: Control by Optic Gland Secretion.\" Science 198, no. 4320 (1977): 948–951. DOI: 10.1126/science.198.4320.948.‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎Wang, Z. Yan, Melissa Pergande, Clifton W. Ragsdale, and Stephanie M. Cologna. \"Steroid Hormones of the Octopus Self-Destruct System.\" Current Biology 32, no. 11 (2022): 2572–2579.e4. DOI: 10.1016/j.cub.2022.04.043.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 9,
+        "anchor": "poem-9",
+        "heading": "۹.  اشاره",
+        "numeral": "۹.",
+        "title": "اشاره",
+        "source": [
+          {
+            "type": "para",
+            "text": "در لائتولیِ تانزانیا، ردپاهایی نزدیک به ۳.۶ میلیون سال در خاکستر آتشفشانی مانده‌اند. چند تن از تبار انسان از خاکستر مرطوب گذشتند؛ باران و لایه‌های بعدی آتشفشان، به‌جای آن‌که ردپاها را پاک کنند، آن را سخت و پنهان کردند. "
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "تا بنگری"
+          },
+          {
+            "type": "line",
+            "text": "یک جفت ردپاست"
+          },
+          {
+            "type": "line",
+            "text": "بر خاکستر مرطوب زمان"
+          }
+        ],
+        "bibliography": {
+          "heading": "۹. اشاره",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎Smithsonian Institution, Human Origins Program. \"Laetoli Footprint Trails.\"‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎McNutt, E. J., et al. \"Footprint Evidence of Early Hominin Locomotor Diversity at Laetoli, Tanzania.\" Nature 600 (2021): 468–471. DOI: 10.1038/s41586-021-04187-7.‎"
+            }
+          ]
+        }
+      },
+      {
+        "number": 10,
+        "anchor": "poem-10",
+        "heading": "۱۰. میدانی خالی",
+        "numeral": "۱۰.",
+        "title": "میدانی خالی",
+        "source": [
+          {
+            "type": "label",
+            "text": "یک."
+          },
+          {
+            "type": "para",
+            "text": "پس از کشتار سربرنیتسا در تابستان ۱۹۹۵، پیکر قربانیان در گورهای جمعی دفن شد. بعدتر، برای پنهان‌کردن رد کشتار، بسیاری از اجساد با ماشین‌آلات سنگین از گورهای اولیه بیرون کشیده و در گورهای ثانویه پراکنده شدند. کمیسیون بین‌المللی مفقودان گزارش می‌کند که بقایای یک قربانی، در موارد معمول، در سه یا چهار گور متفاوت پیدا شده است؛ گورهایی که گاهی کیلومترها از هم فاصله داشته‌اند."
+          },
+          {
+            "type": "label",
+            "text": "دو."
+          },
+          {
+            "type": "para",
+            "text": "در چئونگ اِک، یکی از شناخته‌شده‌ترین میدان‌های کشتار کامبوج، قربانیان خمرهای سرخ در گورهای جمعی دفن شدند. گزارش‌ها می‌گویند باران‌های سنگین هنوز هم گاهی تکه‌های استخوان و پاره‌های لباس قربانیان را از خاک بیرون می‌آورد."
+          }
+        ],
+        "poem": [
+          {
+            "type": "line",
+            "text": "میدانی خالی"
+          },
+          {
+            "type": "line",
+            "text": "بقایای پرچم در باد"
+          },
+          {
+            "type": "line",
+            "text": "بر خاک خشک"
+          },
+          {
+            "type": "line",
+            "text": "چارپاره استخوان"
+          }
+        ],
+        "bibliography": {
+          "heading": "۱۰. میدانی خالی",
+          "entries": [
+            {
+              "lang": "en",
+              "text": "‎International Commission on Missing Persons. \"Srebrenica.\"‎"
+            },
+            {
+              "lang": "en",
+              "text": "‎Reuters. \"Cambodians Remember Victims of 'Killing Fields'.\" May 18, 2017.‎"
+            }
+          ]
+        }
+      }
+    ],
+    "bibliography_heading": "منابع"
+  }
+}

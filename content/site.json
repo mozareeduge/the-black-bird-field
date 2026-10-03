@@ -32,7 +32,13 @@
         "text": "Speculative research poetry keeps the origin and limits of a source visible instead of letting a poem quietly absorb it. A source-bearing scene can acquire its own address inside the field, a location a reader can return to independently of the line it helped produce. The source stays available rather than exhausted by what a poem does with it — a working version of what object-oriented ontology calls withdrawal, built here into the interface rather than argued as philosophy.",
         "image": "assets/black-bird/view-midpoint-desktop.webp",
         "alt": "The Black Bird Reader beside its graph",
-        "caption": "A source-bearing object remains inside the field."
+        "caption": "A source-bearing object remains inside the field.",
+        "links": [
+          {
+            "label": "Read: Ten Research Poems (Persian)",
+            "url": "/writing/ten-research-poems/"
+          }
+        ]
       },
       {
         "id": "generation",
@@ -85,6 +91,11 @@
       {
         "term": "Current field",
         "detail": "Born-digital literature\nResearch poetry\nGenerative writing"
+      },
+      {
+        "term": "Writing",
+        "detail": "Ten Research Poems, 2025–2026\nIn Persian, published online in full",
+        "url": "/writing/ten-research-poems/"
       },
       {
         "term": "Research",
