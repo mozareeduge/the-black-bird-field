@@ -13,7 +13,7 @@
   "summary": "Taroko Gorge kept its word lists in plain view, and writers changed them to make poems of their own. TAROKO REMIXER turns those decisions into modules, so a working poem-machine can be designed, run, and exported without writing code.",
   "responsibility": "a remix can be made without writing code",
   "meta_description": "TAROKO REMIXER is a browser-native no-code platform by Mohammad Zare (Mozare) for composing, running, and exporting procedural poems in the remix lineage of Nick Montfort's Taroko Gorge (2009).",
-  "live_url": "https://taroke-remixer.theblackbirdfield.com/",
+  "live_url": "https://taroko-remixer.theblackbirdfield.com/",
   "repository_url": "https://github.com/mozareeduge/taroko-remixer",
   "poster_caption": "Release v1.0.4",
   "feature_caption": "Release v1.0.4",
@@ -89,7 +89,7 @@
   "citation": {
     "author": "Zare, Mohammad (Mozare).",
     "title": "TAROKO REMIXER",
-    "rest": "Version 1.0.4, 2026. https://taroke-remixer.theblackbirdfield.com/"
+    "rest": "Version 1.0.4, 2026. https://taroko-remixer.theblackbirdfield.com/"
   },
   "motion": {
     "enabled": true,
