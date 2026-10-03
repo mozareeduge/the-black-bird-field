@@ -123,11 +123,16 @@
     return { output: `works/${w.slug}/index.html`, bodyClass, current: 'works', main };
   }
 
+  function moduleLinks(m, prefix) {
+    const links = get(m, 'links', []).map(l => `<a class="action secondary" href="${esc(siteHref(l.url, prefix))}"${linkAttrs(l.url)}><span>${esc(l.label)}</span><span>${isRoute(l.url) ? '→' : '↗'}</span></a>`).join('');
+    return links ? `<div class="action-group module-actions">${links}</div>` : '';
+  }
+
   function renderPractice(site, works) {
     const p = site.practice;
     const idx = p.modules.map(m => `<a href="#${esc(m.id)}">${esc(m.index)} · ${esc(m.title)}</a>`).join('');
     const intro = p.intro.map(x => `<p>${esc(x)}</p>`).join('');
-    const mods = p.modules.map(m => `<article class="practice-module" id="${esc(m.id)}"><header><span class="work-no">${esc(m.index)}</span><h2>${esc(m.title)}</h2></header><div class="reading"><p>${esc(m.text)}</p></div><figure><img alt="${esc(m.alt)}" src="../${esc(m.image)}"><figcaption>${esc(m.caption)}</figcaption></figure></article>`).join('');
+    const mods = p.modules.map(m => `<article class="practice-module" id="${esc(m.id)}"><header><span class="work-no">${esc(m.index)}</span><h2>${esc(m.title)}</h2></header><div class="reading"><p>${esc(m.text)}</p>${moduleLinks(m, '../')}</div><figure><img alt="${esc(m.alt)}" src="../${esc(m.image)}"><figcaption>${esc(m.caption)}</figcaption></figure></article>`).join('');
     const main = `<section class="page-mast"><h1>Practice</h1><p>${esc(fmt(p.mast, works))}</p></section><section class="practice-intro"><div class="practice-index">${idx}</div><div class="practice-reading">${intro}</div></section><section class="practice-modules">${mods}</section>`;
     return { output: 'practice/index.html', bodyClass: 'practice-page', current: 'practice', main };
   }
